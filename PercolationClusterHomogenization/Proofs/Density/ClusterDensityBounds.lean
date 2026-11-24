@@ -1,10 +1,10 @@
 import PercolationClusterHomogenization.Proofs.Density.ClusterDensityMean
 
 /-!
-# Boundedness of cluster-density fluctuations
+# The fluctuation of the cluster density is bounded
 
-The normalized infinite-cluster count is between zero and one. This supplies the finitely many
-initial scales in stretched-exponential density estimates.
+The normalized fluctuation of the density of the infinite cluster in a cube has absolute value at
+most one.
 -/
 
 namespace Rigidity.Proofs.S2

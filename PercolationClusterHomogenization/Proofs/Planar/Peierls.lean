@@ -2,36 +2,13 @@ import PercolationClusterHomogenization.Proofs.Planar.SiteClusters
 import LatticeProb.Prob.Percolation.LSSThinVacuity
 
 /-!
-# Proposition 5.21: the Peierls bounds
+# The Peierls bound for one-dependent site fields in the plane
 
-This file proves the steps `SiteDensityNearOneStep` (`step:5.21-site-density`) and
-`OneDependentPeierlsStep` (`step:5.21-peierls`) of Proposition 5.21
-(`PercolationClusterHomogenization/Proofs/Planar/SiteClusters.lean`; corrected draft L2154-2158,
-L2253-2276). The printed proof cites Grimmett, *Percolation*, Theorem 8.92 for the first; both
-follow from one Peierls bound, valid for every `1`-dependent site field on `ℤ²` (for the
-`ℓ^∞` distance) whose sites are closed with probability at most `ε`:
-`P(z is not in an infinite open cluster) ≤ 64⁹ ε` (`measure_not_inInfiniteSiteCluster_le`).
-
-**Duality** (`exists_closedStarWalk`). Let `z` be open with a finite open cluster `C`, and let
-`u = z + (k₀, 0)` be the last site of `C` on the horizontal ray from `z`. The lattice edges with
-exactly one endpoint in `C` (the edge boundary of `C`) form, with two of them adjacent when
-they are edges of a common plaquette, the dual boundary graph (`boundaryGraph`); let `Γ` be the
-component of the edge `D₀` from `u` to `u + (1, 0)`. Every plaquette has an even number of edges
-in `Γ` (`plaquette_sum_eq_zero`: if it has one, its edges in `Γ` are its boundary edges, and the
-four corners of a plaquette change membership in `C` an even number of times). Hence the parity
-`F(a)` of the number of edges of `Γ` crossed by the horizontal ray from `a` satisfies
-`F(a) + F(b) = 1_{ab ∈ Γ}` for each lattice edge `ab` (`rowCount_succ_fst`,
-`rowCount_add_succ_snd`): `F` is constant on `C`, equal to `F(u) = 1`, and vanishes on the
-column `x = -B - 2` left of `C`. So `Γ` crosses the ray to the left of `z`. The outer endpoints of
-the edges of `Γ` are closed and `*`-connected, which gives a closed self-avoiding `*`-walk from
-`z + (k₀ + 1, 0)` to a site of abscissa at most `z.1`, of length at least `k₀ + 1`.
-
-**Counting.** The `*`-walks of length `n` from a site number at most `9ⁿ`
-(`card_starWalkLists_le`). Among the `n + 1` sites of a self-avoiding walk, at least
-`(n + 1) / 9` lie at pairwise `ℓ^∞` distance at least `2` (`exists_separated_subset`); by
-`1`-dependence these are all closed with probability at most `ε^{(n+1)/9}`
-(`measure_forall_closed_le`). Summing over `n` and the starting points `z + (k, 0)`, `k ≤ n`,
-gives a bound linear in `ε` for `ε ≤ 64⁻⁹`.
+Duality in the plane: if the open cluster of an open site `z` is finite, a closed self-avoiding
+`*`-walk joins a site of the horizontal ray from `z` to a site of abscissa at most that of `z`
+(`exists_closedStarWalk`), through the dual boundary graph of the cluster. Counting the
+`*`-walks gives the Peierls bound for a one-dependent site field whose sites are closed with small
+probability (`measure_not_inInfiniteSiteCluster_le`).
 -/
 
 open MeasureTheory ProbabilityTheory LatticeProb.Percolation Rigidity.Steps.Section5

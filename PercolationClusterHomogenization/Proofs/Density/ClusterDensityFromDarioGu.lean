@@ -4,31 +4,13 @@ import LatticeProb.Prob.Percolation.OpenGraphTranslation
 import LatticeProb.Prob.Percolation.LatticeBondTranslationLaw
 
 /-!
-# Proposition 2.6, step:2.6-inputs: the density of the infinite cluster from Dario–Gu
+# The density of the infinite cluster in balls from Proposition A.1 of Dario and Gu
 
-The density input of Proposition 2.6 (paper L508-511 of the corrected draft; correction C35) from
-the concentration of the density of the infinite cluster in triadic cubes
-(`Rigidity.External.ClusterDensityConcentrationInput`, Dario–Gu, arXiv:1909.10439v4,
-Proposition A.1), by a union bound over triadic cubes.
-
-* A triadic cube `□` of size `3^m` is *bad* if `| |𝒞_∞ ∩ □|/|□| - θ | ≥ θ/2`; by Proposition A.1
-  and Markov's inequality, `P[□ bad] ≤ 2 exp(-((θ/2C) 3^{dm/2})^{s₀})`, `s₀ = 2(d-1)/(3d²+2d-1)`
-  (`measure_badCubeEvent_le`).
-* At the scale `3^m ≤ r/(100d) < 3^{m+1}`, every ball of radius `r/100` whose centre is within
-  `r/100` of `x` contains a triadic cube of size `3^m` among the `K_d = (6d+5)^d` cubes `nearCubes x m`;
-  if that cube is good, the ball contains at least `(θ/2) 3^{dm} ≥ (θ/2)(300d)^{-d} r^d` vertices
-  of `𝒞_∞`.
-* The minimal scale is `M(x) = 100d · 3^{N(x)}`, `N(x)` the first scale from which every scale is
-  good (`exists_minimalScale_of_summable`; Borel–Cantelli). `E[exp(M^s)] < ∞` uniformly in `x`, for
-  `s = d s₀/4`, because `P[scale m bad] ≤ 2 K_d exp(-B 3^{2sm})` beats `exp((100d 3^{m+1})^s)`.
-* If `θ(p) = 0`, almost surely there is no infinite cluster (translation invariance), and the
-  statement is empty.
-
-Main results.
-* `clusterDensityInputFaithful_of_concentration`: Proposition A.1 gives the printed density
-  sentence `ClusterDensityInputFaithful`.
-* `clusterDensityInputProposed_of_concentration`: Proposition A.1 gives
-  `ClusterDensityInputProposed` (with `clusterDensityInputProposed_of_faithful`).
+From the concentration of the density of the infinite cluster in triadic cubes (Dario and Gu,
+Proposition A.1), a triadic cube is bad with stretched exponentially small probability
+(`measure_badCubeEvent_le`), and above a minimal scale with a stretched exponential moment every
+ball of the lattice contains a proportion of vertices of the infinite cluster
+(`clusterDensityInputFaithfulAt_of_concentration`).
 -/
 
 namespace Rigidity.Proofs.S2

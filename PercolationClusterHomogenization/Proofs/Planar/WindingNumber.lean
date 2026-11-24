@@ -9,20 +9,12 @@ import Mathlib.Topology.Connected.Basic
 import Mathlib.Analysis.SpecialFunctions.Complex.Arg
 import Mathlib.Analysis.Convex.Segment
 
-/-! Statements of the numbered results of Section 5.3.1-5.3.2 (unbounded level sets and
-large biconnected components of the potential, d = 2).
+/-!
+# Cubes, complex coordinates and winding numbers in the plane
 
-These results live in the standing context of Sections 5.3-5.4: the event `Σ f = 0`,
-`|supp u_f| = ∞`, on which `u_f` decays to zero. They are stated for every `u` with `-Δu = f` on
-`𝒞_∞` and `u → 0` at infinity (the potential normalized at infinity, see `Section5Statements`)
-whose support is infinite. Graph notions (paths, connected and biconnected sets, components) are
-those of `𝒞_∞` restricted to the set in question; "disjoint" paths are vertex-disjoint; `Q_r` is
-the cube of radius `r`.
-
-Convention: like every `...Stmt` of the draft, the statements below omit the paper's standing
-assumption `p_c(d) < p < 1` (corrected draft L66, L231); the composed theorems in
-`Rigidity/Proofs/Assembly` carry it as hypotheses (`criticalProbability 2 < p`, `p < 1`, or the
-part of it they use). -/
+The cube `Q_r = {x : |x|_∞ ≤ r}` of `ℤ²`, the embedding of `ℤ²` into `ℂ`, and the winding number
+around the origin of a closed lattice path avoiding it.
+-/
 
 open MeasureTheory LatticeProb.Percolation Classical Filter Topology
 

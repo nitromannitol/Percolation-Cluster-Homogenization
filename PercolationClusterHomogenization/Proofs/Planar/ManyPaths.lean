@@ -6,30 +6,12 @@ import PercolationClusterHomogenization.Proofs.Planar.WindingNumber
 import PercolationClusterHomogenization.Proofs.Planar.LoopFromCrossings
 
 /-!
-# Lemma 5.19: many disjoint paths from `γ` to the support of `u`
+# Winding numbers of lattice loops
 
-This file proves `ManyPathsStep` (`step:5.19-many-paths`, corrected draft L2040-2043). No
-literature input is used: the only planar topology is the following
-discrete fact about the winding number `windingNumber` of Lemma 5.14.
-
-* `exists_eq_of_crossing`: a lattice loop in the annulus `Q_{2m} \ Q_m` with nonzero winding
-  number around the origin meets every lattice path from `Q_m` to the complement of `Q_{2m}`.
-  Its proof uses the sum `windAt β y` of the angle increments of the loop `β` seen from `y`. For
-  adjacent lattice points `y`, `y'` off the loop, the increment `θ(y) - θ(y')` along a unit step
-  `a → b` of the loop equals `h(b) - h(a)` with `h(p) = arg ((p - y) / (p - y'))`: the two sides
-  agree modulo `2π`, and all four principal arguments lie in `(-π/2, π/2)` because two nonzero
-  lattice vectors differing by a unit vector have a positive inner product. Summing over the
-  closed loop gives `windAt β y = windAt β y'` (`windAt_eq_of_step`). Far from the loop the
-  increments telescope (`windAt_eq_zero_of_not_mem_cube`), and `windAt` is constant on `Q_m`.
-
-At each scale `m = S₀ 2^j` the loop of Lemma 5.14 meets the path of Lemma 5.18 from `Q_R` to the
-complement of `Q_{2m+1}`, where `u ≠ 0`, and the bi-infinite path `γ`, which visits `Q_R` and
-leaves every cube. Walking along the loop from its meeting point with the path of Lemma 5.18 to
-its first vertex on `γ` and
-reversing gives an arc `ρ` from `γ(k)` to a vertex where `u ≠ 0`, meeting `γ` only at its initial
-point (`exists_arc_of_loop`). As `S₀` exceeds the scale of the stretch of `γ` between its first
-and last visits to `Q_R`, each `k` lies on one of the two tails of `γ`; infinitely many scales
-share a tail, and `N` of them give the paths. Arcs at different scales lie in disjoint annuli.
+The winding number `windAt` of a closed lattice path seen from a lattice point: it is constant
+along lattice lines and on cubes avoided by the loop, vanishes outside a cube containing the loop,
+and a loop in `Q_{2m} \ Q_m` with nonzero winding number around the origin meets every path from
+`Q_m` to the outside of `Q_{2m}` (`exists_eq_of_crossing`).
 -/
 
 open LatticeProb.Percolation Rigidity.Section5 Rigidity.Steps.Section5

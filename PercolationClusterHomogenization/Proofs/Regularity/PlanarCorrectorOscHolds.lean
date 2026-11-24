@@ -80,22 +80,10 @@ import PercolationClusterHomogenization.Proofs.Planar.PlanarCrossingEvents
 import PercolationClusterHomogenization.Proofs.Cluster.PlanarSubaddOsMain
 
 /-!
-# (1.18) and (1.22) in dimension two with no hypothesis
+# Proposition 5.2 for `ν` in the form `O_s` in dimension two
 
-The inputs of `planarCorrectorOscSublinearTwo_of_subaddOs` are proved for `p > p_c(2)`:
-Proposition 5.2 for `ν` in the form `O_s` (`PlanarNuSubaddOsTwo p`) is the part on `ν` of
-`Rigidity.Proofs.Cluster.planar_subadd_os` (`planarNuSubaddOsTwo_holds`), the minimal scales are
-`planarMinimalScalesTwo_holds` (Proposition 2.4) and the order-zero regularity is
-`armstrongDarioOrderZeroTwo_holds`. Hence, with no hypothesis beyond `p_c(2) < p < 1`:
-
-* `planarAffineApproximationTwo_holds`: the approximation of affine functions by harmonic functions
-  on the balls `B_{3^m}` of the cluster, above a minimal scale of class `O_s`;
-* `planarCorrectorSublinearL2Two_holds`: (1.18) of Armstrong and Dario in dimension two, with a
-  minimal scale of class `O_s`;
-* `planarCorrectorOscSublinearTwo_holds`: (1.22) in dimension two in the oscillation form.
-
-`planarCorrectorOscSublinearTwo_iff`: the statement `PlanarCorrectorOscSublinearTwo` is the
-statement `Rigidity.Corrector.CorrectorOscSublinearTwo` of the proof of Lemma 3.2 of Dario.
+`planarNuSubaddOsTwo_holds`: the part on `ν` of Proposition 5.2 of Armstrong and Dario in the form
+`O_s`, for `p > p_c(2)`, from `Rigidity.Proofs.Cluster.planar_subadd_os`.
 -/
 
 namespace Rigidity.Proofs.Regularity

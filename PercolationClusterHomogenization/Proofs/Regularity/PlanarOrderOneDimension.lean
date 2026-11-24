@@ -2,19 +2,10 @@ import PercolationClusterHomogenization.Proofs.Regularity.OrderOneLift
 import PercolationClusterHomogenization.Proofs.Regularity.PlanarAffineApproximationHolds
 
 /-!
-# The dimension of `𝒜_1` on the planar cluster
+# The mesoscopic estimate of degree two in the plane
 
-Theorem 2 (i) of Armstrong and Dario (arXiv:1609.09431v2) at `k = 1` in dimension two,
-`dim 𝒜_1 ≤ 3` (`PlanarOrderOneDimensionTwo`), by Step 4 of the proof of Proposition 3.1 of
-Armstrong, Kuusi and Mourrat (arXiv:1602.00512v1): every element of `𝒜_1` is a combination of the
-constants and of the corrected planes of slopes `e₁, e₂` (`eq_clusterLiftMap_of_orderOne`), so `𝒜_1`
-lies in the range of a linear map from `ℝ × ℝ²`.
-
-The inputs are (7.18) at `k = 2` in the plane (`MesoscopicDegreeTwoPlanarInput`, the statement of
-`ArmstrongDarioMesoscopicDegreeTwo` for `d = 2`) and the existence of the corrected planes, which
-holds from the minimal scales and the order-zero regularity
-(`planarCorrectedPlaneExistenceTwo_of_minimalScales`). With them the planar qualitative corrector
-input follows (`supercriticalBondCorrectorInputTwo_of_mesoscopic`).
+The statement `MesoscopicDegreeTwoPlanarInput` of Lemma 7.3 of Armstrong and Dario, (7.18) at
+`k = 2`, in the plane, and the lift `(a, ξ) ↦ a + Σ ξᵢ gᵢ` as a linear map.
 -/
 
 namespace Rigidity.Proofs.Regularity

@@ -3,10 +3,10 @@ import PercolationClusterHomogenization.Proofs.Density.ClusterDensityResampleLaw
 import PercolationClusterHomogenization.Proofs.Density.FiniteClusterGeometry
 
 /-!
-# Tails of planar single-bond density influences
+# Tails of the finite clusters and of the density influences in the plane
 
-The finite-cluster tail and the endpoint bound give a uniform tail for each unnormalized
-single-bond density influence.
+The size of a finite component has a uniform square-root exponential tail, and the probability of
+a nonzero density influence decays with the distance between the resampled bond and the cube.
 -/
 
 namespace Rigidity.Proofs.S2

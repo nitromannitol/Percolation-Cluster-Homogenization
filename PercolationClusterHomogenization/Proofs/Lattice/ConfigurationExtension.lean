@@ -3,15 +3,12 @@ import LatticeProb.Prob.Percolation.CorrectedPlaneCharacterization
 import LatticeProb.Prob.Percolation.GreenColumn
 import LatticeProb.Prob.Percolation.LatticeUniqueCluster
 
-/-! Statements of the numbered results of Section 3 (Lipschitz harmonic functions). The cited
-literature inputs that each proof uses are added as explicit hypotheses of the final theorems;
-these definitions are the statements themselves.
+/-!
+# The extension by zero of a function on a cluster
 
-* Convention: the statements (`…Stmt`) omit the regime `p_c(d) < p < 1`; the composed theorems
-  (`Rigidity/Proofs/Assembly`) carry it as hypotheses `criticalProbability d < p` and `p < 1`.
-* "With positive probability", for an event that quantifies over corrected planes (not shown
-  measurable), is stated in the inner-measure form of Section 5c: the event contains a measurable
-  event of positive probability (Proposition 3.2). -/
+`extend C u` is the function on `ℤᵈ` equal to `u` on the vertices of the component `C` and to `0`
+elsewhere.
+-/
 
 open MeasureTheory LatticeProb.Percolation Classical
 

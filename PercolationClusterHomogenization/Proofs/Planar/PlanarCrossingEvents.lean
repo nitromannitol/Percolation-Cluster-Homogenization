@@ -12,18 +12,9 @@ import PercolationClusterHomogenization.External.KestenCrossing
 import PercolationClusterHomogenization.Proofs.Percolation.PlanarBoxGeometry
 
 /-!
-# Crossing events at dyadic scales
+# A union bound
 
-`CrossingGood ω L w H N` collects the crossings and well-connected cubes which the flow
-construction of `CrossingFlow.lean` uses inside `[-L, L]²`: open horizontal crossings of all the
-rectangles `[-L, L] × [r, r + w]`, open vertical crossings of all the rectangles
-`[c, c + w] × [-L, L]`, `-L ≤ r, c ≤ L`, and for every centre `z ∈ [-L, L]²` open crossings of the
-rectangles `[z₀, z₀ + w] × [z₁, z₁ + H]` (vertically) and `[z₀, z₀ + H] × [z₁, z₁ + w]`
-(horizontally) and well-connectedness of the cube `z + Q_N`.
-
-Kesten's rectangle crossing estimate and planar well-connectedness bound the probability of the
-complement by a union bound. With `L = 4^m`, `w = m²`, `H = 2^m (m² + 1)` and `N = m^q`, `q s ≥ 2`,
-these bounds are summable in `m`, so the event holds for all large `m`, almost surely.
+A union over a finite index set of sets of measure at most `f` has measure at most `|S| f`.
 -/
 
 open MeasureTheory Filter LatticeProb.Percolation Rigidity.External Rigidity.Proofs.S3

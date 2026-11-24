@@ -1,10 +1,11 @@
 import PercolationClusterHomogenization.Proofs.Density.PowerVarianceBound
 
 /-!
-# Weighted sums of resampling energies
+# The total resampling energy
 
-Tonelli's theorem moves a nonnegative endpoint weight outside the sum of independent-copy
-resampling energies.
+The total squared resampling influence averaged over an independent product copy, the weighted sum
+of the two-copy resampling energies as an integral, and the bound of the variance of a power by
+it.
 -/
 
 namespace Rigidity.Proofs.S2

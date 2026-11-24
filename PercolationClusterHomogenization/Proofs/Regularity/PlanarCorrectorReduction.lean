@@ -30,27 +30,12 @@ import PercolationClusterHomogenization.External.CorrectorQuantitative
 import PercolationClusterHomogenization.External.PlanarInputs
 
 /-!
-# The planar qualitative corrector input from the regularity of order one
+# Corrected planes and the dimension of `𝒜₁` in dimension two
 
-`Rigidity.External.SupercriticalBondCorrectorInputTwo` asks, almost surely on the infinite cluster
-of planar bond percolation, for a unique corrected plane of every slope normalized at a vertex,
-and for a unique slope of every element of `𝒜_1`. Armstrong and Dario (arXiv:1609.09431v2),
-Theorem 2 (i)–(ii) for `k = 1`, give `dim 𝒜_1 = d + 1` and the correctors. This file proves the
-input (`supercriticalBondCorrectorInputTwo_of_orderOne`) from
-
-* `ArmstrongDarioOrderZeroTwo` (Theorem 2 (iii) for `k = 0`; the Liouville theorem of order zero,
-  through `Rigidity.Proofs.Section5.sublinearLiouvilleStep_two`);
-* `PlanarCorrectedPlaneExistenceTwo`: every slope has a corrected plane (Theorem 2 (ii) for
-  `k = 1`, with the sublinearity in the uniform norm of `IsCorrectedPlane`, which comes from
-  Remark 1.1 and (1.22) of the source);
-* `PlanarOrderOneDimensionTwo`: `dim 𝒜_1 ≤ 3` (Theorem 2 (i) for `k = 1`);
-
-and the cap density of the balls of the infinite cluster (proved,
-`infiniteCluster_ballVolume_capDensity`), which shows that a slope is determined by a function
-(`eq_zero_of_slopeAsymptotics_zero`). Uniqueness of the normalized corrected planes follows from
-the Liouville theorem of order zero; the corrected planes normalized at a vertex then depend
-linearly on the slope, and `(q, a) ↦ u_q + a` is an injective linear map from a space of dimension
-three into `𝒜_1`, hence onto `𝒜_1`.
+The statements `PlanarCorrectedPlaneExistenceTwo` (Armstrong and Dario, Theorem 2 (ii) at `k = 1`)
+and `PlanarOrderOneDimensionTwo` (Theorem 2 (i) at `k = 1`, `dim 𝒜₁ ≤ 3`) for the planar infinite
+cluster, and the fact that a function on a cluster whose balls have the cap density determines its
+slope (`eq_zero_of_slopeAsymptotics_zero`).
 -/
 
 namespace Rigidity.Proofs.Regularity

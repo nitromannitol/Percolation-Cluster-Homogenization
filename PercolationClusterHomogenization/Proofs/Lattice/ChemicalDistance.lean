@@ -1,24 +1,11 @@
 import PercolationClusterHomogenization.External.WellConnected
 
 /-!
-# A chemical-distance bound on the infinite cluster from well-connected cubes
+# Cubes and open paths in cubes
 
-The step `step:lip-in-A1` of Lemma 3.1 (paper L820 of the corrected draft) bounds the Euclidean
-growth of a function which is Lipschitz for the graph (chemical) distance of the infinite cluster.
-This needs a comparison of the chemical distance with the Euclidean distance; it is derived here
-from Proposition 2.3 (`Rigidity.External.WellConnectedInput`).
-
-In a well-connected cube `Q_N`, every cube `z + Q_M` of radius `M = ⌈N^δ/2⌉`, `δ = 1/(10d)²`,
-centred in `Q_N` is a good subcube, with a largest cluster `𝒞_*(z + Q_M)`:
-* a vertex `x` of an infinite cluster lies in `𝒞_*(x + Q_M)`, since the first `M` steps of an open
-  path from `x` to infinity stay in `x + Q_M`;
-* the clusters `𝒞_*(z + Q_M)` and `𝒞_*(z + e_j + Q_M)` meet, at a point of the first cluster on
-  the face `{y_j = z_j + M}`, from which the cluster crosses the cube;
-* two points of `𝒞_*(z + Q_M)` are joined by an open path of at most `(2M + 1)^d` steps.
-Chaining along a lattice path of `|x - y|₁ ≤ 2dN` unit steps, two points of infinite clusters in
-`Q_N` are at chemical distance at most `(2dN + 1)(2M + 1)^d`; we use the crude consequence
-`(2d + 1) 4^d N^{3/2}`, which is subquadratic, hence enough for the growth condition of `A₁`.
-By the Borel–Cantelli lemma, `Q_N` is well-connected for all large `N`, almost surely.
+A lattice step changes each coordinate by at most one; the open graph inside a set is a subgraph of
+the open graph, and its walks starting in the set stay in it; the cube `z + Q_r` as a finset; and
+the summability of stretched exponentials over the integers.
 -/
 
 namespace Rigidity.Proofs.S3

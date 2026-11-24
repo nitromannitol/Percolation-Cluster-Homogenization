@@ -5,23 +5,12 @@ import LatticeProb.Prob.Percolation.MeasurableCorrectorGradients
 import PercolationClusterHomogenization.Proofs.Lattice.ConfigurationExtension
 
 /-!
-# Lemma 3.1: the dihedral symmetry of the lattice and of the corrected planes
+# Lattice automorphisms and signed permutations
 
-Step `step:3.1-reflection` of Lemma 3.1 (paper L841-859 of the corrected draft).
-
-* An automorphism `φ` of the nearest-neighbor graph of `ℤ^d` permutes the bonds, hence acts on
-  the configurations by permuting coordinates; this action preserves the product Bernoulli law
-  (`Measure.infinitePi_map_piCongrLeft`), and `φ` is a graph isomorphism from the open graph of
-  `ω` onto the open graph of the transported configuration. It therefore transports the open
-  components, their infinitude, the unique infinite cluster, the Laplacian and the Lipschitz
-  bounds for the graph distance.
-* The signed permutations `x ↦ (sᵢ x_{π i})ᵢ` of the coordinates are such automorphisms; they
-  are Euclidean isometries fixing the origin and transport the affine function `x ↦ q · x` to
-  `x ↦ q' · x` with `q'ᵢ = sᵢ q_{π i}`. Hence they transport corrected planes of slope `q` to
-  corrected planes of slope `q'`, and the set of `L`-Lipschitz slopes covariantly.
-* The reflections `T_j` and the coordinate transpositions are signed permutations; since the law
-  is invariant, a slope which is almost surely `L`-Lipschitz has almost surely `L`-Lipschitz
-  images.
+An automorphism of the nearest-neighbour graph of `ℤᵈ` permutes the bonds and acts on the
+configurations, preserving the product Bernoulli law and carrying open graphs to open graphs. The
+signed permutations `x ↦ (sᵢ x_{π i})ᵢ` are such automorphisms, preserve the `ℓ¹` distance, and act
+on slopes.
 -/
 
 namespace Rigidity.Proofs.S3

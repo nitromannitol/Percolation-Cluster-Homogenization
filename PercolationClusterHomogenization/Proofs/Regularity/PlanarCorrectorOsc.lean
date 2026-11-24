@@ -30,22 +30,11 @@ import PercolationClusterHomogenization.External.CorrectorQuantitative
 import PercolationClusterHomogenization.External.PlanarInputs
 
 /-!
-# (1.22) in dimension two: the oscillation of the correctors on the balls
+# The oscillation form of (1.22) in dimension two
 
-`PlanarCorrectorOscSublinearTwo` is (1.22) of Armstrong and Dario (arXiv:1609.09431v2) in the
-oscillation form: for `R ≥ 1` there is a measurable `Z_R ≥ 0` of class `O_s(C R^{1-δ})` such that
-almost surely, for every corrected plane `ℓ` of slope `q` and all `a, b` of the infinite cluster in
-the ball of radius `R`, `|χ(a) - χ(b)| ≤ |q|₁ Z_R` with `χ = ℓ - q · x`.
-
-`planarCorrectorOscSublinearTwo_of_sublinearL2`: it follows from (1.18) in the form `O_s`, the
-order-zero regularity and the minimal scales:
-* the correctors `u₀, u₁` of the slopes `e₀, e₁` are bounded on the balls by
-  `C max(R, 9 max(X, 1))^{1-7η}` (`exists_corrector_sup_os`, the Remark after (1.19));
-* a corrected plane of slope `q` differs from `q₀ u₀ + q₁ u₁` by a constant: the difference is
-  harmonic and sublinear, hence constant by the Liouville theorem of order zero
-  (`Rigidity.Proofs.Section5.sublinearLiouvilleStep_two`);
-* `Z_R = 2 (C + 1) max(R, 9 max(X, 1))^{1-7η}` is measurable and at most
-  `18 (C + 1) R^{1-7η} max(X, 1)`.
+The statement `PlanarCorrectorOscSublinearTwo` of the quantitative sublinearity (1.22) of the
+correctors in the oscillation form, the uniqueness of the corrected planes up to constants
+(`eq_add_of_isCorrectedPlane`), and the passage from bounds on boxes to bounds on balls.
 -/
 
 namespace Rigidity.Proofs.Regularity

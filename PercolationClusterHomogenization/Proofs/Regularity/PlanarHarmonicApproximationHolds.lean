@@ -4,25 +4,14 @@ import PercolationClusterHomogenization.Proofs.Dirichlet.PlanarTheoremOneHolds
 import PercolationClusterHomogenization.Proofs.Cluster.PlanarMinimalScales
 
 /-!
-# Lemma 7.1 and the order-zero regularity in dimension two, with no hypothesis
+# Lemma 7.1 and Theorem 2 (iii) at `k = 0` in dimension two
 
-The inputs of `planarHarmonicApproximationTwo_of_inputs` are the minimal scales of the planar
-partition (`PlanarMinimalScalesTwo p`, the statement `PercolationClusterHomogenization.Proofs.Cluster.PlanarMinimalScales p`
-of Proposition 2.4) and Theorem 1 in dimension two with the discrete homogenized solution
-(`PlanarHomogenizationErrorTwo p p'`, the statement
-`Rigidity.Dirichlet.PlanarHomogenizationError p p'`). Both are proved for `p > p_c(2)`
-(`planarMinimalScales_holds`, `planarHomogenizationError_holds`), so the following hold with no
-hypothesis beyond `p > p_c(2)`:
-
-* `planarSquareEstimatesTwo_holds`: the estimates on the squares of the proof of Lemma 7.1;
-* `planarHarmonicApproximationTwo_holds`: Lemma 7.1 in dimension two
-  (`PlanarHarmonicApproximationTwo`);
-* `armstrongDarioOrderZeroTwo_holds`: Theorem 2 (iii) for `k = 0` in dimension two
-  (`ArmstrongDarioOrderZeroTwo`).
-
-`armstrongDarioOrderOneOriginTwo_of_dario` is Theorem 2 (iii) for `k = 1` at the origin in
-dimension two from Theorem 1 of Dario (`DarioOptimalCorrectorTwo`), the existence of the corrected
-planes (`PlanarCorrectedPlaneExistenceTwo`) and `dim 𝒜_1 ≤ 3` (`PlanarOrderOneDimensionTwo`).
+For `p_c(2) < p < 1` and with no further hypothesis: the minimal scales of the planar partition and
+Theorem 1 in the forms used for Lemma 7.1 (`planarMinimalScalesTwo_holds`,
+`planarHomogenizationErrorTwo_holds`), the estimates on squares of the proof of Lemma 7.1
+(`planarSquareEstimatesTwo_holds`), Lemma 7.1 of Armstrong and Dario
+(`planarHarmonicApproximationTwo_holds`) and the order-zero regularity, Theorem 2 (iii) at `k = 0`
+(`armstrongDarioOrderZeroTwo_holds`).
 -/
 
 namespace Rigidity.Proofs.Regularity

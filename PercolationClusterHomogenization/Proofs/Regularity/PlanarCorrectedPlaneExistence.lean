@@ -1,22 +1,12 @@
 import PercolationClusterHomogenization.Proofs.Regularity.PlanarCorrectorSupNorm
 
 /-!
-# The corrected planes of the planar cluster from the quantitative sublinearity in `L²`
+# Corrected planes in dimension two from the sublinearity (1.18)
 
-`planarCorrectedPlaneExistenceTwo_of_sublinearL2` proves `PlanarCorrectedPlaneExistenceTwo` (every
-slope has a corrected plane, sublinear in the uniform norm) from (1.18)
-(`PlanarCorrectorSublinearL2Two`), the order-zero regularity of Theorem 2 (iii)
-(`ArmstrongDarioOrderZeroTwo`) and the minimal scales of Proposition 2.4
-(`PlanarMinimalScalesTwo`), by the argument of the Remark after (1.19) of Armstrong and Dario
-(arXiv:1609.09431v2):
-
-* the Lipschitz estimate at every centre (`exists_planar_all_centres_constant_approximation`) with
-  the maximum of its minimal scales over the boxes (`ae_eventually_scale_le_three`) bounds the
-  increments of the corrector;
-* the uniform bound at each triadic scale (`abs_corrector_le_at_scale`), from the comparison with
-  the coarsening and the interpolation inequality, gives the bound of (1.22) above an almost surely
-  finite scale;
-* `componentSlopeAsymptotics_of_scales` turns it into the slope asymptotics.
+Every slope has a corrected plane on the planar infinite cluster (Armstrong and Dario, Theorem 2 (ii)
+at `k = 1`), from the bound (1.18) with an almost surely finite minimal scale
+(`planarCorrectedPlaneExistenceTwo_of_sublinearL2Ae`), or from (1.18), the order-zero regularity and
+the minimal scales (`planarCorrectedPlaneExistenceTwo_of_sublinearL2`).
 -/
 
 namespace Rigidity.Proofs.Regularity

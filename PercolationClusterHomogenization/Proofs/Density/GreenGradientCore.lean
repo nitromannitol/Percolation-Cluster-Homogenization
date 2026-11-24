@@ -18,23 +18,10 @@ import LatticeProb.Prob.Percolation.LatticeRadialScale
 import LatticeProb.Prob.FiniteTailMax
 
 /-!
-# Proposition 2.6: the deterministic core
+# Values on a cluster ball and the normalized `L²` norm
 
-`GreenGradientCoreStep` (step:2.6-expansion, paper L554-655). Write `R = |x - y|₂ / 2` and
-`u = G(·, y) - K - Ḡ(x - y)`, harmonic in the interior of `𝒞 ∩ B_R(x)`.
-
-* The large-scale `C^{1,1}` regularity (H2) at `R` gives a slope `ξ` and a constant `a`, and
-  `GreenOscillationStep` bounds `‖u‖_{L̲²(B_R(x))} ≤ A₂ R^{2-d}`, so that
-  `‖u - ∑ᵢ ξᵢ ℓᵢ - a‖_{L̲²(B_r(x))} ≤ Cr A₂ r² R^{-d}` for `r ∈ [X, R/2]`.
-* `SlopeEstimateStep` then gives `|ξ - ∇Ḡ(x - y)|₁ ≤ A₁ R^{1/2 - d + δ/4}`.
-* At the scale `X`, the value of `v = u - ∑ᵢ ξᵢ ℓᵢ - a` at a vertex of `B_X(x)` is at most
-  `#B_X ‖v‖_{L̲²(B_X(x))} ≤ 5^d X^{d+2} Cr A₂ R^{-d}`, and the forward differences of the
-  corrected planes are bounded by `1 + Cc X^{δ/4}` by (H3). Since
-  `D_j G(x) - ∑ᵢ D_j ℓᵢ(x) ∂ᵢḠ = D_j v(x) + ∑ᵢ (ξᵢ - ∂ᵢḠ) D_j ℓᵢ(x)`, the threshold
-  `|x - y|₁ ≥ A X^{2d+4}` (so that `X^{d+2} ≤ R^{1/2}`) gives the bound `A |x - y|₁^{1/2-d+δ}`.
-
-This replaces the Caccioppoli inequality and the two-scale `L²` bound of the paper by the
-pointwise bound of a function on a finite ball by its normalized `L²` norm at the minimal scale.
+A value of a function on a cluster ball is at most the number of vertices of the ball times the
+normalized `L̲²` norm of the function on the ball.
 -/
 
 namespace Rigidity.Proofs.S2

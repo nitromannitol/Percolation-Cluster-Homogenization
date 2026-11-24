@@ -10,22 +10,11 @@ import Mathlib.Topology.Connected.Basic
 import PercolationClusterHomogenization.External.CorrectorQuantitative
 
 /-!
-# Proposition 2.6, step:2.6-expansion: affine majorization
+# The normalized `L²` norm on the balls of a component
 
-`AffineMajorizationStep` (paper L617-620, proof step `step:2.6-expansion`): under the density
-estimate (H4) at the scale `X`, for
-`r ≥ X ∨ R₀`, the `L̲²(𝒞 ∩ B_r(x))` norm of an affine function `b + η · (· - x)` majorizes
-`c₁ r |η|₁`.
-
-Proof. Replacing `(b, η)` by `(-b, -η)` we may assume `b ≥ 0`. Let `p = x + (r / 2|η|) η` and
-let `z` be the lattice point obtained by rounding `p`, so that `|z - p| ≤ d + 1`. For `r ≥ R₀`,
-the ball `B_{r/100}(z)` lies in `B_r(x)`, the affine function is at least `|η| r / 4` on it, and by
-(H4) it carries at least `c r^d` vertices of the cluster; the ball `B_r(x)` carries at most
-`5^d r^d` lattice points (`card_componentEuclideanBall_le`), and `|η|₁² ≤ (d + 1) |η|²`.
-
-The file also records the elementary properties of the normalized `L̲²` norm `componentBallL2`
-used in the slope estimate: the triangle inequality (`componentBallL2_add_le`) and the bound by
-the supremum (`componentBallL2_le_of_abs_le`).
+The triangle inequality and the symmetry of the normalized `L̲²` norm on the balls of a component,
+the bound by a bound of the absolute value, and the count `5^d r^d` of the vertices of a component
+in a Euclidean ball of radius `r ≥ 1`.
 -/
 
 namespace Rigidity.Proofs.S2

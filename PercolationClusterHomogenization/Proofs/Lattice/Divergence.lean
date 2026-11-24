@@ -16,20 +16,10 @@ import PercolationClusterHomogenization.External.WellConnected
 import LatticeProb.Graph.Zd
 
 /-!
-# `step:3.2-divergence`: the divergence identity on `L(Q_N)`
+# Sums over the lattice neighbours
 
-Step `step:3.2-divergence` of Proposition 3.2 (eq. (divergence-theorem-flux) of the corrected
-draft). For a function `f` on oriented pairs of vertices which is antisymmetric and whose sum over
-the `2d` neighbours of every vertex vanishes, the sum of `f` over the oriented edges leaving
-`L(Q_N)` vanishes: summing the vanishing neighbour sums over `L(Q_N)`, direction by direction, the
-edges with both endpoints in `L(Q_N)` cancel in pairs (`x ↦ x - e_i` is a bijection between the
-two orientations), and the outward edges in direction `±e_i` start exactly at the points of the
-corresponding face: `center(Q_N)` for `+e₁`, `left(Q_N)` for `-e₁`, and the sides `x_j = ±N` for
-`±e_j`, `j ≠ 1`.
-
-The discrete normal derivative `edgeDifference C u` of a function `u` on a cluster is antisymmetric,
-and its neighbour sum at a vertex of the cluster is minus the Laplacian of `u` there, so the
-identity applies to harmonic functions.
+The sum of a function over the lattice neighbours of a vertex is the sum over the `2d` directions,
+and the Laplacian on a cluster is a sum over the lattice neighbours.
 -/
 
 set_option autoImplicit false

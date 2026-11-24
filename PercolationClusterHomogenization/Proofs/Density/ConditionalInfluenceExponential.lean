@@ -1,10 +1,10 @@
 import PercolationClusterHomogenization.Proofs.Density.IntegratedEnergySeries
 
 /-!
-# Exponential moments of averaged planar influences
+# The averaged resampling energy of the planar density
 
-The sum of the independent-copy averaged squared influences satisfies the exponential-moment
-convention for stochastic bounds.
+`planarConditionalInfluenceEnergy`: the sum of the squared resampling influences of the planar
+cluster density, averaged over an independent configuration.
 -/
 
 namespace Rigidity.Proofs.S2

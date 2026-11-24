@@ -4,10 +4,10 @@ import PercolationClusterHomogenization.Proofs.Density.ClusterDensityBounds
 import PercolationClusterHomogenization.Proofs.Density.ConditionalInfluenceExponential
 
 /-!
-# Exponential moment of planar conditional variance
+# The centered planar density in the real encoding
 
-The conditional variance sum has the inverse-volume stochastic bound used in the density
-concentration argument.
+`planarDensityRealObservable`: the centered planar cluster density in the real Bernoulli product
+encoding of the configuration.
 -/
 
 namespace Rigidity.Proofs.S2

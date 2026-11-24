@@ -7,9 +7,10 @@ import PercolationClusterHomogenization.Proofs.Density.NonnegativeIntegralSeries
 import PercolationClusterHomogenization.Proofs.Density.NormalizedInfluenceEnergy
 
 /-!
-# Summing conditional planar resampling influences
+# The integrated resampling energy of the planar density
 
-The average energy is the convergent sum of its single-bond averages almost surely.
+The individual bond influences of the planar cluster density are integrable in the independent copy,
+and their integrals sum to the averaged resampling energy.
 -/
 
 namespace Rigidity.Proofs.S2

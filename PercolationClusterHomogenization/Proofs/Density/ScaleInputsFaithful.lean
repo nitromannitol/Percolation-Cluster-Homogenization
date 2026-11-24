@@ -4,40 +4,12 @@ import LatticeProb.Prob.Percolation.LatticeHarmonicGrowth
 import PercolationClusterHomogenization.Proofs.Density.GreenGradientCore
 
 /-!
-# Proposition 2.6, step:2.6-inputs: the literature inputs as printed
+# The density of the infinite cluster in balls, and stretched exponential moments
 
-The two local proposed inputs of `Rigidity.Proofs.S2` (`ArmstrongDarioOrderOneProposed`,
-`ClusterDensityInputProposed`) are stronger than the sentences of the corrected draft that cite
-them. This file states the two inputs exactly as printed and
-derives the proposed forms from them.
-
-* `ClusterDensityInputFaithful`: paper L508-511: beyond `M_dense(x) ≤ O_s(C)`, any ball of radius
-  `r/100` containing the vertex `x` contains at least `𝔠 r^d` vertices of `𝒞_∞`. Source
-  (correction C35): Dario–Gu, arXiv:1909.10439v4, Proposition A.1, with a union bound over
-  triadic cubes (`clusterDensityInputFaithful_of_concentration`, `ClusterDensityFromDarioGu.lean`).
-* `ArmstrongDarioOrderOneFaithful`: eq. (large scale-regularity), paper L513-518: for
-  `R ≥ 2 M_reg(x)` and `u ∈ 𝒜(𝒞_∞ ∩ B_{2R}(x))` there is a slope `ξ` with
-  `inf_a ‖u - ℓ_ξ - a‖_{L̲²(𝒞_∞ ∩ B_r(x))} ≤ C (r/R)² ‖u‖_{L̲²(𝒞_∞ ∩ B_R(x))}` for
-  `r ∈ [M_reg(x), R/2]`.
-
-Main results.
-* `clusterDensityInputProposed_of_faithful`: the printed density sentence at every centre gives
-  `ClusterDensityInputProposed` (centres in `B̄_r(x)`), with the same exponent `s`: a union bound over
-  the centres (`tailOfOsStep`, `exists_radial_scale_exp_moment`) and the scale
-  `max (100 M_rad(x)) M_dense(x)`; centres within `M_rad(x)` of `x` are covered by balls containing `x`.
-* `armstrongDarioOrderOneProposed_of_faithful`: `ArmstrongDarioOrderOneProposed` from the printed
-  form, the printed density and `CorrectorQuantitativeInput` (at `α = 1/2`). The deterministic part
-  is `regularityProposedAt_of_faithfulAt`: the printed form at radius `R/2` covers `r ≤ R/4`; one
-  constant serves all scales by a dyadic chain of near-minimizing constants (density ratios,
-  `componentBallL2_le_sqrt_card_div_mul`); the range `r ∈ (R/4, R/2]` uses the doubling of `ℓ_ξ + a`
-  (`correctedPlane_doubling`, from the corrector bounds and `affineMajorizationStep`).
-* `regularityScaleStep_of_faithful`, `densityScaleStep_of_faithful`,
-  `greenGradientHomogenization_of_faithfulInputs`: steps 2.6-inputs and Proposition 2.6 from the
-  printed inputs.
-
-The consumer step `RegularityAt` (harmonic in `B_R`, estimate up to `r = R/2`) is stronger than the
-printed form (harmonic in `B_{2R}`); its only consumer (`GreenGradientCore.lean`) applies it to a
-function harmonic in `B_{2R}(x)`. The doubling estimate bridges the two here.
+The statement `ClusterDensityInputFaithful` of the density of the infinite cluster in the balls of
+the lattice above a minimal scale, the bound `X ≤ O_s(θ A^{1/s})` from `E[exp((X/θ ∨ 0)^s)] ≤ A`
+(`isOsBond_of_integral_le`), the monotonicity and scaling rules of `IsOsBond`, and the restriction of
+the normalized `L̲²` norm to a smaller ball.
 -/
 
 namespace Rigidity.Proofs.S2

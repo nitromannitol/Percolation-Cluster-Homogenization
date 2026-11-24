@@ -1,10 +1,10 @@
 import PercolationClusterHomogenization.Proofs.Density.RescaleExponentialMoment
 
 /-!
-# Planar density resampling energy with a unit exponential moment
+# The resampling energy of the normalized planar density
 
-The resampling energy obeys the exponential-moment convention for stochastic bounds, uniformly
-at inverse-volume scale.
+`planarDensityResamplingEnergy`: the total squared influence of the normalized triadic cluster
+density in the plane.
 -/
 
 namespace Rigidity.Proofs.S2

@@ -9,27 +9,12 @@ import PercolationClusterHomogenization.Proofs.Density.ClusterDensityFromDarioGu
 import PercolationClusterHomogenization.Proofs.Cluster.PlanarMinimalScales
 
 /-!
-# Theorem 2 (iii) at `k = 1` in the plane from the estimates on squares
+# Lemma 7.3 at `k = 2` in the plane and the scales of the planar partition
 
-The inputs of `armstrongDarioOrderOneOriginTwo_of_inputs` are discharged as follows.
-
-* `PlanarCoarseHarmonicApproximationTwo` is `PlanarHarmonicApproximationTwo`
-  (`planarCoarseHarmonicApproximationTwo_iff`): the coarsenings `coarseAtAnchor C u` and
-  `planarCoarse C u` are the same function.
-* `PlanarPartCubeMoments p` holds for `p > p_c(2)` (`planarPartCubeMoments_holds`): it is part of
-  the minimal scales `PercolationClusterHomogenization.Proofs.Cluster.PlanarMinimalScales p` of Proposition 2.4
-  (`Rigidity.Proofs.Cluster.planarMinimalScales_holds`).
-* `PlanarPartitionSizeScale p`, the hypothesis on the partition cubes of
-  `planarHarmonicApproximationTwo_of_squareEstimates`, follows from the same minimal scales with
-  `t = 1` and `α = 1/2`, above `max(M, 81)` (`planarPartitionSizeScale_of_partCubeMoments`,
-  `planarPartitionSizeScale_holds`).
-* The planar corrector inputs are `supercriticalBondCorrectorInputTwo_of_orderOne` (Theorem 2 (i),
-  (ii) at `k = 1` and the order-zero regularity) and `correctorQuantitativeInputTwo_of_dario`
-  (Theorem 1 of Dario, `DarioOptimalCorrectorTwo`).
-
-`armstrongDarioOrderOneOriginTwo_of_squareEstimates`: Theorem 2 (iii) at `k = 1` in the plane from
-the estimates on squares of the proof of Lemma 7.1 (`PlanarSquareEstimatesTwo`), Dario's Theorem 1
-in dimension two, the existence of the corrected planes and `dim 𝒜_1 ≤ 3`.
+The two forms of Lemma 7.1 in dimension two agree; the minimal scales of the sizes of the planar
+partition cubes and the bound on their scales (`PlanarPartitionSizeScale`) hold for `p > p_c(2)`;
+and Lemma 7.3 of Armstrong and Dario, (7.18) at `k = 2`, holds in the plane from the estimates on
+squares of the proof of Lemma 7.1 (`armstrongDarioMesoscopicDegreeTwoPlanar_of_squareEstimates`).
 -/
 
 namespace Rigidity.Proofs.Regularity

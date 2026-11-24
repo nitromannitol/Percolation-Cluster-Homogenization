@@ -2,30 +2,11 @@ import PercolationClusterHomogenization.Proofs.Planar.WindingNumber
 import PercolationClusterHomogenization.External.KestenCrossing
 
 /-!
-# Lemma 5.14: the steps of the loops around annuli
+# The crossings of an annulus
 
-Lemma 5.14 (`lemma:loops-around-annuli`, corrected draft L1945-1959) is carved into three steps,
-with the literature input `Rigidity.External.KestenRectangleCrossing` (Kesten, Theorem 11.1)
-supplying the crossing estimate of a long rectangle.
-
-* `CrossingProbabilityStep` (union bound): if every rectangle `[0, m] × [0, n]` is crossed in its
-  long direction outside an event of probability at most `C (m + 1) e^{-cn}`, then the crossings
-  `AnnulusCrossings ω R` at scale `R` occur outside an event of probability at most
-  `C' (R + 1) e^{-c'R}`.
-* `BorelCantelliStep`: such a summable bound gives, almost surely, a scale `M` with
-  `AnnulusCrossings ω R` for every `R ≥ M`.
-* `LoopFromCrossingsStep` (deterministic planarity): the crossings at all scales `R ≥ M` give,
-  for all large `R`, a loop of `𝒞_∞` in `Q_{2R} \ Q_R` with winding number `±1`.
-
-`AnnulusCrossings ω R` consists of the four long crossings of the rectangles which make up the
-annulus `Q_{2R} \ Q_R` (bottom and top, crossed horizontally; left and right, crossed vertically)
-and one radial crossing of `[R + 1, 4R] × [0, R]`. The printed proof only uses the four crossings
-of the annulus ("a union bound and planarity"); it does not show that the loop they contain lies
-in `𝒞_∞`. The radial crossing fills this: it meets the right crossing at scale `R` (in
-`[R + 1, 2R] × [0, R]`) and the right crossing at scale `2R` (in `[2R + 1, 4R] × [0, R]`), so the
-crossings at the scales `2^k R`, `k ≥ 0`, form an infinite connected open set, which lies in the
-unique infinite cluster. In each case the two paths are a horizontal and a vertical crossing of
-the same rectangle of `ℤ²`, hence share a vertex.
+`AnnulusCrossings ω R`: the long crossings of the four rectangles of the annulus `Q_{2R} \ Q_R`;
+and the statement `CrossingProbabilityStep` that an exponential crossing estimate for long
+rectangles gives an exponential bound on the failure of these crossings.
 -/
 
 open MeasureTheory LatticeProb.Percolation

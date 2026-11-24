@@ -1,13 +1,10 @@
 import PercolationClusterHomogenization.Proofs.Planar.LoopsAroundAnnuli
 
 /-!
-# Lemma 5.14: the crossing probability and Borel-Cantelli steps
+# Crossings of the rectangles of an annulus
 
-* `crossingProbabilityStep`: each of the five rectangles in `AnnulusCrossings ω R` has long side
-  `m ≤ 4R` and short side `n ≥ R - 1`, so the failure of its crossing has probability at most
-  `C (m + 1) e^{-cn} ≤ 4 C e^c (R + 1) e^{-cR}`; a union bound over the five gives `C' = 20 C e^c`
-  and `c' = c`.
-* `borelCantelliStep`: `(R + 1) e^{-cR}` is summable, and the Borel-Cantelli lemma applies.
+The crossing estimate of a long rectangle in terms of the radius of the annulus, and the union bound
+over the four rectangles of the annulus (`crossingProbabilityStep`).
 -/
 
 open MeasureTheory LatticeProb.Percolation Filter
