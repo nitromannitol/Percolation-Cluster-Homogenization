@@ -745,3 +745,19 @@ report lists only `propext`, `Classical.choice` and `Quot.sound`.
 #print axioms Rigidity.Percolation.cubeOmega_eq_sub
 #print axioms Rigidity.Percolation.exists_cubeOmega_isOsBond_of_decay
 #print axioms Rigidity.Percolation.exists_neg_cubeMu_le_isOsBond_of_decay
+
+-- Lemma 5.7 in every dimension: the solenoidal field, displays (5.28) to (5.31), Lemma 5.5 for a bounded field, (4.24) in expectation, the variance step and (5.25) for every cube (Armstrong and Dario)
+#print axioms Rigidity.Percolation.latticeEdgePairing_cubeSolenoidalField_eq_zero
+#print axioms Rigidity.Percolation.latticeEdgePairing_cubeSolenoidalField_origin
+#print axioms Rigidity.Percolation.exists_lintegral_coarse_cubeMuMinimizer_le
+#print axioms Rigidity.Percolation.exists_lintegral_latticeEdgePairing_sub_sum_subcubesAt_le
+#print axioms Rigidity.Percolation.exists_lintegral_cubeMuRestrictFieldError_le
+#print axioms Rigidity.Percolation.exists_lintegral_sum_subcube_cubeSolenoidal_sq_le
+#print axioms Rigidity.Percolation.measurable_cubeMuMinimizer_edge
+#print axioms Rigidity.Percolation.indepFun_cubeSwitchLoc
+#print axioms Rigidity.Percolation.sq_sub_cubeSwitchLocValue_le
+#print axioms Rigidity.Percolation.exists_lintegral_sq_sub_cubeSwitchLoc_le
+#print axioms Rigidity.Percolation.exists_variance_cubeMuGradAvg_origin_le
+#print axioms Rigidity.Percolation.exists_lintegral_cubeMuGradAvg_origin_le
+#print axioms Rigidity.Percolation.cubeMuGradAvg_shift_eq_of_good
+#print axioms Rigidity.Percolation.exists_lintegral_cubeMuGradAvg_sub_le

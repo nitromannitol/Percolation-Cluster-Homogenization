@@ -55,8 +55,8 @@ is [`Audit/Axioms.lean`](Audit/Axioms.lean).
 | Definition 5.1, (5.1) | `Rigidity.Percolation.planarNuLimit_eq_planarAhom`, `Rigidity.Percolation.exists_planarAhom_bounds`, `Rigidity.Percolation.cubeAhom` | `d = 2` and every `d` |
 | Proposition 5.2 | `Rigidity.Proofs.Cluster.planarMuLimit_eq`, `Rigidity.Proofs.Regularity.planarNuSubaddOsTwo_holds`; `Rigidity.Percolation.exists_cubeSubaddErr_isOsBond_of_decay` | `d = 2`: the qualitative part, the rate, and the `O_s` form; every `d`: (5.2) and (5.3) in the `O_s` form with `s = 1/(2d − 1)`, given the bound of Lemma 5.9 |
 | Lemma 5.4 | `Rigidity.Percolation.exists_lintegral_planarMuDefect_le` | `d = 2`; every `d` in `GeneralMuEnergyDefect.lean` |
-| Lemma 5.5 | `Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenMu_holds`, `Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenNu_holds` | `d = 2` |
-| Lemma 5.7 | `Rigidity.Proofs.Cluster.planarWeakConvergence_holds` | `d = 2` |
+| Lemma 5.5 | `Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenMu_holds`, `Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenNu_holds`; `Rigidity.Percolation.exists_lintegral_cubeMuRestrictError_le`, `Rigidity.Percolation.exists_lintegral_cubeNuRestrictError_le` | `d = 2`; every `d`, for `□_m` and `2d ≤ n < m ≤ 2n`, `ν` at the slopes `ā⁻¹ q` |
+| Lemma 5.7 | `Rigidity.Proofs.Cluster.planarWeakConvergence_holds`; `Rigidity.Percolation.exists_lintegral_cubeMuGradAvg_sub_le` | `d = 2`; every `d`, for every triadic cube |
 | Lemma 5.9 | `Rigidity.Proofs.Cluster.exists_planarOmegaD_decay_holds` | `d = 2` |
 | Lemma 5.10 | `Rigidity.Percolation.exists_le_mul_pow_of_omega_iteration`, `Rigidity.Percolation.exists_planarOmegaD_le_pow_of_decay`, `Rigidity.Percolation.exists_cubeOmegaD_le_pow_of_decay` | for real sequences, for `D_n` in `d = 2`, and in every `d` given the bound of Lemma 5.9 |
 | Lemma 5.11 | `Rigidity.Percolation.exists_cubeOmega_isOsBond_of_decay` | every `d`, in the `O_s` form with `s = 1/(2d − 1)`, given the bound of Lemma 5.9 |
@@ -1651,3 +1651,43 @@ Departures from Armstrong and Dario:
   the event that the partition cubes have scale at most `l`, with a constant `C₁(l)` (AD: the constant through the
   minimal scales).
 
+
+## Lemma 5.7 in every dimension
+
+For every `d ≥ 2` and `𝔭_c(d) < p < 1`, display (5.25) of Lemma 5.7 holds for every triadic cube `V`
+of scale `n` and every slope `q`:
+`E[Σ_j (|V|⁻¹ ⟨e_j, ∇[u(·, V, q)]_𝒫⟩_V − (ā_{□_n}⁻¹ q)_j)²] ≤ C |q|² (τ_n + 3^{−n/4})`. The modules are
+`GeneralSolenoidalField`, `GeneralSubcubeCrossing`, `GeneralRestrictField`, `GeneralOneVarEst`,
+`GeneralSwitchLocLocal`, `GeneralSwitchLocCompare`, `GeneralSwitchLocProb`, `GeneralWeakConvOrigin` and
+`GeneralWeakConvHolds` of
+[`PercolationClusterHomogenization/Proofs/Cluster/`](PercolationClusterHomogenization/Proofs/Cluster/)
+(namespace `Rigidity.Percolation`).
+
+| Lean declaration | Statement |
+| --- | --- |
+| `cubeSolenoidalField`, `latticeEdgePairing_cubeSolenoidalField_eq_zero`, `latticeEdgePairing_cubeSolenoidalField_origin` | AD Lemma 5.7, Step 1, and (5.28) with right side zero: for a coordinate direction `e_k` and `l ≠ k`, the plane curl of `z_l χ_n(z)` in the coordinates `k, l` is exactly divergence free, bounded by `10`, equal to `e_k` on the edges of `□_n` and zero off the edges of `□_{n+1}`; its pairing with every gradient over `□_{n+1}` vanishes. |
+| `exists_lintegral_coarse_cubeMuMinimizer_le` | AD (4.24) in expectation: `E[Σ_V \|∇[u(·, V, q)]_𝒫\|²] ≤ C \|q\|² \|V\|^{1+1/a}` for every `a ≥ 1`. |
+| `latticeEdgePairing_sub_sum_subcubesAt_sq_le`, `exists_lintegral_latticeEdgePairing_sub_sum_subcubesAt_le` | AD Lemma 5.7, Step 2, (5.29): the pairing of a bounded field over `U` minus the sum over the subcubes is the pairing over the edges between subcubes, at most `d \|U\|/3ⁿ` of them. |
+| `exists_lintegral_cubeMuRestrictFieldError_le` | AD Lemma 5.5 for the pairings with a field `g`, `\|g\| ≤ G`, as used in Step 3 of the proof of Lemma 5.7: the bound of (5.12) with the factor `G²`. |
+| `exists_lintegral_sum_subcube_cubeSolenoidal_sq_le` | AD (5.30): `E[\|Σ_V \|□_n\|⁻¹ ⟨∇[u(·, V, q)]_𝒫, g⟩_V\|²] ≤ C \|q\|² (τ_n + 3^{−n/4})` for the solenoidal field `g` and the subcubes `V` of scale `n` of `□_{n+1}`, `n ≥ 2d`. |
+| `cubeSwitchLoc`, `indepFun_cubeSwitchLoc`, `exists_lintegral_sq_sub_cubeSwitchLoc_le` | AD (5.31): local versions of the subcube pairings, measurable for the bonds inside the subcube and so independent across disjoint subcubes, close in mean square, `C G² \|q\|₁² 3^{−n/4}`, for `n ≥ 8d`. |
+| `exists_variance_cubeMuGradAvg_origin_le`, `exists_lintegral_cubeMuGradAvg_origin_le` | AD Lemma 5.7 for `□_n`, `n ≥ 8d`: the variance bound and (5.25). |
+| `cubeMuGradAvg_shift_eq_of_good`, `exists_lintegral_cubeMuGradAvg_sub_le` | AD Lemma 5.7, (5.25), for every triadic cube, by translation from `□_n`. |
+
+Departures from Armstrong and Dario:
+
+- **Step 1.** AD take a smooth divergence-free continuum field from the proof of Lemma 3.2 of Armstrong and
+  Smart and discretize it, with an error `C 3^{−n}` in (5.28). The Lean field is an exactly divergence-free
+  lattice field: the field `G_i = Σ_j D_j^− A_{ij}` of the antisymmetric potential with `A_{kl} = −A_{lk} = z_l χ_n(z)`
+  and the other entries zero. It vanishes on the edges not inside `□_{n+1}` (AD's printed support
+  `[−3, 3]^d`, rescaled, does not lie inside `□_{n+1}`, whose faces are at `3/2`), so the right side of (5.28) is `0`.
+- **Lemma 5.5 with a field.** The restriction step at the line `⟨∇ f_U, g⟩` of AD is proved by the proof of
+  Lemma 5.5 itself, with the pairing with `g` in place of the pairings with the directions `e_i`, which gives
+  the factor `G²` in place of `d`.
+- **Localization.** AD localize with Lemma 4.11. Here the subcube pairing is compared with a local version
+  built from the partition capped at the scale `⌊n/(8d)⌋` and the field and the slope restricted to the inner
+  cube at distance `3^{k+2}`, by the second variation and Lemma 3.3; the local version depends only on the bonds
+  inside the subcube on the event that the partition agrees with the capped partition, whose complement has
+  probability at most `C (2·3^{n−k} + 29)^d exp(−c 3^k)`.
+- **Small scales.** For `n < 8d` the bound follows from the deterministic bound
+  `\|V\|⁻¹ \|⟨∇[u]_𝒫, e_j⟩_V\| ≤ 2d K² 3^{(2d−1)n} \|q\|₁`.

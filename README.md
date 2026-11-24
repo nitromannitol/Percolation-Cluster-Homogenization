@@ -40,6 +40,7 @@ table.
 | Propositions 3.4, 3.8 | `Rigidity.Percolation.exists_partition_sum_rpow_le_of_sum_eq_zero`, `Rigidity.Proofs.Cluster.GeneralDim.meyersPartition_holds` | every `d`: the Sobolev inequality and the Meyers estimate on the cluster |
 | Propositions 4.9, 4.10 | `Rigidity.Percolation.exists_measure_cubeCappedDiscrepancy_le`, `Rigidity.Percolation.exists_cubeMuLoc_localization` | every `d` |
 | Proposition 5.2 | `Rigidity.Proofs.Cluster.planarMuLimit_eq`, `Rigidity.Proofs.Regularity.planarNuSubaddOsTwo_holds` | `d = 2` |
+| Lemma 5.7 | `Rigidity.Percolation.exists_lintegral_cubeMuGradAvg_sub_le` | every `d`, every triadic cube |
 | Proposition 6.1 | `Rigidity.Dirichlet.sum_sq_sub_le_of_inner_energy_chain` | every `d`, the deterministic error chain |
 | Proposition A.2 | `Rigidity.Proofs.Multiscale.multiscalePoincare_holds` | every `d` |
 

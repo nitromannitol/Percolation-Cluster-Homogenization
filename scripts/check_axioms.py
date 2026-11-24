@@ -719,6 +719,21 @@ groups = {
          'Rigidity.Percolation.cubeOmega_eq_sub',
          'Rigidity.Percolation.exists_cubeOmega_isOsBond_of_decay',
          'Rigidity.Percolation.exists_neg_cubeMu_le_isOsBond_of_decay'],
+    'Lemma 5.7 in every dimension: the solenoidal field, displays (5.28) to (5.31), Lemma 5.5 for a bounded field, (4.24) in expectation, the variance step and (5.25) for every cube (Armstrong and Dario)':
+        ['Rigidity.Percolation.latticeEdgePairing_cubeSolenoidalField_eq_zero',
+         'Rigidity.Percolation.latticeEdgePairing_cubeSolenoidalField_origin',
+         'Rigidity.Percolation.exists_lintegral_coarse_cubeMuMinimizer_le',
+         'Rigidity.Percolation.exists_lintegral_latticeEdgePairing_sub_sum_subcubesAt_le',
+         'Rigidity.Percolation.exists_lintegral_cubeMuRestrictFieldError_le',
+         'Rigidity.Percolation.exists_lintegral_sum_subcube_cubeSolenoidal_sq_le',
+         'Rigidity.Percolation.measurable_cubeMuMinimizer_edge',
+         'Rigidity.Percolation.indepFun_cubeSwitchLoc',
+         'Rigidity.Percolation.sq_sub_cubeSwitchLocValue_le',
+         'Rigidity.Percolation.exists_lintegral_sq_sub_cubeSwitchLoc_le',
+         'Rigidity.Percolation.exists_variance_cubeMuGradAvg_origin_le',
+         'Rigidity.Percolation.exists_lintegral_cubeMuGradAvg_origin_le',
+         'Rigidity.Percolation.cubeMuGradAvg_shift_eq_of_good',
+         'Rigidity.Percolation.exists_lintegral_cubeMuGradAvg_sub_le'],
 }
 standard = {'propext', 'Classical.choice', 'Quot.sound'}
 
