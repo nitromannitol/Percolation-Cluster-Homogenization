@@ -36,7 +36,7 @@ theorem planarCoarseHarmonicApproximationTwo_iff :
 /-- The moments and the maxima of the sizes of the planar partition cubes are part of the
 minimal scales of Proposition 2.4. -/
 theorem planarPartCubeMoments_of_minimalScales {p : unitInterval}
-    (H : PercolationClusterHomogenization.Proofs.Cluster.PlanarMinimalScales p) : PlanarPartCubeMoments p := by
+    (H : Rigidity.Proofs.Cluster.PlanarMinimalScales p) : PlanarPartCubeMoments p := by
   obtain ⟨A₀, s, -, H⟩ := H
   intro t ht α hα
   obtain ⟨K, r, θ, hK, hr, hθ, M, hMm, hM0, hMos, hae⟩ := H t ht α hα

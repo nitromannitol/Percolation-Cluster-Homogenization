@@ -6,7 +6,7 @@ import Mathlib.Data.Int.Interval
 
 The triadic cube of scale `k` containing a lattice point `x` is the sup-norm ball of radius
 `h_k = (3^k - 1)/2` around the point `3^k idx_k(x)`, where `idx_k(x)_i = ⌊(x_i + h_k)/3^k⌋`; these
-are the cubes `PercolationClusterHomogenization.Percolation.TriadicCube` of scale `k`, whose parent has the index
+are the cubes `Rigidity.Percolation.TriadicCube` of scale `k`, whose parent has the index
 `⌊(idx_k(x) + 1)/3⌋`. The enlargement `enl j k x` is the ball of radius `h_{k+j}` around the same
 center, the cube of side `3^j` times larger with the same center (`j = 1`: the cube `3□`).
 

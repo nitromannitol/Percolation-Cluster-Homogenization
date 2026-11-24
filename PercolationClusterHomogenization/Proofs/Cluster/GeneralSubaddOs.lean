@@ -458,9 +458,9 @@ theorem exists_cubeSubaddErr_isOsBond_of_decay [NeZero d] (hd : 2 ≤ d) {p : un
       push_cast
       ring
     have hD : (2 * (d : ℝ) - 2) ≠ 0 := by linarith
-    have hD' : (2 * (d : ℝ) - 1) ≠ 0 := by linarith
-    rw [hr, hs₀, hnd]
-    field_simp <;> ring
+    rw [hr, hs₀, hnd, mul_one, div_add_one hD, div_div_div_cancel_right₀ hD]
+    congr 1
+    ring
   set B₁ : ℝ := (2 : ℝ) ^ ((s₀ + 1) / (s₀ * 1)) with hB₁
   set B₂ : ℝ := (2 : ℝ) ^ (1 / r) with hB₂
   have hB₁0 : 0 < B₁ := by positivity
