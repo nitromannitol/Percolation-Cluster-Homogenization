@@ -1,7 +1,7 @@
 import PercolationClusterHomogenization.Proofs.Cluster.GeneralOmegaMeasurable
 import PercolationClusterHomogenization.Proofs.Cluster.GeneralSIUpgrade
 import PercolationClusterHomogenization.Proofs.Cluster.GeneralRhoSubadditive
-import PercolationClusterHomogenization.Proofs.Cluster.GeneralSubaddTail
+import PercolationClusterHomogenization.Proofs.Cluster.GeneralSubaddRates
 
 /-!
 # The pointwise chain of the proof of Lemma 5.9 on the event of small partition cubes
@@ -103,37 +103,5 @@ theorem cubeForm_sub_le {U : TriadicCube d} (a b : CubeFun ω U) :
   simp only [map_add, map_sub, LinearMap.add_apply, LinearMap.sub_apply] at h ⊢
   rw [cubeForm_symm b a] at h ⊢
   linarith
-
-/-- **The comparison constant grows like `(3^ℓ)^d`.** -/
-theorem comparisonCap_le (hd : 0 < d) (ℓ : ℕ) :
-    comparisonCap d ℓ ≤ (1 + 2 * d + 2 * 3 ^ d * (d * √(4 * Real.exp 1))) * ((3 : ℝ) ^ ℓ) ^ d := by
-  unfold comparisonCap
-  set w : ℝ := (3 : ℝ) ^ ℓ with hw
-  have hw1 : 1 ≤ w := one_le_pow₀ (by norm_num)
-  have hwd : w ≤ w ^ d := le_self_pow₀ hw1 hd.ne'
-  have h1 : (1 : ℝ) ≤ w ^ d := one_le_pow₀ hw1
-  have hsq : √(d * (w ^ (2 * (d - 1)) * (d * (Real.exp 1 * (2 * (w + 1)))))) ≤
-      d * √(4 * Real.exp 1) * w ^ d := by
-    have hin : d * (w ^ (2 * (d - 1)) * (d * (Real.exp 1 * (2 * (w + 1))))) ≤
-        (d * √(4 * Real.exp 1) * w ^ d) ^ 2 := by
-      have hw2 : w + 1 ≤ 2 * w := by linarith
-      have key : ∀ x : ℝ, x ^ (2 * (d - 1)) * x ^ 2 = (x ^ d) ^ 2 := fun x => by
-        rw [← pow_add, ← pow_mul, show 2 * (d - 1) + 2 = d * 2 by omega]
-      have hpow : w ^ (2 * (d - 1)) * w ^ 2 = (w ^ d) ^ 2 := key w
-      have hww : w ^ (2 * (d - 1)) * w ≤ w ^ (2 * (d - 1)) * w ^ 2 := by
-        have : w ≤ w ^ 2 := by nlinarith
-        exact mul_le_mul_of_nonneg_left this (by positivity)
-      rw [mul_pow, mul_pow, Real.sq_sqrt (by positivity)]
-      have he := Real.exp_pos 1
-      calc (d : ℝ) * (w ^ (2 * (d - 1)) * (d * (Real.exp 1 * (2 * (w + 1)))))
-          ≤ d * (w ^ (2 * (d - 1)) * (d * (Real.exp 1 * (2 * (2 * w))))) := by gcongr
-        _ = d ^ 2 * (4 * Real.exp 1) * (w ^ (2 * (d - 1)) * w) := by ring
-        _ ≤ d ^ 2 * (4 * Real.exp 1) * (w ^ (2 * (d - 1)) * w ^ 2) := by gcongr
-        _ = (d : ℝ) ^ 2 * (4 * Real.exp 1) * (w ^ d) ^ 2 := by rw [hpow]
-    calc _ ≤ √((d * √(4 * Real.exp 1) * w ^ d) ^ 2) := Real.sqrt_le_sqrt hin
-      _ = d * √(4 * Real.exp 1) * w ^ d := Real.sqrt_sq (by positivity)
-  have h3 : (0 : ℝ) ≤ 2 * 3 ^ d := by positivity
-  nlinarith [mul_le_mul_of_nonneg_left hsq h3, mul_le_mul_of_nonneg_left hwd
-    (by positivity : (0 : ℝ) ≤ 2 * d)]
 
 end Rigidity.Percolation

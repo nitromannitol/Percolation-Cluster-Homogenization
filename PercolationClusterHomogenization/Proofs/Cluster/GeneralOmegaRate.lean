@@ -40,7 +40,7 @@ variable {d : ℕ} {p : unitInterval}
 
 /-- The constant of the deterministic part. -/
 noncomputable def omegaRateConst (d : ℕ) : ℝ :=
-  1 + (1 + 2 * d + 2 * 3 ^ d * (d * √(4 * Real.exp 1))) +
+  1 + (1 + 2 * d + 2 * 3 ^ d * √(4 * d * d * Real.exp 1)) +
     96 * coarseningConst d ^ 2 * d * 3 ^ d * (3 ^ d + 4 * (d * d * coarseGradConstant d ^ 2))
 
 theorem latticeVolume_succ_eq (n : ℕ) :
@@ -161,7 +161,7 @@ theorem omegaConst_le (hd : 0 < d) {n : ℕ} (hn : 1 ≤ n) (p' q : Fin d → �
   have hQ0 : 0 ≤ Q := Finset.sum_nonneg fun _ _ => abs_nonneg _
   have hQ20 : 0 ≤ Q2 := Finset.sum_nonneg fun _ _ => sq_nonneg _
   have hA0 : 0 ≤ A := abs_nonneg _
-  set Ccap : ℝ := 1 + 2 * d + 2 * 3 ^ d * (d * √(4 * Real.exp 1)) with hCcap
+  set Ccap : ℝ := 1 + 2 * d + 2 * 3 ^ d * √(4 * d * d * Real.exp 1) with hCcap
   have hCcap0 : 0 ≤ Ccap := by positivity
   set Kμ : ℝ := d * d * coarseGradConstant d ^ 2 with hKμ
   have hKμ0 : 0 ≤ Kμ := by positivity
@@ -461,10 +461,10 @@ theorem exists_cubeOmegaD_term_le [NeZero d] (hd : 2 ≤ d)
       rw [hr]
       refine one_div_le_one_div_of_le (by positivity) ?_
       have h1 : (1 : ℝ) ≤ 3 ^ n := one_le_pow₀ (by norm_num)
-      have a : √((3 : ℝ) ^ n) ≤ 3 ^ n := Real.sqrt_le_iff.2 ⟨by positivity, by nlinarith⟩
+      have a : √((3 : ℝ) ^ n) ≤ 3 ^ n :=
+        Real.sqrt_le_iff.2 ⟨by positivity, le_self_pow₀ h1 two_ne_zero⟩
       exact (Real.sqrt_le_sqrt a).trans a
     rw [div_eq_mul_one_div]
-    have hw0 : 0 ≤ 1 + 1 + |x i| + ∑ j, x j ^ 2 := by positivity
     exact mul_le_mul (mul_le_mul_of_nonneg_left hw hCBad) h3n (by positivity)
       (mul_nonneg hCBad (by linarith))
   -- the energy of the differences of the minimizers of `μ`
