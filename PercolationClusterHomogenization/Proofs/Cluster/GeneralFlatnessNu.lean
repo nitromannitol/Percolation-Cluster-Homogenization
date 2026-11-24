@@ -9,12 +9,14 @@ Let `v = v(·, □_m, q)` be the maximizer of `ν(□_m, q)` (zero off the resol
 `exists_cubeFlatness_le_multiscale`, with the block averages of `∇w` on the subcubes `V` of scale
 `k` split as in display (5.36) of Armstrong and Dario,
 
-`|V|⁻¹ ⟨∇w⟩_V - ξ = |V|⁻¹ (⟨∇w⟩_V - ⟨∇[v(·, V, q)]_𝒫⟩_V) + (|V|⁻¹ ⟨∇[v(·, V, q)]_𝒫⟩_V - c) + (c - ξ)`
+`|V|⁻¹ ⟨∇w⟩_V - ξ = |V|⁻¹ (⟨∇w⟩_V - ⟨∇[v(·, V, q)]_𝒫⟩_V)`
+`  + (|V|⁻¹ ⟨∇[v(·, V, q)]_𝒫⟩_V - c) + (c - ξ)`
 
 (`sum_centers_coarsen_nu_le_general`: the first term is the quantity of Lemma 5.5), gives
 
 `‖w - ℓ_ξ - (w - ℓ_ξ)_{□_m}‖²_{L̲²} ≤ C 3^{2n₀} ‖∇w‖²_{L̲²}
-  + ∑_{k=n₀}^{m-1} 3C 3^m 3^k (A_k + B_k) + C 3^{2n₀} |ξ|² + ∑_k C 3^m 3^k (3 |c_k - ξ|² + 3^{-2k} |ξ|²)`
+  + ∑_{k=n₀}^{m-1} 3C 3^m 3^k (A_k + B_k) + C 3^{2n₀} |ξ|²
+  + ∑_k C 3^m 3^k (3 |c_k - ξ|² + 3^{-2k} |ξ|²)`
 
 (`exists_cubeNuFlatness_le_pointwise`), `A_k` the quantity of display (5.12) at scale `k` and `B_k`
 the mean over the subcubes of `| |V|⁻¹ ⟨∇[v(·, V, q)]_𝒫⟩_V - c_k |²`. This is the pointwise bound

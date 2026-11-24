@@ -53,12 +53,14 @@ is [`Audit/Axioms.lean`](Audit/Axioms.lean).
 | Proposition 4.9 | `Rigidity.Percolation.exists_measure_planarCappedDiscrepancy_le`, `Rigidity.Percolation.exists_measure_cubeCappedDiscrepancy_le` | `d = 2` and every `d` |
 | Proposition 4.10 | `Rigidity.Percolation.exists_planarNuLoc_localization`, `Rigidity.Percolation.exists_planarMuLoc_localization`, `Rigidity.Percolation.exists_cubeMuLoc_localization` | `d = 2`; every `d` for `μ` (for `ν`, locality holds by definition) |
 | Definition 5.1, (5.1) | `Rigidity.Percolation.planarNuLimit_eq_planarAhom`, `Rigidity.Percolation.exists_planarAhom_bounds`, `Rigidity.Percolation.cubeAhom` | `d = 2` and every `d` |
-| Proposition 5.2 | `Rigidity.Proofs.Cluster.planarMuLimit_eq`, `Rigidity.Proofs.Regularity.planarNuSubaddOsTwo_holds` | `d = 2`: the qualitative part, the rate, and the `O_s` form (sections below) |
+| Proposition 5.2 | `Rigidity.Proofs.Cluster.planarMuLimit_eq`, `Rigidity.Proofs.Regularity.planarNuSubaddOsTwo_holds`; `Rigidity.Percolation.exists_cubeSubaddErr_isOsBond_of_decay` | `d = 2`: the qualitative part, the rate, and the `O_s` form; every `d`: (5.2) and (5.3) in the `O_s` form with `s = 1/(2d − 1)`, given the bound of Lemma 5.9 |
 | Lemma 5.4 | `Rigidity.Percolation.exists_lintegral_planarMuDefect_le` | `d = 2`; every `d` in `GeneralMuEnergyDefect.lean` |
 | Lemma 5.5 | `Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenMu_holds`, `Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenNu_holds` | `d = 2` |
 | Lemma 5.7 | `Rigidity.Proofs.Cluster.planarWeakConvergence_holds` | `d = 2` |
 | Lemma 5.9 | `Rigidity.Proofs.Cluster.exists_planarOmegaD_decay_holds` | `d = 2` |
-| Lemma 5.10 | `Rigidity.Percolation.exists_le_mul_pow_of_omega_iteration`, `Rigidity.Percolation.exists_planarOmegaD_le_pow_of_decay` | for real sequences, and for `D_n` in `d = 2` |
+| Lemma 5.10 | `Rigidity.Percolation.exists_le_mul_pow_of_omega_iteration`, `Rigidity.Percolation.exists_planarOmegaD_le_pow_of_decay`, `Rigidity.Percolation.exists_cubeOmegaD_le_pow_of_decay` | for real sequences, for `D_n` in `d = 2`, and in every `d` given the bound of Lemma 5.9 |
+| Lemma 5.11 | `Rigidity.Percolation.exists_cubeOmega_isOsBond_of_decay` | every `d`, in the `O_s` form with `s = 1/(2d − 1)`, given the bound of Lemma 5.9 |
+| Definition 5.12, Proposition 5.13 | `Rigidity.Percolation.exists_cubeBoundN_of_decay` | every `d`, given the bound of Lemma 5.9 |
 | Proposition 6.1, Lemmas 6.2 to 6.4 | `Rigidity.Dirichlet.sum_sq_sub_le_of_inner_energy_chain`, `Rigidity.Dirichlet.innerEdgeEnergy_dirichletSolution_div_le_of_coarse` | every `d`, deterministic steps on the lattice |
 | Lemma 7.1 | `Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_holds` | `d = 2`, no hypothesis |
 | Lemma 7.2 | `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2` | every `k`, with its excess-decay and approximation hypotheses |
@@ -1610,4 +1612,42 @@ Departures from Armstrong and Dario:
   open edges and every function harmonic on it, as `rhGood` does for `𝓡`, in place of the estimate `ME_ε(□)` with
   `𝒞_max(3□)`. The printed family has `ME_ε(□_m) ≤ C` where `ME_ε(□) ≤ C` is meant. The minimal scales have the
   stretched exponential tails stated in the table.
+
+## Propositions 5.2 and 5.13, Definition 5.12 and Lemma 5.11 in every dimension, from the bound of Lemma 5.9
+
+For every `d ≥ 2` and `𝔭_c(d) < p < 1`, the stochastic forms of Proposition 5.2, Lemma 5.11 and
+Proposition 5.13 are proved from the bound of Lemma 5.9, the hypothesis `h59`:
+`D_n ≤ C₉ σ₉ⁿ + C₉ Σ_{l ≤ n} ρ₉^{n−l} τ_l` for `n ≥ N₉`, with `σ₉, ρ₉ ∈ [0, 1)`, the same hypothesis
+as for Lemma 5.10 in every dimension. The modules are the thirteen files `GeneralBoundN`,
+`GeneralFieldPairing`, `GeneralFlatnessNuExpect`, `GeneralOmegaSupRate`, `GeneralRhoLocal`,
+`GeneralRhoSubadditive`, `GeneralSIStepTwo`, `GeneralSIUpgrade`, `GeneralSIUpgradeOs`,
+`GeneralSubaddOs`, `GeneralSubaddRates`, `GeneralSubaddTail` and `GeneralSubaddTailMain` of
+[`PercolationClusterHomogenization/Proofs/Cluster/`](PercolationClusterHomogenization/Proofs/Cluster/)
+(namespace `Rigidity.Percolation`).
+
+| Lean declaration | Statement |
+| --- | --- |
+| `exists_cubeRho_majorant_of_decay` | AD (5.42), given `h59`: the quantity `ρ(V) = sup_q \|q\|⁻² ω₊(V, q)` has an almost surely integrable majorant with expectation at most `C rⁿ`. |
+| `exists_cubeRho_tail_of_decay` | AD Lemma 5.11, tail form, given `h59`: the tail of `ρ(□_{n+3+j})` off the event that the partition cubes have scale at most `l`. |
+| `exists_cubeSubaddGood_tail_of_decay` | AD Proposition 5.2, tail form, given `h59`: the event that `\|μ(□_m, q) + (1/2) q · ā⁻¹ q\|` and `\|ν(□_m, ā⁻¹ q) − (1/2) q · ā⁻¹ q\|` are at most `K \|q\|² λᵐ` fails with probability at most `K' exp(−c (3ᵐ)ˢ)`. |
+| `exists_cubeBoundN_of_decay` | AD Definition 5.12 and Proposition 5.13, given `h59`: a random scale `N ≤ O_r(θ)` above which the bounds of Proposition 5.2 hold at the mesoscopic scales `n(m) ≤ m ≤ L n(m)`. |
+| `exists_cubeSubaddErr_isOsBond_of_decay` | AD Proposition 5.2, (5.2) and (5.3), given `h59`: for every triadic cube `V` the random error `X(V)` of `μ(V, q) + (1/2) q · ā⁻¹ q` and `ν(V, ā⁻¹ q) − (1/2) q · ā⁻¹ q` is measurable and `X(V) ≤ O_r(C 3^{−α scale V})` with `r = 1/(2d − 1)`. |
+| `exists_cubeOmega_isOsBond_of_decay` | AD Lemma 5.11, given `h59`: `sup_q \|q\|⁻² \|ω(V, q)\| ≤ O_r(C 3^{−α scale V})` with `r = 1/(2d − 1)` and a measurable majorant, which also bounds `ρ(V)`. |
+| `exists_neg_cubeMu_le_isOsBond_of_decay` | AD (4.17), given `h59`: `−μ(V, q) ≤ (K + Z(V)) \|q\|²` with `Z(V) ≤ O_r(C 3^{−α scale V})`, `r = 1/(2d − 1)`. |
+
+Departures from Armstrong and Dario:
+
+- **Hypothesis.** The three results are proved from the bound of Lemma 5.9 (`h59`), which is not proved in every
+  dimension; in `d = 2` it is proved (`exists_planarOmegaD_decay_holds`).
+- **Order.** AD prove Lemma 5.11 first and derive Proposition 5.2 from it; here, as in `d = 2`, both come from the
+  tail bounds of `GeneralSubaddTailMain.lean`, and Lemma 5.11 is the difference of the two error forms of
+  Proposition 5.2.
+- **Exponents.** The exponent of the `O_s` bounds is `1/(2d − 1)`, which depends only on `d`, as the `s(d)` of AD.
+  For (4.17) AD print `O_{1/(2d+1)}(C |q|² size(□)⁻¹)` with no hypothesis; the Lean bound has the rate
+  `size(□)^{−α}` of Proposition 5.2 in place of `size(□)⁻¹`, and the exponent `1/(2d − 1) ≥ 1/(2d + 1)`.
+- **`ν` at `ā⁻¹ q`.** `ν` is evaluated at the slopes `ā⁻¹ q`; this is equivalent to AD's statement for every slope,
+  since `ā = σ I` with `σ > 0` (`exists_cubeAhom_eq_smul_one`).
+- **Rates.** The rate of (5.42) is `C rⁿ` for some `r < 1` (AD: `C 3^{−nα}`); Lemma 5.11 in tail form is stated on
+  the event that the partition cubes have scale at most `l`, with a constant `C₁(l)` (AD: the constant through the
+  minimal scales).
 

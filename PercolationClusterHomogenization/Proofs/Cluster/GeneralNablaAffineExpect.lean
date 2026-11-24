@@ -24,13 +24,8 @@ namespace Rigidity.Percolation
 variable {d : ℕ} {ω : Configuration d}
 
 /-- The square of the sum of the absolute values bounds the sum of the squares. -/
-theorem sum_sq_le_sq_sum_abs_general (ξ : Fin d → ℝ) : ∑ j, ξ j ^ 2 ≤ (∑ i, |ξ i|) ^ 2 := by
-  have hle : ∀ j, ξ j ^ 2 ≤ |ξ j| * ∑ i, |ξ i| := fun j => by
-    rw [← sq_abs, sq]
-    exact mul_le_mul_of_nonneg_left (Finset.single_le_sum (f := fun i => |ξ i|)
-      (fun i _ => abs_nonneg _) (Finset.mem_univ j)) (abs_nonneg _)
-  calc ∑ j, ξ j ^ 2 ≤ ∑ j, |ξ j| * ∑ i, |ξ i| := Finset.sum_le_sum fun j _ => hle j
-    _ = (∑ i, |ξ i|) ^ 2 := by rw [← Finset.sum_mul, sq]
+@[deprecated sum_sq_le_sq_sum_abs_vec (since := "2026-11-24")]
+alias sum_sq_le_sq_sum_abs_general := sum_sq_le_sq_sum_abs_vec
 
 /-- **The pointwise majorant of display (4.26)** on the partition event. -/
 theorem sum_sq_cubeNuGradAvg_sub_le (hd : 0 < d) (hP : PartitionEvent ω) (U : TriadicCube d)
@@ -87,7 +82,8 @@ theorem sum_sq_cubeNuGradAvg_sub_le (hd : 0 < d) (hP : PartitionEvent ω) (U : T
           4 * 9 ^ d * d * marginSizeSum ω U / U.latticeVolume := by
         rw [mul_pow, mul_pow, h9, hm]
         ring
-      have ha2 : (1 / (3 : ℝ) ^ U.scale) ^ 2 = 1 / ((3 : ℝ) ^ U.scale) ^ 2 := by rw [div_pow, one_pow]
+      have ha2 : (1 / (3 : ℝ) ^ U.scale) ^ 2 = 1 / ((3 : ℝ) ^ U.scale) ^ 2 := by
+        rw [div_pow, one_pow]
       rw [hYabc]
       nlinarith [sq_nonneg (1 / (3 : ℝ) ^ U.scale - faceSizeSum ω U / U.latticeVolume),
         sq_nonneg (faceSizeSum ω U / U.latticeVolume -
@@ -119,7 +115,7 @@ theorem sum_sq_cubeNuGradAvg_sub_le (hd : 0 < d) (hP : PartitionEvent ω) (U : T
       rw [Finset.sum_div]
       exact Finset.sum_congr rfl fun x _ => by rw [div_pow]
     rw [hSeq] at h1
-    calc ∑ j, ξ j ^ 2 ≤ Ξ ^ 2 := sum_sq_le_sq_sum_abs_general ξ
+    calc ∑ j, ξ j ^ 2 ≤ Ξ ^ 2 := sum_sq_le_sq_sum_abs_vec ξ
       _ = Ξ ^ 2 * 1 := (mul_one _).symm
       _ ≤ Ξ ^ 2 * (T + (∑ x ∈ U.toIntegerCube.vertices,
             TriadicCube.stoppingSize (TriadicCube.goodCubes ω) x ^ (d + 1)) /
@@ -274,7 +270,8 @@ theorem exists_lintegral_cubeNuGradAvg_sub_le [NeZero d] (hd : 2 ≤ d) {p : uni
   have hG0 : ∀ ω, 0 ≤ A + B * faceSizeSqSum ω U + D * marginSizeSum ω U + E * S ω := fun ω => by
     have := faceSizeSqSum_nonneg ω U
     have := marginSizeSum_nonneg ω U
-    have : 0 ≤ S ω := Finset.sum_nonneg fun x _ => pow_nonneg (TriadicCube.stoppingSize_nonneg _ _) _
+    have : 0 ≤ S ω :=
+      Finset.sum_nonneg fun x _ => pow_nonneg (TriadicCube.stoppingSize_nonneg _ _) _
     have : 0 ≤ A := by positivity
     positivity
   have hint : ∫ ω, (A + B * faceSizeSqSum ω U + D * marginSizeSum ω U + E * S ω) ∂μ =

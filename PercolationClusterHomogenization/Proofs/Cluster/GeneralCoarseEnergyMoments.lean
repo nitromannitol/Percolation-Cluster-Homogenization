@@ -11,8 +11,8 @@ there is `C < ∞` such that for every triadic cube `V` and slope `ξ`,
 (`exists_lintegral_coarse_cubeNuSolution_le`). Pointwise, by Lemma 3.3 the energy of the
 coarsening of `w` is at most `K² ∑_z size(z)^{2d-1} |∇w|²(z) ≤ K² X^{1/a} B(w, w)`,
 `X = ∑_{z ∈ V} size(z)^{(2d-1)a}`, since each `size(z)^{2d-1}` is at most `X^{1/a}`
-(`sum_gradNormIn_coarse_sq_le_rpow`); with `B(v, v) ≤ (3^d/2) |V| |ξ|₁²`, Jensen's inequality for the
-concave power `1/a` (`lintegral_ofReal_rpow_le`) and the moments of the partition sizes give the
+(`sum_gradNormIn_coarse_sq_le_rpow`); with `B(v, v) ≤ (3^d/2) |V| |ξ|₁²`, Jensen's inequality for
+the concave power `1/a` (`lintegral_ofReal_rpow_le`) and the moments of the partition sizes give the
 bound. Armstrong and Dario state it with the loss `3^{δ n}`, `δ > 0` arbitrary, which is the factor
 `|V|^{1/a}` for `a` large. This is the general-dimensional form of
 `Rigidity.Proofs.Cluster.exists_lintegral_coarse_minimizer_le`, with the partition sizes in place
