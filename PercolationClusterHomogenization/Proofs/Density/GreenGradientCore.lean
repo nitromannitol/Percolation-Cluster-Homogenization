@@ -39,7 +39,7 @@ pointwise bound of a function on a finite ball by its normalized `L²` norm at t
 
 namespace Rigidity.Proofs.S2
 
-open LatticeProb.Percolation Rigidity.Section2 Rigidity.Steps.S2
+open LatticeProb.Percolation
 
 variable {d : ℕ} {ω : Configuration d}
 

@@ -10,7 +10,7 @@ The exterior-reaching candidate bonds all lie in this smaller finite cut.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory ProbabilityTheory Rigidity.External Filter
-open scoped unitInterval Topology
+open scoped unitInterval
 
 /-- Boundary bonds with both endpoints in the ambient region. -/
 noncomputable def vertexCutBondsIn {d : ℕ} (R : Finset (Vertex d))

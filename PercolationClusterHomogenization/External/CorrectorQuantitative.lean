@@ -36,4 +36,28 @@ def IsOsBond (d : ℕ) (p : unitInterval) (X : Configuration d → ℝ) (s θ : 
   Integrable (fun ω => Real.exp (Real.rpow (max (X ω / θ) 0) s)) (latticeBondLaw d p) ∧
   (∫ ω, Real.exp (Real.rpow (max (X ω / θ) 0) s) ∂latticeBondLaw d p) ≤ 2
 
+/-- **Theorem 2.5, quantitative sublinearity and Lipschitz bound** (literature input; Dario-Gu,
+Proposition 2.12). For every
+`α > 0` there are `s, C > 0` and, for every vertex `x`, a minimal scale `M ≤ O_s(C)` such that for
+every `r ≥ M`, every slope `p` and every corrected plane `ℓ_p`, with `χ_p = ℓ_p - p·x`,
+`osc_{𝒞_∞ ∩ B_r(x)} χ_p + ‖∇χ_p‖_{L^∞(𝒞_∞ ∩ B_r(x))} ≤ C |p| r^α`. -/
+def CorrectorQuantitativeInput : Prop :=
+  ∀ (d : ℕ) [NeZero d], 2 ≤ d → ∀ p : unitInterval,
+    criticalProbability d < (p : ℝ) → (p : ℝ) < 1 →
+    ∀ α : ℝ, 0 < α → ∃ s C : ℝ, 0 < s ∧ 0 < C ∧ ∀ x : Vertex d,
+      ∃ M : Configuration d → ℝ, Measurable M ∧ (∀ ω, 0 ≤ M ω) ∧ IsOsBond d p M s C ∧
+      ∀ᵐ ω ∂latticeBondLaw d p, ∀ h : HasUniqueInfiniteOpenComponent ω,
+        ∀ (q : Fin d → ℝ) (ℓ : uniqueInfiniteComponent h → ℝ),
+          IsCorrectedPlane (uniqueInfiniteComponent h) q ℓ →
+        ∀ r : ℝ, M ω ≤ r →
+        ∀ a b a' b' : uniqueInfiniteComponent h,
+          ‖latticeEuclideanEmbedding a.val - latticeEuclideanEmbedding x‖ < r →
+          ‖latticeEuclideanEmbedding b.val - latticeEuclideanEmbedding x‖ < r →
+          ‖latticeEuclideanEmbedding a'.val - latticeEuclideanEmbedding x‖ < r →
+          ‖latticeEuclideanEmbedding b'.val - latticeEuclideanEmbedding x‖ < r →
+          (componentGraph (uniqueInfiniteComponent h)).Adj a' b' →
+          |(ℓ a - ∑ i, q i * a.val i) - (ℓ b - ∑ i, q i * b.val i)| +
+              |(ℓ a' - ∑ i, q i * a'.val i) - (ℓ b' - ∑ i, q i * b'.val i)|
+            ≤ C * (∑ i, |q i|) * r ^ α
+
 end Rigidity.External

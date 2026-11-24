@@ -1,25 +1,5 @@
 import PercolationClusterHomogenization.Proofs.Regularity.PlanarClusterInclusions
-import LatticeProb.External.ArmstrongDarioOrderZero
-import LatticeProb.External.GreenColumnExistence
-import LatticeProb.External.GreenQuantitative
-import LatticeProb.External.SupercriticalBondCorrectorInput
-import LatticeProb.External.SupercriticalBondUniquenessInput
-import LatticeProb.Prob.CountableMeasurable
-import LatticeProb.Prob.Percolation.LSSThinInstantiation
-import LatticeProb.Prob.Percolation.LSSThinIsIncreasing
-import LatticeProb.Prob.Percolation.LSSThinKDependent
-import LatticeProb.Prob.Percolation.LSSThinVacuity
-import LatticeProb.Prob.Percolation.LatticeHarmonicGrowth
-import LatticeProb.Prob.Percolation.LatticeIncidentBonds
-import LatticeProb.Prob.Strassen.Defs
-import PercolationClusterHomogenization.Proofs.Planar.WindingNumber
-import PercolationClusterHomogenization.External.CorrectorQuantitative
-import PercolationClusterHomogenization.External.KestenCrossing
-import PercolationClusterHomogenization.External.WellConnected
-import PercolationClusterHomogenization.Proofs.Percolation.ClusterComparison
-import PercolationClusterHomogenization.Proofs.Percolation.PositiveCriticalProbability
-import PercolationClusterHomogenization.Proofs.Percolation.SupercriticalUniqueness
-import PercolationClusterHomogenization.Proofs.Regularity.PlanarOrderZero
+import PercolationClusterHomogenization.Proofs.Regularity.PlanarOrderZeroInput
 
 /-!
 # Armstrong–Dario, Lemma 7.1, in dimension two, from the estimates on squares, almost surely

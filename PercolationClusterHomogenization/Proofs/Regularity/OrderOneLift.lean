@@ -19,7 +19,7 @@ for that `ε`, and the scale above which the argument runs is finite but not con
 
 namespace Rigidity.Proofs.Regularity
 
-open Filter Topology MeasureTheory LatticeProb LatticeProb.Percolation Rigidity.External
+open Filter MeasureTheory LatticeProb LatticeProb.Percolation Rigidity.External
   Rigidity.Proofs.S2
 
 variable {d : ℕ} {ω : Configuration d}

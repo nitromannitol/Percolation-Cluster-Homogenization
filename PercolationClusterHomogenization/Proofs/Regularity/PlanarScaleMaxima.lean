@@ -1,45 +1,4 @@
-import LatticeProb.External.ArmstrongDarioOrderZero
-import LatticeProb.External.GreenColumnExistence
-import LatticeProb.External.GreenQuantitative
-import LatticeProb.External.SupercriticalBondCorrectorInput
-import LatticeProb.External.SupercriticalBondUniquenessInput
-import LatticeProb.Prob.CountableMeasurable
-import LatticeProb.Prob.Percolation.ContinuumGreen
-import LatticeProb.Prob.Percolation.CorrectedPlaneAlgebra
-import LatticeProb.Prob.Percolation.CorrectedPlaneCharacterization
-import LatticeProb.Prob.Percolation.GreenColumn
-import LatticeProb.Prob.Percolation.GreenColumnEvent
-import LatticeProb.Prob.Percolation.LSSThinInstantiation
-import LatticeProb.Prob.Percolation.LSSThinIsIncreasing
-import LatticeProb.Prob.Percolation.LSSThinKDependent
-import LatticeProb.Prob.Percolation.LSSThinVacuity
-import LatticeProb.Prob.Percolation.LatticeBondErgodicity
-import LatticeProb.Prob.Percolation.LatticeBondTranslationLaw
-import LatticeProb.Prob.Percolation.LatticeClusterL2
-import LatticeProb.Prob.Percolation.LatticeHarmonicGrowth
-import LatticeProb.Prob.Percolation.LatticeIncidentBonds
-import LatticeProb.Prob.Percolation.LatticeOrderZeroApproximation
-import LatticeProb.Prob.Percolation.LatticeOrderZeroTranslation
-import LatticeProb.Prob.Percolation.LatticeUniqueCluster
-import LatticeProb.Prob.Percolation.LatticeUniqueClusterEvent
-import LatticeProb.Prob.Percolation.OpenGraphTranslation
-import LatticeProb.Prob.Strassen.Defs
-import Mathlib.Analysis.Calculus.FDeriv.Basic
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Analysis.InnerProductSpace.Calculus
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.SpecialFunctions.Log.Deriv
-import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
-import Mathlib.Topology.Connected.Basic
-import PercolationClusterHomogenization.Proofs.Lattice.ConfigurationExtension
-import PercolationClusterHomogenization.Proofs.Planar.WindingNumber
-import PercolationClusterHomogenization.External.CorrectorQuantitative
-import PercolationClusterHomogenization.External.KestenCrossing
-import PercolationClusterHomogenization.External.WellConnected
-import PercolationClusterHomogenization.Proofs.Percolation.ClusterComparison
-import PercolationClusterHomogenization.Proofs.Percolation.PositiveCriticalProbability
-import PercolationClusterHomogenization.Proofs.Percolation.SupercriticalUniqueness
-import PercolationClusterHomogenization.Proofs.Regularity.PlanarOrderZero
+import PercolationClusterHomogenization.Proofs.Regularity.PlanarCorrectorL2
 
 /-!
 # The maximum of the minimal scales over a box, by Borel–Cantelli

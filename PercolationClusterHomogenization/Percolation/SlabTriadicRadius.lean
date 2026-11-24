@@ -11,7 +11,7 @@ cubes whose side and radius scales grow linearly together.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory Rigidity.External Filter
-open scoped Topology ENNReal
+open scoped ENNReal
 
 /-- At linearly related cube and radius scales, uniform full-slab two-point
 bounds imply an eventual exponential radius-crossing bound. -/

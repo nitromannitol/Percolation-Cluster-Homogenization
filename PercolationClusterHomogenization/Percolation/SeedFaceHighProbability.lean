@@ -11,7 +11,6 @@ probability.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory ProbabilityTheory Rigidity.External Filter
-open scoped Topology
 
 /-- With positive percolation probability in the base layer and positive
 sprinkling density, a centered seed connects to an outward open trial with

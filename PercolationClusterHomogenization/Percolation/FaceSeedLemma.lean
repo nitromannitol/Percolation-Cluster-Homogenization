@@ -10,7 +10,6 @@ to a fully open translate of itself in a controlled outward pad.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory ProbabilityTheory Rigidity.External Filter
-open scoped Topology
 
 /-- The central seed reaches a face vertex joined by an open bond to an
 open translate of the seed contained in the outward pad. -/

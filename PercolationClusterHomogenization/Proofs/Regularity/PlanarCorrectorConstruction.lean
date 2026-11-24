@@ -1,4 +1,4 @@
-import PercolationClusterHomogenization.Proofs.Regularity.PlanarCorrectorSupNorm
+import PercolationClusterHomogenization.Proofs.Regularity.PlanarCorrectedPlaneExistence
 import PercolationClusterHomogenization.Proofs.Regularity.ClusterOrderOne
 
 /-!
@@ -20,7 +20,7 @@ hypothesis `PlanarAffineApproximationTwo` of `PlanarCorrectorFromApproximation`.
 
 namespace Rigidity.Proofs.Regularity
 
-open Finset Filter Topology LatticeProb LatticeProb.Percolation Rigidity.Percolation
+open Finset Filter LatticeProb LatticeProb.Percolation Rigidity.Percolation
 
 variable {ω : Configuration 2}
 

@@ -10,7 +10,6 @@ a lower bound for two-point connection probabilities in an arbitrary region.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory ProbabilityTheory Rigidity.External Filter
-open scoped Topology
 
 /-- The root has an infinite open component inside the specified vertex region. -/
 def infiniteOpenInEvent {d : ℕ} (B : Set (Vertex d)) (x : Vertex d) : Set (Configuration d) :=

@@ -30,7 +30,7 @@ the supremum (`componentBallL2_le_of_abs_le`).
 
 namespace Rigidity.Proofs.S2
 
-open LatticeProb.Percolation Rigidity.Section2 Rigidity.Steps.S2
+open LatticeProb.Percolation
 
 variable {d : ℕ} {ω : Configuration d}
 

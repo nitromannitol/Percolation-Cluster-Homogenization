@@ -11,7 +11,6 @@ vertices on an expanding cube boundary tends to zero.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory ProbabilityTheory Rigidity.External Filter
-open scoped Topology
 
 /-- The centered lattice cube of integer radius `n`. -/
 def centeredBondCube {d : ℕ} (n : ℕ) : Set (Vertex d) :=

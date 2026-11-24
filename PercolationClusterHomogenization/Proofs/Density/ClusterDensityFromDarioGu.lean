@@ -33,7 +33,7 @@ Main results.
 
 namespace Rigidity.Proofs.S2
 
-open MeasureTheory LatticeProb.Percolation Rigidity.External Rigidity.Steps.S2 Classical
+open MeasureTheory LatticeProb.Percolation Rigidity.External Classical
 
 variable {d : ℕ}
 

@@ -10,7 +10,6 @@ lower bound on the number of contacts on any fixed orthant face.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory ProbabilityTheory Rigidity.External Filter
-open scoped Topology
 
 /-- If the probability that a centered seed has no infinite component is
 smaller than `ε` to the number of orthant faces, then sufficiently large cube

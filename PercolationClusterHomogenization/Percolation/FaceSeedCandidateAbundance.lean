@@ -11,7 +11,6 @@ to those targets, provided its boundary is hidden from the target field.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory ProbabilityTheory Rigidity.External Filter
-open scoped Topology
 
 /-- Uniformly over explored sets containing the central seed and avoiding the
 face, there are more than `t` exterior-reaching boundary candidates with

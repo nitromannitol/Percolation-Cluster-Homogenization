@@ -12,7 +12,6 @@ boundary vertices therefore tends to zero.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory ProbabilityTheory Rigidity.External Filter
-open scoped Topology
 
 /-- Some seed vertex belongs to an infinite open component. -/
 def seedInfiniteOpenEvent {d : ℕ} (roots : Finset (Vertex d)) : Set (Configuration d) :=

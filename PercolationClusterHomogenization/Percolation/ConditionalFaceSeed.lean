@@ -11,7 +11,7 @@ probability, even after conditioning boundary marks above prior thresholds.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory ProbabilityTheory Rigidity.External Filter
-open scoped unitInterval Topology
+open scoped unitInterval
 
 /-- Above criticality and below density one, there are seed and cube sizes
 such that, uniformly over admissible explored sets and previously revealed

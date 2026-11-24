@@ -11,7 +11,6 @@ infinite cluster misses a centered cube tends to zero as the cube grows.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory ProbabilityTheory Rigidity.External Filter
-open scoped Topology
 
 /-- A finite seed meets an infinite open component in a measurable event. -/
 theorem measurableSet_seedInfiniteOpenEvent {d : ℕ} (roots : Finset (Vertex d)) :

@@ -42,7 +42,7 @@ function harmonic in `B_{2R}(x)`. The doubling estimate bridges the two here.
 
 namespace Rigidity.Proofs.S2
 
-open MeasureTheory LatticeProb.Percolation Rigidity.Steps.S2
+open MeasureTheory LatticeProb.Percolation
 open Rigidity.External (IsOsBond)
 
 /-! ### The `O_s` calculus and the density input -/

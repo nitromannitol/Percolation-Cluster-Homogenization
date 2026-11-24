@@ -11,7 +11,7 @@ unlikely.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory ProbabilityTheory Rigidity.External Filter
-open scoped Topology ENNReal
+open scoped ENNReal
 
 /-- Nonempty reached contacts in a sequence of finite regions. -/
 def seedBoundarySurvival {d : ℕ} (P : ℕ → Set (Vertex d))

@@ -37,7 +37,7 @@ set_option relaxedAutoImplicit false
 
 namespace Rigidity.Proofs.S3
 
-open LatticeProb LatticeProb.Percolation Rigidity.Section3 Rigidity.Steps.S3 Classical
+open LatticeProb LatticeProb.Percolation Rigidity.Section3 Classical
 
 variable {d : ℕ}
 
@@ -46,10 +46,6 @@ variable {d : ℕ}
 section Faces
 
 variable [NeZero d] {N : ℕ}
-
-omit [NeZero d] in
-
-omit [NeZero d] in
 
 end Faces
 

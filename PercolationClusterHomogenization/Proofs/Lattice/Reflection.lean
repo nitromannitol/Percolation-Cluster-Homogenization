@@ -26,7 +26,7 @@ Step `step:3.1-reflection` of Lemma 3.1 (paper L841-859 of the corrected draft).
 
 namespace Rigidity.Proofs.S3
 
-open MeasureTheory ProbabilityTheory LatticeProb.Percolation Rigidity.Section3 Rigidity.Steps.S3
+open MeasureTheory ProbabilityTheory LatticeProb.Percolation Rigidity.Section3
 
 variable {d : ℕ}
 
