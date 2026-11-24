@@ -53,14 +53,15 @@ is [`Audit/Axioms.lean`](Audit/Axioms.lean).
 | Proposition 4.9 | `Rigidity.Percolation.exists_measure_planarCappedDiscrepancy_le`, `Rigidity.Percolation.exists_measure_cubeCappedDiscrepancy_le` | `d = 2` and every `d` |
 | Proposition 4.10 | `Rigidity.Percolation.exists_planarNuLoc_localization`, `Rigidity.Percolation.exists_planarMuLoc_localization`, `Rigidity.Percolation.exists_cubeMuLoc_localization` | `d = 2`; every `d` for `μ` (for `ν`, locality holds by definition) |
 | Definition 5.1, (5.1) | `Rigidity.Percolation.planarNuLimit_eq_planarAhom`, `Rigidity.Percolation.exists_planarAhom_bounds`, `Rigidity.Percolation.cubeAhom` | `d = 2` and every `d` |
-| Proposition 5.2 | `Rigidity.Proofs.Cluster.planarMuLimit_eq`, `Rigidity.Proofs.Regularity.planarNuSubaddOsTwo_holds`; `Rigidity.Percolation.exists_cubeSubaddErr_isOsBond_of_decay` | `d = 2`: the qualitative part, the rate, and the `O_s` form; every `d`: (5.2) and (5.3) in the `O_s` form with `s = 1/(2d − 1)`, given the bound of Lemma 5.9 |
+| Proposition 5.2 | `Rigidity.Proofs.Cluster.planarMuLimit_eq`, `Rigidity.Proofs.Regularity.planarNuSubaddOsTwo_holds`; `Rigidity.Percolation.cubeMuLimit_eq`, `Rigidity.Percolation.exists_cubeSubaddErr_isOsBond` | `d = 2`: the qualitative part, the rate, and the `O_s` form; every `d`: the qualitative part, and (5.2) and (5.3) in the `O_s` form with `s = 1/(2d − 1)` |
 | Lemma 5.4 | `Rigidity.Percolation.exists_lintegral_planarMuDefect_le` | `d = 2`; every `d` in `GeneralMuEnergyDefect.lean` |
 | Lemma 5.5 | `Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenMu_holds`, `Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenNu_holds`; `Rigidity.Percolation.exists_lintegral_cubeMuRestrictError_le`, `Rigidity.Percolation.exists_lintegral_cubeNuRestrictError_le` | `d = 2`; every `d`, for `□_m` and `2d ≤ n < m ≤ 2n`, `ν` at the slopes `ā⁻¹ q` |
 | Lemma 5.7 | `Rigidity.Proofs.Cluster.planarWeakConvergence_holds`; `Rigidity.Percolation.exists_lintegral_cubeMuGradAvg_sub_le` | `d = 2`; every `d`, for every triadic cube |
-| Lemma 5.9 | `Rigidity.Proofs.Cluster.exists_planarOmegaD_decay_holds` | `d = 2` |
-| Lemma 5.10 | `Rigidity.Percolation.exists_le_mul_pow_of_omega_iteration`, `Rigidity.Percolation.exists_planarOmegaD_le_pow_of_decay`, `Rigidity.Percolation.exists_cubeOmegaD_le_pow_of_decay` | for real sequences, for `D_n` in `d = 2`, and in every `d` given the bound of Lemma 5.9 |
-| Lemma 5.11 | `Rigidity.Percolation.exists_cubeOmega_isOsBond_of_decay` | every `d`, in the `O_s` form with `s = 1/(2d − 1)`, given the bound of Lemma 5.9 |
-| Definition 5.12, Proposition 5.13 | `Rigidity.Percolation.exists_cubeBoundN_of_decay` | every `d`, given the bound of Lemma 5.9 |
+| Lemma 5.8 | `Rigidity.Percolation.exists_lintegral_cubeMuFlatness_le`, `Rigidity.Percolation.exists_lintegral_cubeNuFlatness_le` | every `d`, in expectation, with the rate `3^{−n/4}` |
+| Lemma 5.9 | `Rigidity.Proofs.Cluster.exists_planarOmegaD_decay_holds`; `Rigidity.Percolation.exists_cubeOmegaD_le_decay` | `d = 2`; every `d`, with the exponent `1/4` |
+| Lemma 5.10 | `Rigidity.Percolation.exists_le_mul_pow_of_omega_iteration`, `Rigidity.Percolation.exists_planarOmegaD_le_pow_of_decay`, `Rigidity.Percolation.exists_cubeOmegaD_le_pow`, `Rigidity.Percolation.exists_abs_cubeAhomInvLimit_sub_le_pow`, `Rigidity.Percolation.cubeAhomInvLimit_eq` | for real sequences, for `D_n` in `d = 2`, and in every `d` |
+| Lemma 5.11 | `Rigidity.Percolation.exists_cubeOmega_isOsBond`, `Rigidity.Percolation.exists_cubeRho_tail` | every `d`, in the `O_s` form with `s = 1/(2d − 1)` and in tail form |
+| Definition 5.12, Proposition 5.13 | `Rigidity.Percolation.exists_cubeBoundN` | every `d` |
 | Proposition 6.1, Lemmas 6.2 to 6.4 | `Rigidity.Dirichlet.sum_sq_sub_le_of_inner_energy_chain`, `Rigidity.Dirichlet.innerEdgeEnergy_dirichletSolution_div_le_of_coarse` | every `d`, deterministic steps on the lattice |
 | Lemma 7.1 | `Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_holds` | `d = 2`, no hypothesis |
 | Lemma 7.2 | `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2` | every `k`, with its excess-decay and approximation hypotheses |
@@ -1618,7 +1619,9 @@ Departures from Armstrong and Dario:
 For every `d ≥ 2` and `𝔭_c(d) < p < 1`, the stochastic forms of Proposition 5.2, Lemma 5.11 and
 Proposition 5.13 are proved from the bound of Lemma 5.9, the hypothesis `h59`:
 `D_n ≤ C₉ σ₉ⁿ + C₉ Σ_{l ≤ n} ρ₉^{n−l} τ_l` for `n ≥ N₉`, with `σ₉, ρ₉ ∈ [0, 1)`, the same hypothesis
-as for Lemma 5.10 in every dimension. The modules are the thirteen files `GeneralBoundN`,
+as for Lemma 5.10 in every dimension. The hypothesis is discharged by Lemma 5.9 in
+[Lemmas 5.8 and 5.9 in every dimension, and Section 5 without hypothesis](#lemmas-58-and-59-in-every-dimension-and-section-5-without-hypothesis).
+The modules are the thirteen files `GeneralBoundN`,
 `GeneralFieldPairing`, `GeneralFlatnessNuExpect`, `GeneralOmegaSupRate`, `GeneralRhoLocal`,
 `GeneralRhoSubadditive`, `GeneralSIStepTwo`, `GeneralSIUpgrade`, `GeneralSIUpgradeOs`,
 `GeneralSubaddOs`, `GeneralSubaddRates`, `GeneralSubaddTail` and `GeneralSubaddTailMain` of
@@ -1691,3 +1694,41 @@ Departures from Armstrong and Dario:
   probability at most `C (2·3^{n−k} + 29)^d exp(−c 3^k)`.
 - **Small scales.** For `n < 8d` the bound follows from the deterministic bound
   `\|V\|⁻¹ \|⟨∇[u]_𝒫, e_j⟩_V\| ≤ 2d K² 3^{(2d−1)n} \|q\|₁`.
+
+## Lemmas 5.8 and 5.9 in every dimension, and Section 5 without hypothesis
+
+For every `d ≥ 2` and `𝔭_c(d) < p < 1`, Lemma 5.8 for `μ` (display (5.32)) and Lemma 5.9 hold, and
+with them the results of Section 5 stated with the bound of Lemma 5.9 as a hypothesis hold without
+it. The modules are `GeneralFlatnessMu`, `GeneralOmegaCaccioppoli`, `GeneralOmegaChain`,
+`GeneralOmegaMeasurable`, `GeneralOmegaExpect`, `GeneralOmegaBound`, `GeneralOmegaIntegral`,
+`GeneralOmegaTerm`, `GeneralOmegaRate` and `GeneralSectionFive` of
+[`PercolationClusterHomogenization/Proofs/Cluster/`](PercolationClusterHomogenization/Proofs/Cluster/)
+(namespace `Rigidity.Percolation`).
+
+| Lean declaration | Statement |
+| --- | --- |
+| `exists_lintegral_cubeMuFlatness_le` | AD Lemma 5.8 for `μ`, (5.32), in expectation: the flatness error of the coarsened minimizer `[u(·, □_{n+1}, q)]_𝒫` at the slope `ā_{□_n}⁻¹ q` is at most `C \|q\|² 9ⁿ (3^{−n/4} + 3^{−n} Σ_{k ≤ n} 3^k τ_k)`. |
+| `cubeForm_restrict_le_caccioppoli` | AD Lemma 3.5 (Caccioppoli) in the form of (5.39): `B_V(w) ≤ 8d (3ⁿ − 1)^{−2} Σ_{C_*(U)} (w − c)²` for `w` harmonic in `□_{n+1}`. |
+| `cubeNu_sub_cubeMu_chain` | the pointwise chain (5.38) to (5.41): `ν(□_n, p) − μ(□_n, q) − q · p` is bounded by the quadratic-response error, the boundary error, the energies `D^ν_n`, `D^μ_n` and the Caccioppoli term with the coarsening and flatness errors. |
+| `measurable_cubeFlatnessError_cubeMuMinimizer`, `measurable_cubeFlatnessError_cubeNuSolution` | the flatness errors are measurable, through the measurability of the edge differences and lattice paths. |
+| `cubeCoarseningError_le_of_sizeLe`, `cubeOmega_le_of_sizeLe` | on the event that the partition cubes of `□_{n+1}` have scale at most `ℓ ≤ n`: AD Lemma 3.2 with `s = 2` for the coarsening error, and the chain with deterministic boundary and coarsening errors. |
+| `integral_cubeOmegaX_le`, `exists_integral_nuDefectMajorant_le`, `exists_measure_omegaBad_le`, `exists_integral_omegaBad_le`, `omegaConst_le` | the expectation of the chain at the cap scale `⌊n/(4d)⌋`, and the bounds of its terms. |
+| `exists_cubeOmegaD_term_le`, `exists_cubeOmegaD_le_decay` | AD Lemma 5.9: `D_n ≤ C 3^{−n/4} + C Σ_{l ≤ n} 3^{l−n} τ_l` for `n ≥ N`. |
+| `exists_h59`, `exists_cubeOmegaD_le_pow`, `exists_cubeTau_le_pow`, `exists_abs_cubeAhomInvLimit_sub_le_pow`, `cubeAhomInvLimit_eq` | AD Lemma 5.10 without hypothesis. |
+| `cubeMuLimit_eq`, `exists_abs_cubeMuMean_sub_le_pow`, `exists_abs_cubeNuMean_sub_le_pow` | AD Proposition 5.2, qualitative part, and (5.4) in expectation, without hypothesis. |
+| `exists_cubeRho_majorant`, `exists_cubeRho_tail`, `exists_cubeOmega_isOsBond`, `exists_neg_cubeMu_le_isOsBond` | AD (5.42) and Lemma 5.11 without hypothesis. |
+| `exists_cubeSubaddGood_tail`, `exists_cubeSubaddErr_isOsBond`, `exists_cubeBoundN` | AD Proposition 5.2, (5.2) and (5.3), Definition 5.12 and Proposition 5.13, without hypothesis. |
+
+Departures from Armstrong and Dario:
+
+- **Exponent.** AD state Lemma 5.9 with `3^{−n s}` for some `s(d, 𝔭) > 0`; the proof here gives `s = 1/4`
+  and the weights `3^{l−n}` on `τ_l`.
+- **The slopes.** The term `i` of `D_n` is tested with `p = eᵢ` and `q = ā_{□_n} eᵢ`. The flatness error of
+  `u` is taken at `ā_{□_n}⁻¹ q = eᵢ` and that of `v` at `ā⁻¹ (σ eᵢ) = eᵢ`, using `ā = σ I`.
+- **Measurability.** The energy of the differences of the maximizers of `ν` enters through its
+  subadditivity majorant, which is integrable; the energy of the differences of the minimizers of `μ`
+  enters through its lower integral (Lemma 5.4). The other terms are integrable majorants.
+- **The bad event.** AD bound the chain on the event where the partition resolves `□_n` and `□_{n+1}`.
+  Here the event is that the partition cubes of `□_{n+1}` have scale at most `⌊n/(4d)⌋`, on which the
+  boundary and coarsening errors are deterministic; its complement has probability at most `C 9^{−n}`,
+  and its contribution is bounded with `1_E S ≤ T 1_E + S²/T` and the moments of the partition sizes.

@@ -39,8 +39,10 @@ table.
 | Proposition 2.4 | `Rigidity.Percolation.exists_minimalScale` | every `d` |
 | Propositions 3.4, 3.8 | `Rigidity.Percolation.exists_partition_sum_rpow_le_of_sum_eq_zero`, `Rigidity.Proofs.Cluster.GeneralDim.meyersPartition_holds` | every `d`: the Sobolev inequality and the Meyers estimate on the cluster |
 | Propositions 4.9, 4.10 | `Rigidity.Percolation.exists_measure_cubeCappedDiscrepancy_le`, `Rigidity.Percolation.exists_cubeMuLoc_localization` | every `d` |
-| Proposition 5.2 | `Rigidity.Proofs.Cluster.planarMuLimit_eq`, `Rigidity.Proofs.Regularity.planarNuSubaddOsTwo_holds` | `d = 2` |
+| Proposition 5.2 | `Rigidity.Proofs.Cluster.planarMuLimit_eq`, `Rigidity.Proofs.Regularity.planarNuSubaddOsTwo_holds`; `Rigidity.Percolation.cubeMuLimit_eq`, `Rigidity.Percolation.exists_cubeSubaddErr_isOsBond` | `d = 2`; every `d`, (5.2) and (5.3) in the `O_s` form with `s = 1/(2d − 1)` |
 | Lemma 5.7 | `Rigidity.Percolation.exists_lintegral_cubeMuGradAvg_sub_le` | every `d`, every triadic cube |
+| Lemma 5.9 | `Rigidity.Percolation.exists_cubeOmegaD_le_decay` | every `d`, with the exponent `1/4` |
+| Lemmas 5.10, 5.11, Proposition 5.13 | `Rigidity.Percolation.exists_abs_cubeAhomInvLimit_sub_le_pow`, `Rigidity.Percolation.cubeAhomInvLimit_eq`, `Rigidity.Percolation.exists_cubeOmega_isOsBond`, `Rigidity.Percolation.exists_cubeBoundN` | every `d` |
 | Proposition 6.1 | `Rigidity.Dirichlet.sum_sq_sub_le_of_inner_energy_chain` | every `d`, the deterministic error chain |
 | Proposition A.2 | `Rigidity.Proofs.Multiscale.multiscalePoincare_holds` | every `d` |
 
