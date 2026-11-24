@@ -114,7 +114,7 @@ theorem MeshedFlipBound.stable {x : Vertex 2} {L : ℤ} (h : MeshedFlipBound ω 
     exact ⟨fun h1 A hA => (hall A hA).1 (h1 hA), fun h1 A hA => (hall A hA).2 (h1 hA)⟩
   · right
     obtain ⟨A, hA⟩ := not_forall.1 hall
-    obtain ⟨hAD, hne⟩ := not_imp.1 hA
+    obtain ⟨hAD, hne⟩ := Classical.not_imp.1 hA
     rcases h.good A with h1 | ⟨h1, h2⟩
     · exact absurd h1 hne
     · have hsc := TriadicCube.scale_le_of_mem_influence hAD
@@ -275,7 +275,6 @@ theorem side_planarPartCube_le_of_near (hP : PlanarPartitionEvent ω) {x z : Ver
     else if δ i = -2 then Q.center i - (3 * h + 1) else G0.center i with hu
   have hvG : v ∈ G0.vertices := by
     intro i
-    change |2 * (v i - G0.side * G0.index i)| < G0.side
     have e : G0.side * G0.index i = G0.center i := rfl
     rw [e, ← ht]
     simp only [hv]
@@ -289,7 +288,6 @@ theorem side_planarPartCube_le_of_near (hP : PlanarPartitionEvent ω) {x z : Ver
       exact ht0
   have huQ : u ∈ Q.vertices := by
     intro i
-    change |2 * (u i - Q.side * Q.index i)| < Q.side
     have e : Q.side * Q.index i = Q.center i := rfl
     rw [e, hb]
     simp only [hu]
@@ -316,14 +314,19 @@ theorem side_planarPartCube_le_of_near (hP : PlanarPartitionEvent ω) {x z : Ver
     simp only [hv, hu]
     have hd := hdiff i
     split_ifs with h2 hm2
-    · rw [show G0.center i - h - (Q.center i + (3 * h + 1)) = t * δ i - 4 * h - 1 by
-        rw [← hd]; ring, h2, hh]
+    · have e1 : G0.center i - h - (Q.center i + (3 * h + 1)) = 1 := by
+        have e2 : G0.center i - h - (Q.center i + (3 * h + 1)) = t * δ i - 4 * h - 1 := by
+          rw [← hd]; ring
+        rw [e2, h2, hh]
+        ring
+      rw [e1]
       norm_num
-      ring_nf
-      norm_num
-    · rw [show G0.center i + h - (Q.center i - (3 * h + 1)) = t * δ i + 4 * h + 1 by
-        rw [← hd]; ring, hm2, hh]
-      ring_nf
+    · have e1 : G0.center i + h - (Q.center i - (3 * h + 1)) = -1 := by
+        have e2 : G0.center i + h - (Q.center i - (3 * h + 1)) = t * δ i + 4 * h + 1 := by
+          rw [← hd]; ring
+        rw [e2, hm2, hh]
+        ring
+      rw [e1]
       norm_num
     · rw [sub_self, abs_zero]
       norm_num
