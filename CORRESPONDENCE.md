@@ -1732,3 +1732,35 @@ Departures from Armstrong and Dario:
   Here the event is that the partition cubes of `□_{n+1}` have scale at most `⌊n/(4d)⌋`, on which the
   boundary and coarsening errors are deterministic; its complement has probability at most `C 9^{−n}`,
   and its contribution is bounded with `1_E S ≤ T 1_E + S²/T` and the moments of the partition sizes.
+
+## The resampling of one bond and the planar partition of meshed cubes
+
+For two configurations of `ℤ²` equal off one bond `e = {x, y}`, the partition of meshed cubes changes
+only near `e`. This is the planar part of Lemma 3.5 of Dario (*Optimal corrector estimates on
+percolation clusters*) for the partition of this repository, whose goodness is the strip-mesh
+condition `planarMeshed`; it is used in Percolation-Rigidity. The modules are `PlanarAnchorInterior`,
+`PlanarResampleStopping`, `PlanarStripDuality`, `PlanarFaceWalks`, `PlanarWalkLevels`,
+`PlanarFaceSwap`, `PlanarStripFlip` and `PlanarMeshFlip` of
+[`PercolationClusterHomogenization/Proofs/Percolation/`](PercolationClusterHomogenization/Proofs/Percolation/)
+(namespace `Rigidity.Percolation`).
+
+| Lean declaration | Statement |
+| --- | --- |
+| `exists_dualWalk_of_not_crossing`, `exists_faceWalk_of_not_crossing` | planar duality for a translated rectangle (from `lrCrossing_xor_dualTBCrossing_holds` of the vendored planar duality): without an open left-right crossing there is a walk of faces from the top to the bottom crossing only closed edges. |
+| `exists_dart_open_of_crossing`, `exists_dart_open_of_vcrossing` | such a walk of faces crosses every open left-right walk of the rectangle at an open edge; the same for top-bottom walks, by the exchange of the coordinates. |
+| `crossing_iff_of_flip`, `vcrossing_iff_of_flip`, `planarMesh_iff_of_flip` | if a square of side `M + 1` around `x` has open crossings of its four outer strips of width `w`, the crossings of rectangles of width at least `M + 3`, hence the strip meshes of width at least `M + 3`, are the same for the two configurations. |
+| `meshedFlipBound_of_flip` | with `s` the side of the partition cube of `x`, the meshed cubes agree except for cubes of side below `101 s` whose square of side `9 × side` contains `x`. |
+| `MeshedFlipBound.good`, `MeshedFlipBound.stable`, `MeshedFlipBound.stopping` | the good, stable and stopping cubes then agree except for cubes of side below `3L`, `3L`, `9L` within `5`, `39 L`, `42 L` of `x`. |
+| `planarPartCube_eq_of_meshedFlipBound`, `side_planarPartCube_le_of_meshedFlipBound` | the partition cubes agree at the vertices `z` with `|z − x|_∞ ≥ 47 L`, and have side at most `max(9L, 3 max(s, M + 1))` at the vertices with `|z − x|_∞ ≤ M`. |
+| `TriadicCube.isPlanarAnchor_iff_of_meshed`, `TriadicCube.planarAnchor_eq_of_adj_iff_vertices` | for a meshed cube of side at least `1000`, the condition in `9Q` of the anchor follows from the condition in `Q`, so the anchor depends only on the open edges inside the cube. |
+
+Departures from Dario:
+
+- **Goodness.** Dario's proof of Lemma 3.5 uses large cubes crossable by clusters avoiding a given cube,
+  which the strip meshes do not provide. Here a change of a crossing of a strip of width at least `s + 2`
+  would give, by planar duality, a walk of faces through closed edges from the flipped bond to a side of
+  the strip; it leaves the square of side `s` around `x`, whose outer strip crossings block it.
+- **Anchors.** The anchors of the repository depend on the bonds of the square `9Q`; for a meshed cube
+  the dependence reduces to the bonds inside the cube.
+- **Constants.** The constants are explicit: `L = 101 s`, the radius `47 L = 4747 s` and the bound of the
+  sides `14244 s` in Percolation-Rigidity.

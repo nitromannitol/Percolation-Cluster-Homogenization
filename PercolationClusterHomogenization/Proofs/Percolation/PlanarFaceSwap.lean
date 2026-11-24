@@ -1,5 +1,5 @@
 import PercolationClusterHomogenization.Proofs.Percolation.PlanarFaceWalks
-import PercolationClusterHomogenization.Proofs.Lattice.Reflection
+import PercolationClusterHomogenization.Proofs.Cluster.PlanarReflectionMesh
 
 /-!
 # The exchange of the coordinates and walks of faces
@@ -56,13 +56,12 @@ theorem sepHi_siteSwap {z z' : Site 2} (h : (zdGraph 2).Adj z z') :
     funext i
     fin_cases i <;> simp [siteSwap]
 
-/-- The exchange of the coordinates as an automorphism of the lattice. -/
-abbrev swapIso : nearestNeighborGraph 2 ≃g nearestNeighborGraph 2 :=
-  Rigidity.Proofs.S3.signedPermIso (Equiv.swap 0 1) 1
-
 theorem swapIso_apply (x : Vertex 2) : swapIso x = siteSwap x := by
   funext i
-  simp [Rigidity.Proofs.S3.signedPermIso, Rigidity.Proofs.S3.signedPermVertex, siteSwap]
+  have hi : i = 0 ∨ i = 1 := by fin_cases i <;> simp
+  rcases hi with rfl | rfl
+  · rw [swapIso_apply_zero, siteSwap_zero]
+  · rw [swapIso_apply_one, siteSwap_one]
 
 /-- **A walk of faces from the right to the left of a rectangle crosses every open top-bottom walk
 of the rectangle.** -/

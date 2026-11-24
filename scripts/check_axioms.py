@@ -764,6 +764,28 @@ groups = {
          'Rigidity.Percolation.exists_cubeSubaddGood_tail',
          'Rigidity.Percolation.exists_cubeSubaddErr_isOsBond',
          'Rigidity.Percolation.exists_cubeBoundN'],
+    'The resampling of one bond and the planar partition of meshed cubes: planar duality for translated rectangles, the flip lemma for wide strips, the meshed, stopping and partition cubes and the anchors near the bond':
+        ['Rigidity.Percolation.TriadicCube.isPlanarAnchor_iff_of_meshed',
+         'Rigidity.Percolation.TriadicCube.planarAnchor_eq_of_adj_iff_vertices',
+         'Rigidity.Percolation.MeshedFlipBound.good',
+         'Rigidity.Percolation.MeshedFlipBound.stable',
+         'Rigidity.Percolation.MeshedFlipBound.stopping',
+         'Rigidity.Percolation.planarPartCube_eq_of_meshedFlipBound',
+         'Rigidity.Percolation.side_planarPartCube_le_of_near',
+         'Rigidity.Percolation.side_planarPartCube_le_of_meshedFlipBound',
+         'Rigidity.Percolation.lrCrossing_vendorConfig_of_reachIn',
+         'Rigidity.Percolation.exists_dualWalk_of_not_crossing',
+         'Rigidity.Percolation.exists_faceWalk_of_not_crossing',
+         'Rigidity.Percolation.exists_dart_open_of_crossing',
+         'Rigidity.Percolation.exists_dart_open_of_vcrossing',
+         'Rigidity.Percolation.exists_levelCrossing',
+         'Rigidity.Percolation.exists_exit',
+         'Rigidity.Percolation.false_of_exit_faceSquare',
+         'Rigidity.Percolation.false_of_flip_crossing',
+         'Rigidity.Percolation.crossing_iff_of_flip',
+         'Rigidity.Percolation.vcrossing_iff_of_flip',
+         'Rigidity.Percolation.planarMesh_iff_of_flip',
+         'Rigidity.Percolation.meshedFlipBound_of_flip'],
 }
 standard = {'propext', 'Classical.choice', 'Quot.sound'}
 

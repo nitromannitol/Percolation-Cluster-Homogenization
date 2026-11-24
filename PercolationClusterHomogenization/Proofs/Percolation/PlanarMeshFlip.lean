@@ -23,19 +23,17 @@ open Percolation.Literature.LatticeModels (Site zdGraph)
 
 /-! ### The exchange of the coordinates acting on configurations -/
 
-theorem swapIso_symm_apply (x : Vertex 2) : swapIso.symm x = siteSwap x := by
+theorem siteSwap_siteSwap (z : Site 2) : siteSwap (siteSwap z) = z := by
   funext i
-  simp [Rigidity.Proofs.S3.signedPermIso, Rigidity.Proofs.S3.signedPermVertex, siteSwap,
-    Equiv.symm_swap]
+  fin_cases i <;> simp
+
+theorem swapIso_symm_apply (x : Vertex 2) : swapIso.symm x = siteSwap x :=
+  (RelIso.symm_apply_eq swapIso).2 (by rw [swapIso_apply, siteSwap_siteSwap])
 
 theorem siteSwap_mem_latticeBox {c v : Site 2} {m n : ℕ} (hv : v ∈ latticeBox c m n) :
     siteSwap v ∈ latticeBox (siteSwap c) n m := by
   simp only [latticeBox, Set.mem_setOf_eq, siteSwap_zero, siteSwap_one] at hv ⊢
   omega
-
-theorem siteSwap_siteSwap (z : Site 2) : siteSwap (siteSwap z) = z := by
-  funext i
-  fin_cases i <;> simp
 
 /-- Open walks are carried to open walks of the configuration with exchanged coordinates. -/
 theorem reachIn_swap_box {ω : Configuration 2} {c a b : Site 2} {m n : ℕ}
