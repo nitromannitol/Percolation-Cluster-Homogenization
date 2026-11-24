@@ -1,5 +1,5 @@
 import PercolationClusterHomogenization.Proofs.Regularity.PlanarCoarseCells
-import PercolationClusterHomogenization.Proofs.Regularity.ClusterBallVolume
+import PercolationClusterHomogenization.Proofs.Regularity.OrderOneOrigin
 
 /-!
 # Passing between a cluster function and its coarsening on the balls of `ℤ²`

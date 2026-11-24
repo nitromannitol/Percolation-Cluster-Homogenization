@@ -1,4 +1,4 @@
-import PercolationClusterHomogenization.Proofs.Regularity.ClusterBallVolume
+import PercolationClusterHomogenization.Proofs.Regularity.OrderOneOrigin
 import PercolationClusterHomogenization.External.PlanarInputs
 
 /-!

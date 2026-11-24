@@ -1,4 +1,4 @@
-import PercolationClusterHomogenization.Proofs.Regularity.ClusterBallVolume
+import PercolationClusterHomogenization.Proofs.Regularity.OrderOneOrigin
 
 /-!
 # Every element of `𝒜_1` is a lifted affine function

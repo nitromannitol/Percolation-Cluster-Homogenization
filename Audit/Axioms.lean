@@ -1,0 +1,600 @@
+import PercolationClusterHomogenization
+
+/-!
+# Axiom report
+
+`lake env lean Audit/Axioms.lean` prints the axioms of the results of the library, grouped by the parts of
+Armstrong and Dario, *Elliptic regularity and quantitative homogenization on percolation clusters*
+(arXiv:1609.09431v2) and of the percolation results they use. `scripts/check_axioms.py` checks that every
+report lists only `propext`, `Classical.choice` and `Quot.sound`.
+-/
+
+-- The literature statements: well-connected cubes, Theorem 2 (iii) at k = 1 at the origin, and the corrector estimate of Dario and Gu (Proposition 2.12)
+#print axioms Rigidity.External.WellConnectedInput
+#print axioms Rigidity.External.ArmstrongDarioOrderOneOrigin
+#print axioms Rigidity.External.CorrectorQuantitativeInput
+
+-- Slab connectivity above the critical point (Grimmett and Marstrand, d ≥ 3)
+#print axioms Rigidity.Percolation.uniformCubeSlabConnectivity_of_criticalProbability_lt
+
+-- Well-connected cubes for d ≥ 3, their reduction to d = 2, and finite clusters for d ≥ 3
+#print axioms Rigidity.Percolation.wellConnected_of_three_le
+#print axioms Rigidity.Percolation.wellConnectedInput_of_planar
+#print axioms Rigidity.Percolation.exists_finite_cluster_radius_le
+#print axioms Rigidity.Percolation.exists_finite_cluster_card_le
+
+-- The concentration of the density of the infinite cluster for d = 2 (Dario and Gu, Proposition A.1)
+#print axioms Rigidity.Proofs.S2.planar_cluster_density_concentration
+
+-- The concentration of the density of the infinite cluster in every dimension (Dario and Gu, Proposition A.1)
+#print axioms Rigidity.Proofs.S2.cluster_density_concentration
+
+-- The multiscale Poincaré inequality of Armstrong and Dario (Proposition A.2) and its affine form
+#print axioms Rigidity.Proofs.Multiscale.multiscalePoincare_holds
+#print axioms Rigidity.Proofs.Multiscale.exists_multiscalePoincare_affine
+
+-- The partition into good cubes of Armstrong and Dario (Propositions 2.1 and 2.4, Lemmas 2.7 and 2.8, Corollary 2.10) and the inequalities on the cluster (Lemmas 3.2, 3.3, 3.5 and 3.6, Proposition 3.4, a Gehring lemma on triadic cubes and Proposition 3.8)
+#print axioms Rigidity.Percolation.partition_estimates
+#print axioms Rigidity.Percolation.partition_estimates_general
+#print axioms Rigidity.Percolation.exists_minimalScale
+#print axioms Rigidity.Percolation.exists_minimalScale_general
+#print axioms Rigidity.Percolation.exists_measure_not_mem_goodCubes_le
+#print axioms Rigidity.Percolation.TriadicCube.reachable_of_mem_goodCubes
+#print axioms Rigidity.Percolation.reachable_partitionAnchor_of_walk
+#print axioms Rigidity.Percolation.partition_sum_abs_sub_coarseAnchor_rpow_le
+#print axioms Rigidity.Percolation.partition_sum_gradNormIn_coarseAnchor_rpow_le
+#print axioms Rigidity.Percolation.exists_partition_sum_rpow_le_of_latticeSobolevOn
+#print axioms Rigidity.Percolation.exists_partition_sum_sq_le_two
+#print axioms Rigidity.Proofs.Cluster.caccioppoli_cluster
+#print axioms Rigidity.Proofs.Cluster.reverse_holder_partition_cube
+#print axioms Rigidity.Proofs.Cluster.gehring_triadic
+#print axioms Rigidity.Proofs.Cluster.meyers_cluster
+
+-- The localization and stationarity of the planar subadditive quantities of Armstrong and Dario (Propositions 4.9 and 4.10, (4.40)), the limits of their expectations and the homogenized matrix (Definition 5.1, (5.1)), for d = 2
+#print axioms Rigidity.Percolation.exists_measure_planarCappedDiscrepancy_le
+#print axioms Rigidity.Percolation.exists_planarNuLoc_localization
+#print axioms Rigidity.Percolation.exists_planarMuLoc_localization
+#print axioms Rigidity.Percolation.map_planarNuStat_shift
+#print axioms Rigidity.Percolation.map_planarMuStat_shift
+#print axioms Rigidity.Percolation.exists_tendsto_planarNuMean
+#print axioms Rigidity.Percolation.exists_tendsto_planarMuMean
+#print axioms Rigidity.Percolation.planarNuLimit_eq_planarAhom
+#print axioms Rigidity.Percolation.exists_planarAhom_bounds
+#print axioms Rigidity.Percolation.exists_planarMuLimit_two_sided
+#print axioms Rigidity.Percolation.sum_mul_le_planarMuLimit_add_planarNuLimit
+
+-- The deterministic steps of the homogenization of the Dirichlet problem of Armstrong and Dario (Lemmas 6.2, 6.3 and 6.4, Proposition 6.1) and the excess-decay iteration (Lemmas 7.2 and 7.3)
+#print axioms Rigidity.Dirichlet.innerEdgeEnergy_dirichletSolution_div_le_of_coarse
+#print axioms Rigidity.Dirichlet.patch_cubeCutoff_of_not_mem
+#print axioms Rigidity.Dirichlet.innerEdgeEnergy_patch_div_le_of_coarse
+#print axioms Rigidity.Dirichlet.exists_sum_sq_patch_sub_div_le_of_coarse
+#print axioms Rigidity.Dirichlet.sum_abs_grad_boundaryInterpolation_rpow_div_le
+#print axioms Rigidity.Dirichlet.sum_sq_sub_le_of_inner_energy_chain
+#print axioms Rigidity.Dirichlet.sum_energy_cubeLayer_div_le
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2_zero
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2_one
+#print axioms Rigidity.Proofs.Regularity.harmonicRegularity_latticeHarmonicClass
+#print axioms Rigidity.Proofs.Regularity.harmonicRegularity_planarHarmonicClass
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2_zero_latticeHarmonic
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2_one_latticeHarmonic
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2_zero_planar
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2_one_planar
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_zero_planar
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_one_planar
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_orderZero_origin_planar
+
+-- The Sobolev inequality of the lattice and Proposition 3.4 of Armstrong and Dario in every dimension
+#print axioms Rigidity.Percolation.IntegerCube.exists_latticeSobolevOn
+#print axioms Rigidity.Percolation.exists_sum_rpow_le_of_eq_zero_on_boundary
+#print axioms Rigidity.Percolation.exists_partition_sum_rpow_le_of_sum_eq_zero
+#print axioms Rigidity.Percolation.exists_partition_sum_rpow_le_of_sum_coarsen_eq_zero
+#print axioms Rigidity.Percolation.exists_partition_sum_rpow_le_of_coarsen_eq_zero
+#print axioms Rigidity.Percolation.exists_clusterSobolevTwo
+
+-- The energy defects, the finite-volume matrices, the solenoidal field and the identification of the limit from the decay of omega in Section 5 of Armstrong and Dario, for d = 2
+#print axioms Rigidity.Percolation.sum_clusterForm_sub_add_sum_planarMu_subcubes_le
+#print axioms Rigidity.Percolation.sum_clusterForm_sub_add_planarNu_le_sum_subcubes
+#print axioms Rigidity.Percolation.exists_lintegral_planarMuDefect_le
+#print axioms Rigidity.Percolation.exists_lintegral_planarNuDefect_le
+#print axioms Rigidity.Percolation.exists_planarMuDefect_le_planarMuTau
+#print axioms Rigidity.Percolation.exists_planarNuDefect_le_planarNuTau
+#print axioms Rigidity.Percolation.summable_planarTau
+#print axioms Rigidity.Percolation.exists_planarMuDefect_le_tendsto
+#print axioms Rigidity.Percolation.exists_planarNuDefect_le_tendsto
+#print axioms Rigidity.Percolation.planarMuLimit_eq_iff_planarOmegaLimit_eq_zero
+#print axioms Rigidity.Percolation.forall_planarOmegaLimit_eq_zero_iff
+#print axioms Rigidity.Percolation.coarsePairing_planarMuMinimizer
+#print axioms Rigidity.Percolation.integral_coarsePairing_planarMuMinimizer
+#print axioms Rigidity.Percolation.tendsto_planarAhomInvFinite
+#print axioms Rigidity.Percolation.planarMuLimit_eq_planarAhomInvLimit
+#print axioms Rigidity.Percolation.exists_planarAhomInvFinite_bounds
+#print axioms Rigidity.Percolation.exists_abs_planarAhomInvFinite_sub_le
+#print axioms Rigidity.Percolation.sum_solenoidalField_sub_eq_zero
+#print axioms Rigidity.Percolation.solenoidalField_eq
+#print axioms Rigidity.Percolation.abs_solenoidalField_le
+#print axioms Rigidity.Percolation.tsum_sum_grad_mul_solenoidalField
+#print axioms Rigidity.Percolation.exists_abs_planarNu_sub_planarMu_sub_le
+#print axioms Rigidity.Percolation.exists_planarOmegaD_succ_le
+#print axioms Rigidity.Percolation.exists_neg_le_planarOmegaD
+#print axioms Rigidity.Percolation.exists_le_mul_pow_of_omega_iteration
+#print axioms Rigidity.Percolation.exists_le_mul_pow_of_omega_iteration_of_ge
+#print axioms Rigidity.Percolation.exists_planarOmegaD_le_pow_of_decay
+#print axioms Rigidity.Percolation.exists_planarTau_le_pow_of_decay
+#print axioms Rigidity.Percolation.exists_abs_planarAhomInvLimit_sub_le_of_decay
+#print axioms Rigidity.Percolation.planarAhomInvLimit_det_ne_zero
+#print axioms Rigidity.Percolation.tendsto_planarAhomFinite
+#print axioms Rigidity.Percolation.tendsto_planarOmegaD
+#print axioms Rigidity.Percolation.dotProduct_inv_planarAhomInvLimit_le
+#print axioms Rigidity.Percolation.planarMuLimit_eq_of_limit_planarOmegaD_nonpos
+#print axioms Rigidity.Percolation.planarMuLimit_eq_of_decay
+
+-- The reverse Hölder inequality, the Meyers estimate and the Sobolev inequality on the clusters of integer cubes (Armstrong and Dario, Lemma 3.6, Propositions 3.4 and 3.8)
+#print axioms Rigidity.Proofs.Cluster.exists_latticeSobolevOn_two
+#print axioms Rigidity.Proofs.Cluster.reverse_holder_partition_cube_of_moment
+#print axioms Rigidity.Proofs.Cluster.reverse_holder_partition_of_moment
+#print axioms Rigidity.Proofs.Cluster.lowerSobolevTwo_two
+#print axioms Rigidity.Proofs.Cluster.mem_clusterVertices_of_adj_mem
+#print axioms Rigidity.Proofs.Cluster.planar_reverse_holder_cube_of_moment
+#print axioms Rigidity.Proofs.Cluster.reverse_holder_clusterEnergy_local
+#print axioms Rigidity.Proofs.Cluster.meyers_cluster_of_local
+#print axioms Rigidity.Proofs.Cluster.mem_boxClusterVertices_of_mem_cube
+#print axioms Rigidity.Proofs.Cluster.planar_meyers
+#print axioms Rigidity.Proofs.Cluster.mem_partitionBoxCluster_of_mem_cube
+#print axioms Rigidity.Proofs.Cluster.partition_meyers
+#print axioms Rigidity.Percolation.TriadicCube.reachIn_boxWindow_of_reachIn
+#print axioms Rigidity.Percolation.TriadicCube.reachIn_planarAnchor_boxPairWindow
+#print axioms Rigidity.Percolation.reachIn_planarAnchor_of_boxResolved
+#print axioms Rigidity.Percolation.planarBoxCoarseData
+#print axioms Rigidity.Percolation.planarBox_sum_abs_sub_coarseAnchor_rpow_le
+#print axioms Rigidity.Percolation.planarBox_sum_gradNormIn_coarseAnchor_rpow_le
+#print axioms Rigidity.Percolation.exists_planarBox_sum_sq_le
+#print axioms Rigidity.Percolation.three_pow_reachScale_le_planarReach_box
+#print axioms Rigidity.Percolation.three_pow_pairReachScale_le_planarReach_box
+#print axioms Rigidity.Proofs.Cluster.openLaplacian_clusterExtend
+#print axioms Rigidity.Proofs.Cluster.openLaplacian_clusterExtend_eq_zero
+#print axioms Rigidity.Proofs.Cluster.planar_meyers_clusterHarmonic
+#print axioms Rigidity.Percolation.reachable_partitionAnchor_of_reachable_box
+#print axioms Rigidity.Percolation.IntegerCube.exists_walk
+#print axioms Rigidity.Percolation.partitionBoxCoarseData
+#print axioms Rigidity.Percolation.exists_partitionBox_sum_rpow_le_of_latticeSobolevOn
+#print axioms Rigidity.Percolation.exists_clusterSobolevTwo_box
+#print axioms Rigidity.Percolation.three_pow_reachScale_le_partitionReach_box
+
+-- The coarse energy, the pairings with bounded fields and the restriction defect (Armstrong and Dario, display (4.24), Lemmas 5.5 and 5.7, d = 2)
+#print axioms Rigidity.Proofs.Cluster.sum_gradNormIn_coarse_sq_le_clusterForm
+#print axioms Rigidity.Proofs.Cluster.edgePairing_clusterExtend_sq_le_clusterForm
+#print axioms Rigidity.Proofs.Cluster.sup_planarReach_pow_seven_le
+#print axioms Rigidity.Proofs.Cluster.ofReal_coarse_minimizer_le_reachSum
+#print axioms Rigidity.Proofs.Cluster.exists_lintegral_coarse_minimizer_le
+#print axioms Rigidity.Proofs.Cluster.exists_lintegral_coarse_minimizer_sq_le
+#print axioms Rigidity.Proofs.Cluster.sum_rpow_le_of_meyers_cells
+#print axioms Rigidity.Proofs.Cluster.sum_mul_le_of_meyers_cells
+#print axioms Rigidity.Proofs.Cluster.planarBox_sum_gradNormIn_sq_le_clusterGradSq
+#print axioms Rigidity.Proofs.Cluster.planarBox_coarse_energy_le_of_meyers
+#print axioms Rigidity.Proofs.Cluster.sum_gradNormIn_coarse_sq_le_sup
+#print axioms Rigidity.Proofs.Cluster.three_pow_sup_pairReachScale_le
+#print axioms Rigidity.Proofs.Cluster.ofReal_sum_gradNormIn_coarse_sq_le
+#print axioms Rigidity.Proofs.Cluster.ofReal_sum_gradNormIn_coarse_planarMuMinimizer_le
+#print axioms Rigidity.Percolation.edgePairing
+#print axioms Rigidity.Percolation.coarsePairing_eq_edgePairing
+#print axioms Rigidity.Percolation.edgeEnergy_le_two_mul_sum_gradNormIn_sq
+#print axioms Rigidity.Percolation.edgePairing_sq_le
+#print axioms Rigidity.Percolation.card_layer_edges_le
+#print axioms Rigidity.Percolation.edgePairing_sq_le_of_subset
+#print axioms Rigidity.Proofs.Cluster.exists_lintegral_edgePairing_sub_sum_subcubes_le
+#print axioms Rigidity.Proofs.Cluster.TriadicCube.subset_innerSquare
+#print axioms Rigidity.Proofs.Cluster.enl_subset_of_mem_innerSquare
+#print axioms Rigidity.Proofs.Cluster.card_innerCells_filter_le
+#print axioms Rigidity.Proofs.Cluster.edgePairing_innerCells_sq_le
+#print axioms Rigidity.Proofs.Cluster.innerSquare
+#print axioms Rigidity.Proofs.Cluster.innerSquare_subset
+#print axioms Rigidity.Proofs.Cluster.card_sdiff_innerSquare_le
+#print axioms Rigidity.Proofs.Cluster.planarBoxResolved_innerSquare
+#print axioms Rigidity.Percolation.exists_measure_partitionScale_gt_le
+#print axioms Rigidity.Proofs.Cluster.edgePairing_coarse_sq_le_of_meyers
+#print axioms Rigidity.Proofs.Cluster.sum_edgePairing_sq_le_planarMuDefect
+#print axioms Rigidity.Proofs.Cluster.sum_clusterGradSq_eq_clusterForm
+#print axioms Rigidity.Proofs.Cluster.edgePairing_clusterExtend_sq_le_of_meyers
+#print axioms Rigidity.Percolation.edgePairing_sub_sum_subcubes_sq_le
+
+-- The subadditive quantities on the clusters of triadic cubes of Z^d (Armstrong and Dario, Section 4 and Definition 5.1, every d >= 2)
+#print axioms Rigidity.Percolation.exists_cubeHarmonic_minimizer
+#print axioms Rigidity.Percolation.exists_cubeMu_minimizer
+#print axioms Rigidity.Percolation.exists_cubeNu_maximizer
+#print axioms Rigidity.Percolation.cubeMu
+#print axioms Rigidity.Percolation.cubeNu
+#print axioms Rigidity.Percolation.cubeMu_nonpos
+#print axioms Rigidity.Percolation.cubeNu_nonneg
+#print axioms Rigidity.Percolation.cubeNu_le
+#print axioms Rigidity.Percolation.cubeMu_mul_latticeVolume_add_cubeForm_sub
+#print axioms Rigidity.Percolation.cubeMu_mul_latticeVolume_eq
+#print axioms Rigidity.Percolation.cubeFluxPairing_sub_add_cubeForm_sub
+#print axioms Rigidity.Percolation.cubeNu_mul_latticeVolume_eq
+#print axioms Rigidity.Percolation.cubeNu_sub_cubeMu_eq
+#print axioms Rigidity.Percolation.cubeMu_smul_add_smul
+#print axioms Rigidity.Percolation.cubeNu_smul_add_smul
+#print axioms Rigidity.Percolation.crossingClusterVertices_subset_of_resolved
+#print axioms Rigidity.Percolation.cubeRestrictExt_mem_cubeHarmonic
+#print axioms Rigidity.Percolation.sum_cubeForm_restrictExt_le
+#print axioms Rigidity.Percolation.sum_cubeMu_subcubes_le
+#print axioms Rigidity.Percolation.cubeNu_le_sum_subcubes
+#print axioms Rigidity.Percolation.sum_cubeForm_sub_add_sum_cubeMu_subcubes_le
+#print axioms Rigidity.Percolation.sum_cubeForm_sub_add_cubeNu_le_sum_subcubes
+#print axioms Rigidity.Percolation.exists_cubeHarmonic_eq_on_boundary
+#print axioms Rigidity.Percolation.exists_cubeNu_maximizer_affine
+#print axioms Rigidity.Percolation.cubeNu_le_of_affine_boundary
+#print axioms Rigidity.Percolation.exists_cubeNu_eq_of_affine_boundary
+#print axioms Rigidity.Percolation.cubeCoarsePairing_eq_faces
+#print axioms Rigidity.Percolation.abs_cubeCoarsePairing_sub_le
+#print axioms Rigidity.Percolation.cubeBoundaryError_le
+#print axioms Rigidity.Percolation.cubeBoundaryWeight_le
+#print axioms Rigidity.Percolation.neg_cubeMu_le
+#print axioms Rigidity.Percolation.exists_abs_cubeNu_sub_cubeMu_sub_le
+#print axioms Rigidity.Percolation.exists_cubeMu_le_cubeNu_sub
+#print axioms Rigidity.Percolation.exists_cubeMu_le_neg_sum_sq
+#print axioms Rigidity.Percolation.le_cubeNu_add_of_resolved
+#print axioms Rigidity.Percolation.exists_le_integral_cubeNu
+#print axioms Rigidity.Percolation.exists_cubeAhom_lower_bound
+#print axioms Rigidity.Percolation.exists_integral_sum_faces_le
+#print axioms Rigidity.Percolation.exists_integral_sum_margin_le
+#print axioms Rigidity.Percolation.exists_lintegral_neg_cubeMu_le
+#print axioms Rigidity.Percolation.cubeNu_eq_of_equiv
+#print axioms Rigidity.Percolation.measurable_cubeNu
+#print axioms Rigidity.Percolation.integral_cubeNu_eq_of_scale_eq
+#print axioms Rigidity.Percolation.integrable_cubeNu
+#print axioms Rigidity.Percolation.flux_error_le
+#print axioms Rigidity.Percolation.cubeNu_mul_latticeVolume_le_sum_add
+#print axioms Rigidity.Percolation.sum_exp_neg_margin_le
+#print axioms Rigidity.Percolation.exists_integral_cubeNu_le_of_scale_le
+#print axioms Rigidity.Percolation.cubeNu_eq_sum_polarization
+#print axioms Rigidity.Percolation.exists_tendsto_cubeNuMean
+#print axioms Rigidity.Percolation.tendsto_cubeNuLimit
+#print axioms Rigidity.Percolation.cubeAhom
+#print axioms Rigidity.Percolation.cubeNuLimit_eq_cubeAhom
+#print axioms Rigidity.Percolation.cubeAhom_symm
+#print axioms Rigidity.Percolation.cubeAhom_bounds
+#print axioms Rigidity.Percolation.cubeNuDefect_add_le
+#print axioms Rigidity.Percolation.exists_lintegral_cubeNuDefect_le
+
+-- The flatness of the coarsened minimizers, the decay of omega and the qualitative part of Proposition 5.2 (Armstrong and Dario, Lemmas 5.8 and 5.9, d = 2)
+#print axioms Rigidity.Percolation.PlanarWeakConvergence
+#print axioms Rigidity.Percolation.PlanarRestrictQuadCoarsenMu
+#print axioms Rigidity.Percolation.PlanarRestrictQuadCoarsenNu
+#print axioms Rigidity.Percolation.exists_coarseEnergyMu_majorant
+#print axioms Rigidity.Percolation.exists_coarseEnergyNu_majorant
+#print axioms Rigidity.Percolation.exists_flatness_le_multiscale
+#print axioms Rigidity.Percolation.exists_planarMuFlatness_majorant
+#print axioms Rigidity.Percolation.exists_lintegral_planarMuFlatness_le
+#print axioms Rigidity.Percolation.exists_planarNuFlatness_majorant
+#print axioms Rigidity.Percolation.exists_lintegral_planarNuFlatness_le
+#print axioms Rigidity.Percolation.exists_planarMuFlatness_majorant_ae
+#print axioms Rigidity.Percolation.exists_planarNuFlatness_majorant_ae
+#print axioms Rigidity.Percolation.sum_sq_planarNuGradAvg_sub_le
+#print axioms Rigidity.Percolation.exists_lintegral_planarNuGradAvg_sub_le
+#print axioms Rigidity.Percolation.caccioppoli_dist
+#print axioms Rigidity.Percolation.clusterForm_restrict_le_caccioppoli
+#print axioms Rigidity.Percolation.planarNu_sub_planarMu_sub_le
+#print axioms Rigidity.Percolation.planarOmega_chain
+#print axioms Rigidity.Percolation.planarOmega_real_le
+#print axioms Rigidity.Percolation.planarOmega_integral_le
+#print axioms Rigidity.Percolation.exists_boundaryMajorant
+#print axioms Rigidity.Percolation.exists_lintegral_not_resolved_le
+#print axioms Rigidity.Percolation.exists_badMajorant
+#print axioms Rigidity.Percolation.exists_lintegral_subMuSum_le
+#print axioms Rigidity.Percolation.exists_lintegral_subNuSum_le
+#print axioms Rigidity.Percolation.exists_lintegral_nuSubGap_le
+#print axioms Rigidity.Percolation.exists_muSubGap_majorant
+#print axioms Rigidity.Percolation.exists_subadditivityMajorant
+#print axioms Rigidity.Percolation.exists_coarseError_majorant
+#print axioms Rigidity.Percolation.planarTau_le_weighted
+#print axioms Rigidity.Percolation.exists_planarOmegaD_le_of_inputs
+#print axioms Rigidity.Percolation.exists_planarOmegaD_decay
+#print axioms Rigidity.Percolation.planarMuLimit_eq_of_inputs
+
+-- Theorem 2(iii) at k = 1 from the mesoscopic regularity of degree two (Armstrong and Dario, Lemma 7.3 and Theorem 2)
+#print axioms Rigidity.Proofs.Regularity.ArmstrongDarioMesoscopicDegreeTwo
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo
+#print axioms Rigidity.Proofs.Regularity.ballExcess_le_of_clusterBallVolumeL2
+#print axioms Rigidity.Proofs.Regularity.weighted_endpoint_step
+#print axioms Rigidity.Proofs.Regularity.orderOneEndpoint_step
+#print axioms Rigidity.Proofs.Regularity.orderOneEndpoint_iterate
+#print axioms Rigidity.Proofs.Regularity.orderOneEndpoint_fit
+#print axioms Rigidity.Proofs.Regularity.exists_forall_le_of_orderOneEndpoint
+#print axioms Rigidity.Proofs.Regularity.orderOneEndpointData_cluster
+#print axioms Rigidity.Proofs.Regularity.clusterLiftMap_mem_harmonicGrowthSpace
+
+-- The partition of Definition 3.7 of Armstrong and Dario from the local family of reverse Hoelder cubes, and Lemmas 5.5 and 5.7 and Proposition 5.2, qualitative part, for p > p_c (d = 2)
+#print axioms Rigidity.Proofs.Cluster.measurableSet_not_mem_planarRHGood_local
+#print axioms Rigidity.Proofs.Cluster.planar_meyers_rh_uniform
+#print axioms Rigidity.Proofs.Cluster.planarRHPartition_of_failureBound
+#print axioms Rigidity.Proofs.Cluster.planarRHCube_of_scales
+#print axioms Rigidity.Proofs.Cluster.planarRHFailureBound_holds
+#print axioms Rigidity.Proofs.Cluster.planarRHPartition_holds
+#print axioms Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenMu_holds
+#print axioms Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenNu_holds
+#print axioms Rigidity.Proofs.Cluster.planarWeakConvergence_holds
+#print axioms Rigidity.Proofs.Cluster.planarMuLimit_eq
+
+-- The inputs of Lemmas 5.5 and 5.7 in dimension two from the partition hypothesis PlanarGehringPartition (the earlier form of Lemmas 5.5 and 5.7 and of the qualitative part of Proposition 5.2, d = 2)
+#print axioms Rigidity.Proofs.Cluster.PlanarGehringPartition
+#print axioms Rigidity.Proofs.Cluster.PlanarReachConcentration
+#print axioms Rigidity.Proofs.Cluster.planarReachConcentration_holds
+#print axioms Rigidity.Proofs.Cluster.meyers_triadic_uniform
+#print axioms Rigidity.Proofs.Cluster.meyers_cluster_of_local_uniform
+#print axioms Rigidity.Proofs.Cluster.planar_meyers_uniform
+#print axioms Rigidity.Proofs.Cluster.planar_meyers_clusterHarmonic_uniform
+#print axioms Rigidity.Proofs.Cluster.partition_meyers_uniform
+#print axioms Rigidity.Proofs.Cluster.measure_restrictBad_le
+#print axioms Rigidity.Proofs.Cluster.exists_planarMuRestrictError_majorant
+#print axioms Rigidity.Proofs.Cluster.exists_planarNuRestrictError_majorant
+#print axioms Rigidity.Proofs.Cluster.exists_lintegral_planarMuRestrictFieldError_le
+#print axioms Rigidity.Proofs.Cluster.exists_lintegral_sum_subcube_solenoidal_sq_le
+#print axioms Rigidity.Proofs.Cluster.exists_lintegral_sq_sub_switchLoc_le
+#print axioms Rigidity.Proofs.Cluster.exists_measure_not_planarCapGood_le
+#print axioms Rigidity.Proofs.Cluster.exists_variance_planarMuGradAvg_origin_le
+#print axioms Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenMu_of_inputs
+#print axioms Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenNu_of_inputs
+#print axioms Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenMu_of_gehring
+#print axioms Rigidity.Proofs.Cluster.planarRestrictQuadCoarsenNu_of_gehring
+#print axioms Rigidity.Proofs.Cluster.planarMuLimit_eq_of_gehring
+#print axioms Rigidity.Proofs.Cluster.planarWeakConvergence_of_gehring
+#print axioms Rigidity.Proofs.Cluster.planarMuLimit_eq_of_gehring_partition
+#print axioms Rigidity.Percolation.exists_lintegral_planarMuDefect_le_tau
+#print axioms Rigidity.Percolation.exists_lintegral_planarNuDefect_le_tau
+#print axioms Rigidity.Percolation.exists_measure_not_mem_planarCoarseGood_le
+#print axioms Rigidity.Percolation.planarReach_le_stoppingSize
+#print axioms Rigidity.Percolation.measurable_planarMuRestrictError
+#print axioms Rigidity.Percolation.measurable_planarNuRestrictError
+#print axioms Rigidity.Percolation.measurable_planarMuGen_indicator
+
+-- The rate of Proposition 5.2 and Lemmas 5.3, 5.10 and 5.11 (Step 2) in dimension two
+#print axioms Rigidity.Proofs.Cluster.exists_planarOmegaD_decay_holds
+#print axioms Rigidity.Proofs.Cluster.exists_planarOmegaD_le_geometric
+#print axioms Rigidity.Proofs.Cluster.exists_planarTau_le_geometric
+#print axioms Rigidity.Proofs.Cluster.planarAhomInvLimit_eq_inv
+#print axioms Rigidity.Proofs.Cluster.exists_abs_planarAhom_inv_sub_planarAhomInvFinite_le
+#print axioms Rigidity.Proofs.Cluster.planar_convexp
+#print axioms Rigidity.Proofs.Cluster.planar_omegadecayrate
+#print axioms Rigidity.Proofs.Cluster.exists_integral_min_planarRhoStat_le
+#print axioms Rigidity.Proofs.Cluster.measureReal_sum_ge_le_of_bounded
+#print axioms Rigidity.Proofs.Cluster.planar_SIupgrade_step2
+#print axioms Rigidity.Proofs.Cluster.abs_quadratic_sub_half_le
+#print axioms Rigidity.Proofs.Cluster.planar_minimalset
+
+-- Propositions 5.2 and 5.13, Lemma 5.11 and the minimal scales in dimension two (Armstrong and Dario)
+#print axioms Rigidity.Proofs.Cluster.planarMinimalScales_holds
+#print axioms Rigidity.Proofs.Cluster.exists_planar_minimalScale
+#print axioms Rigidity.Proofs.Cluster.exists_measure_not_planarReachLe_le
+#print axioms Rigidity.Proofs.Cluster.reachSum_le_of_planarReach_le
+#print axioms Rigidity.Proofs.Cluster.planarRho_le_avg_of_planarReachLe
+#print axioms Rigidity.Proofs.Cluster.planarComparisonError_le_of_planarReachLe
+#print axioms Rigidity.Proofs.Cluster.sum_subcubesAt_eq_sum_sum
+#print axioms Rigidity.Proofs.Cluster.exists_planarRho_tail
+#print axioms Rigidity.Proofs.Cluster.planarSubaddGood_of_event
+#print axioms Rigidity.Proofs.Cluster.exists_planarSubaddGood_tail
+#print axioms Rigidity.Proofs.Cluster.exists_planarSubaddGood_tail_cube
+#print axioms Rigidity.Proofs.Cluster.exists_planarBoundN_general
+#print axioms Rigidity.Proofs.Cluster.planarBoundN_holds
+#print axioms Rigidity.Proofs.Cluster.planarMinimalScales_partition_holds
+#print axioms Rigidity.Proofs.Cluster.planarMesoscopicConvergence_holds
+#print axioms Rigidity.Proofs.Cluster.planar_subadd_os
+#print axioms Rigidity.Proofs.Cluster.osBound_coarse_bound
+#print axioms Rigidity.Proofs.Cluster.OsBound.mul
+#print axioms Rigidity.Proofs.Cluster.OsBound.add
+#print axioms Rigidity.Proofs.Cluster.osBound_indicator
+#print axioms Rigidity.Proofs.Cluster.isOsBond_of_osBound
+#print axioms Rigidity.Proofs.Cluster.planar_SIupgrade_os
+#print axioms Rigidity.Proofs.Cluster.planar_muupbound_os
+
+-- Lemma 7.1, the order-zero regularity and the corrector input in dimension two (Armstrong and Dario)
+#print axioms Rigidity.Proofs.Regularity.componentBallL2_le_squareL2
+#print axioms Rigidity.Proofs.Regularity.squareL2_le_componentBallL2
+#print axioms Rigidity.Proofs.Regularity.ballDist_le_squareHarmonicDist
+#print axioms Rigidity.Proofs.Regularity.squareOsc_le_ballExcess
+#print axioms Rigidity.Proofs.Regularity.le_sum_squareIterCoeff
+#print axioms Rigidity.Proofs.Regularity.harmonicApproximation_of_squares
+#print axioms Rigidity.Proofs.Regularity.le_sum_prod_of_step
+#print axioms Rigidity.Proofs.Regularity.le_of_geometric_step
+#print axioms Rigidity.Proofs.Regularity.exists_planarOrderZeroDecay
+#print axioms Rigidity.Proofs.Regularity.card_ball_ge_of_clusterCubeDensity
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_of_planarHarmonicApproximation
+#print axioms Rigidity.Proofs.Regularity.planarHarmonicApproximationAt_of_squareEstimates
+#print axioms Rigidity.Proofs.Regularity.mem_supp_of_mem_clusterVertices
+#print axioms Rigidity.Proofs.Regularity.mem_clusterVertices_succ
+#print axioms Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_of_squareEstimates
+#print axioms Rigidity.Proofs.Regularity.eq_zero_of_slopeAsymptotics_zero
+#print axioms Rigidity.Proofs.Regularity.clusterRestrictTo_mem_clusterHarmonic
+#print axioms Rigidity.Proofs.Regularity.clusterForm_clusterRestrictTo_le
+
+-- Lemma 7.3, (7.18) at k = 2, and Theorem 2(iii) at k = 1 in dimension two (Armstrong and Dario)
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2_two_planar
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_two_planar
+#print axioms Rigidity.Proofs.Regularity.harmonicRegularity_three_latticeHarmonicClass
+#print axioms Rigidity.Proofs.Regularity.polynomialComparison_latticeHarmonicCubic
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2_two_latticeHarmonic
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_two_latticeHarmonic
+#print axioms Rigidity.Proofs.Regularity.componentBallL2_le_sum_abs_of_latticeHarmonic
+#print axioms Rigidity.Proofs.Regularity.coarse_top_bounds
+#print axioms Rigidity.Proofs.Regularity.harmonicApproximation_error_le
+#print axioms Rigidity.Proofs.Regularity.mesoscopicDegreeTwo_core
+#print axioms Rigidity.Proofs.Regularity.mesoscopicDegreeTwoAt_of_inputs
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioMesoscopicDegreeTwoPlanar_of_inputs
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderOneOriginTwo_of_inputs
+#print axioms Rigidity.Proofs.Regularity.orderOneOrigin_of_mesoscopicDegreeTwoAt
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderOneOriginTwo_of_mesoscopicDegreeTwoPlanar
+#print axioms Rigidity.Proofs.Regularity.planarCoarseHarmonicApproximationTwo_iff
+#print axioms Rigidity.Proofs.Regularity.planarPartCubeMoments_holds
+#print axioms Rigidity.Proofs.Regularity.planarPartitionSizeScale_of_partCubeMoments
+#print axioms Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_of_squareEstimates_holds
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioMesoscopicDegreeTwoPlanar_of_squareEstimates
+
+-- Theorem 1 of Armstrong and Dario in dimension two (the homogenization error for the Dirichlet problem)
+#print axioms Rigidity.Percolation.exists_planarAhom_eq_smul_one
+#print axioms Rigidity.Percolation.planarNuLimit_signedPermSlope
+#print axioms Rigidity.Percolation.planarPartitionEvent_configurationMap_iff
+#print axioms Rigidity.Dirichlet.exists_mu_test_of_subcubes
+#print axioms Rigidity.Dirichlet.abs_cubeEdgeSlope_sub_sum_tiles_le
+#print axioms Rigidity.Dirichlet.sum_subcube_errors_le
+#print axioms Rigidity.Dirichlet.planar_lemmaSixTwo
+#print axioms Rigidity.Dirichlet.exists_planar_sum_sq_le_of_eq_zero
+#print axioms Rigidity.Dirichlet.planar_sum_abs_grad_boundaryInterpolation_rpow_div_le
+#print axioms Rigidity.Dirichlet.sum_three_pow_pairReachScale_rpow_le
+#print axioms Rigidity.Dirichlet.planarMu_le_test
+#print axioms Rigidity.Dirichlet.planar_lemmaSixThree
+#print axioms Rigidity.Dirichlet.planar_sum_sq_sub_uhom_le
+#print axioms Rigidity.Dirichlet.planar_error_chain
+#print axioms Rigidity.Dirichlet.chain_le
+#print axioms Rigidity.Dirichlet.planarHomogenizationError_of_inputs
+#print axioms Rigidity.Dirichlet.planarHomogenizationError_holds
+
+-- Lemma 7.1 and the order-zero regularity in dimension two from Theorem 1 (Armstrong and Dario)
+#print axioms Rigidity.Proofs.Regularity.planarPartitionSizeScale_of_minimalScales
+#print axioms Rigidity.Proofs.Regularity.coarseComparison_on_square
+#print axioms Rigidity.Proofs.Regularity.planarCoarseComparisonTwo_of_minimalScales
+#print axioms Rigidity.Proofs.Regularity.sum_sq_coarse_sub_mean_le
+#print axioms Rigidity.Proofs.Regularity.squareL2_coarse_sub_le
+#print axioms Rigidity.Proofs.Regularity.planarCoarseBoundTwo_of_minimalScales
+#print axioms Rigidity.Proofs.Regularity.planarHarmonicDistTwo_of_homogenizationError
+#print axioms Rigidity.Proofs.Regularity.planarSquareEstimatesTwo_of_parts
+#print axioms Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_of_inputs
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_of_inputs
+#print axioms Rigidity.Proofs.Regularity.planarMinimalScalesTwo_holds
+#print axioms Rigidity.Proofs.Regularity.planarHomogenizationErrorTwo_holds
+#print axioms Rigidity.Proofs.Regularity.planarSquareEstimatesTwo_holds
+#print axioms Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_holds
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_holds
+
+-- Section 3 and the isotropy of the homogenized matrix in every dimension (Armstrong and Dario), and (3.3) and Step 3 of Lemma 3.2 of Dario
+#print axioms Rigidity.Proofs.Cluster.GeneralDim.measurableSet_not_mem_rhGood_local
+#print axioms Rigidity.Proofs.Cluster.GeneralDim.meyers_rh_uniform
+#print axioms Rigidity.Proofs.Cluster.GeneralDim.mem_partitionBoxCluster_of_exit
+#print axioms Rigidity.Proofs.Cluster.GeneralDim.rhCube_of_scales
+#print axioms Rigidity.Proofs.Cluster.GeneralDim.exists_measure_sum_reach_enl_gt_le
+#print axioms Rigidity.Proofs.Cluster.GeneralDim.rhFailureBound_holds
+#print axioms Rigidity.Proofs.Cluster.GeneralDim.rhPartition_holds
+#print axioms Rigidity.Percolation.reachable_partitionAnchor_of_exit
+#print axioms Rigidity.Percolation.partitionReach_le_stoppingSize_coarseGood
+#print axioms Rigidity.Percolation.exists_measure_not_mem_coarseGood_le
+#print axioms Rigidity.Percolation.cubeNu_signedPerm
+#print axioms Rigidity.Percolation.cubeNuLimit_signedPermSlope
+#print axioms Rigidity.Percolation.exists_cubeAhom_eq_smul_one
+
+-- The corrected planes, the dimension of the harmonic functions of linear growth and the corrector input in dimension two (Armstrong and Dario, (1.18), Lemma 7.3), with no hypothesis
+#print axioms Rigidity.Proofs.Regularity.exists_planar_all_centres_constant_approximation
+#print axioms Rigidity.Proofs.Regularity.ae_eventually_scale_le_three
+#print axioms Rigidity.Proofs.Regularity.abs_corrector_le_at_scale
+#print axioms Rigidity.Proofs.Regularity.componentSlopeAsymptotics_of_scales
+#print axioms Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_sublinearL2
+#print axioms Rigidity.Proofs.Regularity.exists_harmonic_of_approximations
+#print axioms Rigidity.Proofs.Regularity.planarCorrectorSublinearL2Two_of_affineApproximation
+#print axioms Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_affineApproximation
+#print axioms Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_affineApproximationAe
+#print axioms Rigidity.Proofs.Regularity.clusterForm_planarNuSolution_le
+#print axioms Rigidity.Proofs.Regularity.sum_sq_extend_sub_coarsen_le
+#print axioms Rigidity.Proofs.Regularity.sum_sq_coarsen_combo_le
+#print axioms Rigidity.Proofs.Regularity.affineApproximation_at_scale
+#print axioms Rigidity.Proofs.Regularity.radicand_le
+#print axioms Rigidity.Proofs.Regularity.ae_eventually_planarNuFlatness_le
+#print axioms Rigidity.Proofs.Regularity.planarAffineApproximationAeTwo_of_nuFlatness
+#print axioms Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_nuFlatness
+#print axioms Rigidity.Proofs.Regularity.planarAffineApproximationAeTwo_of_minimalScales
+#print axioms Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_minimalScales
+#print axioms Rigidity.Proofs.Regularity.eq_clusterLiftMap_of_orderOne
+
+-- (1.18) and (1.22) in dimension two with minimal scales of class O_s (Armstrong and Dario, Lemma 5.8, (5.33)), and Lemma 3.2 of Dario with no hypothesis
+#print axioms Rigidity.Proofs.Regularity.exists_isOsBond_of_events
+#print axioms Rigidity.Proofs.Regularity.exists_restrictBad_os
+#print axioms Rigidity.Proofs.Regularity.planarNuDefect_le_of_errors
+#print axioms Rigidity.Proofs.Regularity.exists_planarFlatness_le_of_reach
+#print axioms Rigidity.Proofs.Regularity.exists_flatnessBound_le
+#print axioms Rigidity.Proofs.Regularity.exists_measure_flatnessBad_le
+#print axioms Rigidity.Proofs.Regularity.exists_planarNuFlatness_os
+#print axioms Rigidity.Proofs.Regularity.planarAffineApproximationTwo_of_subaddOs
+#print axioms Rigidity.Proofs.Regularity.planarCorrectorSublinearL2Two_of_subaddOs
+#print axioms Rigidity.Proofs.Regularity.exists_isOsBond_scale_le_three
+#print axioms Rigidity.Proofs.Regularity.exists_corrector_sup_os
+#print axioms Rigidity.Proofs.Regularity.eq_add_of_isCorrectedPlane
+#print axioms Rigidity.Proofs.Regularity.planarNuSubaddOsTwo_holds
+
+-- Localization, stationarity and limits of the subadditive quantity mu in every dimension, and the partition of Definition 3.9 (Armstrong and Dario, Section 4, Definition 3.9)
+#print axioms Rigidity.Percolation.cubeMu_eq_of_equiv
+#print axioms Rigidity.Percolation.cubeMu_eq_of_adj_iff_of_anchor_eq
+#print axioms Rigidity.Percolation.cubeMu_shift_translation_of_partition
+#print axioms Rigidity.Percolation.cappedCube_goodCubes_eq_of_localBonds
+#print axioms Rigidity.Percolation.anchor_cappedCube_goodCubes_eq_of_localBonds
+#print axioms Rigidity.Percolation.exists_measure_ne_cappedCube_goodCubes_le
+#print axioms Rigidity.Percolation.exists_measure_cubeCappedDiscrepancy_le
+#print axioms Rigidity.Percolation.exists_measure_not_cubeLocalGood_le
+#print axioms Rigidity.Percolation.neg_cubeMu_le_latticeVolume_sq
+#print axioms Rigidity.Percolation.cubeMuLoc_eq_of_good
+#print axioms Rigidity.Percolation.measurable_cubeMuLoc_localBondSigma
+#print axioms Rigidity.Percolation.indepFun_cubeMuLoc
+#print axioms Rigidity.Percolation.exists_cubeMuLoc_localization
+#print axioms Rigidity.Percolation.measurable_cubeNu_localBondSigma
+#print axioms Rigidity.Percolation.indepFun_cubeNu
+#print axioms Rigidity.Percolation.map_cubeMuStat_shift
+#print axioms Rigidity.Percolation.indepFun_cubeMuStat
+#print axioms Rigidity.Percolation.cubeMuStat_eq_of_good
+#print axioms Rigidity.Percolation.exists_cubeMuStat_localization
+#print axioms Rigidity.Percolation.exists_lintegral_neg_cubeMu_le_of_scale_eq
+#print axioms Rigidity.Percolation.tendsto_lintegral_cubeMuLoc_of_tendsto
+#print axioms Rigidity.Percolation.tendsto_lintegral_neg_cubeMu_of_tendsto
+#print axioms Rigidity.Percolation.measurable_cubeMu_indicator
+#print axioms Rigidity.Percolation.exceptionalMajorant_of_isExceptionalEdge
+#print axioms Rigidity.Percolation.exceptionalEdgeCount_le
+#print axioms Rigidity.Percolation.sum_cubeMu_subcubes_sub_le
+#print axioms Rigidity.Percolation.exists_lintegral_sum_cubeMu_subcubes_sub_le
+#print axioms Rigidity.Percolation.exists_lintegral_neg_cubeMu_le_of_scale_le
+#print axioms Rigidity.Percolation.exists_tendsto_cubeMuMean
+#print axioms Rigidity.Percolation.tendsto_lintegral_neg_cubeMu_of_scale
+#print axioms Rigidity.Percolation.tendsto_lintegral_cubeMuLoc_of_scale
+#print axioms Rigidity.Percolation.tendsto_lintegral_cubeMuStat_of_scale
+#print axioms Rigidity.Proofs.Cluster.GeneralDim.exists_measure_stoppingScale_large_le
+#print axioms Rigidity.Proofs.Cluster.GeneralDim.measurableSet_not_mem_meyersGood_local
+#print axioms Rigidity.Proofs.Cluster.GeneralDim.exists_meyersFailureBound
+#print axioms Rigidity.Proofs.Cluster.GeneralDim.meyersPartition_holds
+#print axioms Rigidity.Percolation.cubeMuLimit_smul_add_smul
+#print axioms Rigidity.Percolation.exists_cubeMuLimit_bounds
+#print axioms Rigidity.Percolation.sum_mul_le_neg_cubeMu_add_cubeNu
+#print axioms Rigidity.Percolation.exists_sum_mul_le_cubeMuMean_add_cubeNuMean
+#print axioms Rigidity.Percolation.sum_mul_le_cubeMuLimit_add_cubeNuLimit
+#print axioms Rigidity.Percolation.cubeMuLimit_ge_of_cubeAhom_eq_smul_one
+#print axioms Rigidity.Percolation.exists_cubeMuLimit_two_sided
+
+-- Lemmas 5.3 and 5.4, (5.21)-(5.24) and Step 1(a) of Lemma 5.10 of Armstrong and Dario in every dimension
+#print axioms Rigidity.Percolation.abs_slopeQuadratic_sub_half_le
+#print axioms Rigidity.Percolation.isSlopeQuadratic_of_eq_dotProduct
+#print axioms Rigidity.Percolation.IsSlopeQuadratic.comp_mulVec
+#print axioms Rigidity.Percolation.cubeMu_eq_sum_polarization
+#print axioms Rigidity.Percolation.sum_mul_le_neg_cubeMu_add_cubeNu_add_mul
+#print axioms Rigidity.Percolation.neg_cubeMu_le_cubeMuBound_mul
+#print axioms Rigidity.Percolation.cubeOmega_le_cubeRho_mul
+#print axioms Rigidity.Percolation.neg_le_cubeOmega
+#print axioms Rigidity.Percolation.cube_minimalset
+#print axioms Rigidity.Percolation.exceptionalPairing_le
+#print axioms Rigidity.Percolation.cubeMuDefect_add_sum_sub_le
+#print axioms Rigidity.Percolation.exists_integral_subaddBound_le
+#print axioms Rigidity.Percolation.exists_integral_neg_cubeMu_le_of_scale_eq
+#print axioms Rigidity.Percolation.exists_lintegral_cubeMuDefect_le
+#print axioms Rigidity.Percolation.IsSlopeQuadratic.le_of_nonneg
+#print axioms Rigidity.Percolation.isSlopeQuadratic_integral
+#print axioms Rigidity.Percolation.isSlopeQuadratic_cubeMuMean
+#print axioms Rigidity.Percolation.exists_cubeMuIncrement_le
+#print axioms Rigidity.Percolation.exists_cubeNuIncrement_le
+#print axioms Rigidity.Percolation.exists_lintegral_cubeMuDefect_le_tau
+#print axioms Rigidity.Percolation.exists_lintegral_cubeNuDefect_le_tau
+#print axioms Rigidity.Percolation.half_sum_mul_cubeAhomInvFinite_eq
+#print axioms Rigidity.Percolation.exists_abs_cubeMuMean_sub_le
+#print axioms Rigidity.Percolation.exists_abs_cubeAhomInvFinite_sub_le
+#print axioms Rigidity.Percolation.summable_cubeTau
+#print axioms Rigidity.Percolation.tendsto_cubeAhomInvFinite
+#print axioms Rigidity.Percolation.exists_abs_cubeAhomInvLimit_sub_le
+#print axioms Rigidity.Percolation.isSlopeQuadratic_cubeMuLimit
+#print axioms Rigidity.Percolation.exists_cubeAhomInvFinite_bounds
+#print axioms Rigidity.Percolation.IsSlopeQuadratic.add_sub_sub_eq
+#print axioms Rigidity.Percolation.cubeCoarsePairing_cubeMuMinimizer_div
+#print axioms Rigidity.Percolation.integral_cubeCoarsePairing_cubeMuMinimizer
+#print axioms Rigidity.Percolation.exists_cubeAhomInvFinite_mul_cubeAhomFinite
+#print axioms Rigidity.Percolation.cubeMuMean_cubeAhomFinite_sub_le
+#print axioms Rigidity.Percolation.cubeOmegaD_succ_le
