@@ -18,7 +18,7 @@ the Borel–Cantelli lemma give `flatness ≤ (|ξ|² + 1) 9^n μ^n` eventually,
 
 namespace Rigidity.Proofs.Regularity
 
-open MeasureTheory Filter LatticeProb.Percolation Rigidity.Percolation Rigidity.External
+open MeasureTheory Filter Topology LatticeProb.Percolation Rigidity.Percolation Rigidity.External
 open scoped ENNReal
 
 /-- **Lemma 5.8, (5.33), of Armstrong and Dario in expectation** (the conclusion of

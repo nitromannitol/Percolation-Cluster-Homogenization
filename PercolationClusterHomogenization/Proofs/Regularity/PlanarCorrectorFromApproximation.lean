@@ -18,7 +18,7 @@ density of the cluster, by the construction of Step 3 (`exists_harmonic_of_appro
 
 namespace Rigidity.Proofs.Regularity
 
-open Finset Filter MeasureTheory LatticeProb LatticeProb.Percolation Rigidity.Percolation
+open Finset Filter Topology MeasureTheory LatticeProb LatticeProb.Percolation Rigidity.Percolation
 open Rigidity.External Rigidity.Proofs.S2
 
 /-- The approximation of affine functions by harmonic functions on growing balls of the planar

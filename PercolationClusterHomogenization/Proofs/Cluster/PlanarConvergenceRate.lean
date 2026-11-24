@@ -29,7 +29,7 @@ exists and resolves `□_n` (`planarMuMean`, `planarNuMean`), and `|q|² = q₀�
 
 namespace Rigidity.Proofs.Cluster
 
-open MeasureTheory Filter LatticeProb.Percolation Rigidity.Percolation
+open MeasureTheory Filter Topology LatticeProb.Percolation Rigidity.Percolation
   Rigidity.External Rigidity.Proofs.Section5
 open scoped Classical Matrix
 

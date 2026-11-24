@@ -1,4 +1,4 @@
-import PercolationClusterHomogenization.Steps.Section5.DisjointPathsToInfinity
+import PercolationClusterHomogenization.Proofs.Planar.SiteClusters
 import LatticeProb.Prob.Percolation.LSSThinVacuity
 
 /-!
@@ -6,7 +6,7 @@ import LatticeProb.Prob.Percolation.LSSThinVacuity
 
 This file proves the steps `SiteDensityNearOneStep` (`step:5.21-site-density`) and
 `OneDependentPeierlsStep` (`step:5.21-peierls`) of Proposition 5.21
-(`PercolationClusterHomogenization/Steps/Section5/DisjointPathsToInfinity.lean`; corrected draft L2154-2158,
+(`PercolationClusterHomogenization/Proofs/Planar/SiteClusters.lean`; corrected draft L2154-2158,
 L2253-2276). The printed proof cites Grimmett, *Percolation*, Theorem 8.92 for the first; both
 follow from one Peierls bound, valid for every `1`-dependent site field on `ℤ²` (for the
 `ℓ^∞` distance) whose sites are closed with probability at most `ε`:
@@ -48,6 +48,10 @@ namespace Rigidity.Proofs.Section5
 `(s, true)` the edge from `s` to `s + (0, 1)`. -/
 def edgeTip (e : PlanarCarrier × Bool) : PlanarCarrier :=
   if e.2 then (e.1.1, e.1.2 + 1) else (e.1.1 + 1, e.1.2)
+
+@[simp] theorem edgeTip_false (x y : ℤ) : edgeTip ((x, y), false) = (x + 1, y) := rfl
+
+@[simp] theorem edgeTip_true (x y : ℤ) : edgeTip ((x, y), true) = (x, y + 1) := rfl
 
 theorem edgeTip_dist (e : PlanarCarrier × Bool) :
     |e.1.1 - (edgeTip e).1| + |e.1.2 - (edgeTip e).2| = 1 := by

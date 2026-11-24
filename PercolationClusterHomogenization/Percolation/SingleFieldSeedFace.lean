@@ -11,6 +11,7 @@ the union configuration.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory ProbabilityTheory Rigidity.External Filter
+open scoped Topology
 
 /-- A seed is connected inside the region to a face contact whose outward
 trial is fully open in the same configuration. -/

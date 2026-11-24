@@ -11,6 +11,7 @@ fixed polynomial in its side length.
 namespace Rigidity.Percolation
 
 open LatticeProb.Percolation MeasureTheory Rigidity.External Filter
+open scoped Topology
 
 /-- The combinatorial prefactor in the slab crossing estimate is bounded by a
 power of the cube's side length. -/

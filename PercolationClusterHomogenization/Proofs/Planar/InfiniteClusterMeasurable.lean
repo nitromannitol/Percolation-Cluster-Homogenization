@@ -1,10 +1,10 @@
-import PercolationClusterHomogenization.Steps.Section5.DisjointPathsToInfinity
+import PercolationClusterHomogenization.Proofs.Planar.SiteClusters
 
 /-!
 # Proposition 5.21: the infinite cluster event is measurable
 
 This file proves the step `InfiniteClusterMeasurableStep` (`step:5.21-cluster-measurable`) of
-Proposition 5.21 (`PercolationClusterHomogenization/Steps/Section5/DisjointPathsToInfinity.lean`): for each site `z` of
+Proposition 5.21 (`PercolationClusterHomogenization/Proofs/Planar/SiteClusters.lean`): for each site `z` of
 `ℤ²`, the event that `z` lies in an infinite open cluster of a site configuration is
 measurable. The open cluster of `z` is infinite exactly when it contains sites of every
 `ℓ¹`-norm (`siteCluster_infinite_iff`), and `z` is joined to `w` by an open path exactly when it

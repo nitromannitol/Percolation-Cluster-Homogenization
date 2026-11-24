@@ -45,6 +45,38 @@ namespace Rigidity.Proofs.S2
 open MeasureTheory LatticeProb.Percolation
 open Rigidity.External (IsOsBond)
 
+/-- **Density of the infinite cluster**, as printed at paper L508-511: there are `s, C, 𝔠 > 0`
+and, for every vertex `x`, a minimal scale `M_dense(x) ≤ O_s(C)` such that for all
+`r ≥ M_dense(x)` any (open Euclidean) ball of radius `r/100` containing the vertex `x` contains at
+least `𝔠 r^d` vertices of `𝒞_∞`. The draft cites Penrose–Pisztora, Adv. Appl. Probab. 28 (1996),
+Theorem 1, which concerns continuum percolation (their lattice theorems are for site percolation;
+correction C35). For bond percolation in every `d ≥ 2` it follows from Dario–Gu,
+arXiv:1909.10439v4, Proposition A.1 (`Rigidity.External.ClusterDensityConcentrationInput`), by a
+union bound over triadic cubes: `clusterDensityInputFaithful_of_concentration`
+(`ClusterDensityFromDarioGu.lean`). -/
+def ClusterDensityInputFaithful : Prop :=
+  ∀ (d : ℕ) [NeZero d], 2 ≤ d → ∀ p : unitInterval,
+    criticalProbability d < (p : ℝ) → (p : ℝ) < 1 →
+    ∃ s C c : ℝ, 0 < s ∧ 0 < C ∧ 0 < c ∧ ∀ x : Vertex d,
+      ∃ M : Configuration d → ℝ, Measurable M ∧ (∀ ω, 0 ≤ M ω) ∧ IsOsBond d p M s C ∧
+      ∀ᵐ ω ∂latticeBondLaw d p, ∀ h : HasUniqueInfiniteOpenComponent ω,
+        ∀ r : ℝ, M ω ≤ r → ∀ y : EuclideanSpace ℝ (Fin d),
+          dist (latticeEuclideanEmbedding x) y < r / 100 →
+            c * r ^ d ≤
+              ({z : uniqueInfiniteComponent h |
+                dist (latticeEuclideanEmbedding z.val) y < r / 100}.ncard : ℝ)
+
+/-- The density lower bound at a fixed dimension and bond parameter. -/
+def ClusterDensityInputFaithfulAt (d : ℕ) (p : unitInterval) : Prop :=
+  ∃ s C c : ℝ, 0 < s ∧ 0 < C ∧ 0 < c ∧ ∀ x : Vertex d,
+      ∃ M : Configuration d → ℝ, Measurable M ∧ (∀ ω, 0 ≤ M ω) ∧ IsOsBond d p M s C ∧
+      ∀ᵐ ω ∂latticeBondLaw d p, ∀ h : HasUniqueInfiniteOpenComponent ω,
+        ∀ r : ℝ, M ω ≤ r → ∀ y : EuclideanSpace ℝ (Fin d),
+          dist (latticeEuclideanEmbedding x) y < r / 100 →
+            c * r ^ d ≤
+              ({z : uniqueInfiniteComponent h |
+                dist (latticeEuclideanEmbedding z.val) y < r / 100}.ncard : ℝ)
+
 /-! ### The `O_s` calculus and the density input -/
 
 section Density

@@ -10,7 +10,7 @@ disjoint. On a finite measure space their probabilities tend to zero.
 namespace Rigidity.Percolation
 
 open MeasureTheory Filter
-open scoped ENNReal
+open scoped Topology ENNReal
 
 /-- Successive extinction events for decreasing survival events are disjoint. -/
 theorem pairwise_disjoint_extinction_events {Ω : Type*} (E : ℕ → Set Ω)

@@ -11,6 +11,7 @@ exponential rate at sufficiently large scales.
 namespace Rigidity.Percolation
 
 open Filter Asymptotics
+open scoped Topology
 
 /-- Any nonnegative multiple of a power is eventually bounded by a positive
 exponential. -/

@@ -25,7 +25,7 @@ crossing cluster alone. The planar case is `PlanarAhomIsotropic`.
 
 namespace Rigidity.Percolation
 
-open MeasureTheory LatticeProb.Percolation Rigidity.Proofs.S3 Rigidity.External Filter
+open MeasureTheory LatticeProb.Percolation Rigidity.Proofs.S3 Rigidity.External Filter Topology
 open scoped Classical
 
 variable {d : ℕ}

@@ -125,6 +125,42 @@ theorem measurable_infiniteClusterCount_triadicCube (m : ℕ) (k : Vertex d) :
   exact Finset.measurable_sum _ fun y _ =>
     measurable_const.indicator (measurableSet_infiniteComponentEvent y)
 
+/-- A set of vertices inside the ball `B(y, ρ)` has at most as many vertices of `𝒞_∞` as the ball. -/
+theorem infiniteClusterCount_le_ncard {ω : Configuration d}
+    (h : HasUniqueInfiniteOpenComponent ω) {Q : Set (Vertex d)}
+    {y : EuclideanSpace ℝ (Fin d)} {ρ : ℝ}
+    (hQ : ∀ w ∈ Q, dist (latticeEuclideanEmbedding w) y < ρ) :
+    infiniteClusterCount Q ω ≤
+      {z : uniqueInfiniteComponent h | dist (latticeEuclideanEmbedding z.val) y < ρ}.ncard := by
+  set T := {z : uniqueInfiniteComponent h | dist (latticeEuclideanEmbedding z.val) y < ρ}
+  rw [infiniteClusterCount, ← Set.ncard_image_of_injective T Subtype.val_injective]
+  have hfin : (Subtype.val '' T).Finite := by
+    refine (finite_latticeEuclideanBall 0 (ρ + dist y (latticeEuclideanEmbedding 0))).subset ?_
+    rintro _ ⟨z, hz, rfl⟩
+    simp only [T, Set.mem_setOf_eq] at hz ⊢
+    calc dist (latticeEuclideanEmbedding z.val) (latticeEuclideanEmbedding 0)
+        ≤ dist (latticeEuclideanEmbedding z.val) y + dist y (latticeEuclideanEmbedding 0) :=
+          dist_triangle _ _ _
+      _ < ρ + dist y (latticeEuclideanEmbedding 0) := by linarith
+  refine Set.ncard_le_ncard ?_ hfin
+  rintro w ⟨hwQ, hwE⟩
+  exact ⟨⟨w, (mem_uniqueInfiniteComponent_iff h w).2 hwE⟩, hQ w hwQ, rfl⟩
+
+/-- Euclidean distance from coordinatewise bounds: `|uᵢ - vᵢ| < T` gives `|u - v| < d T`. -/
+theorem dist_lt_of_forall_abs_sub_lt [NeZero d] {u v : EuclideanSpace ℝ (Fin d)} {T : ℝ}
+    (h : ∀ i, |u i - v i| < T) : dist u v < d * T := by
+  rw [EuclideanSpace.dist_eq]
+  have hT : 0 < T := lt_of_le_of_lt (abs_nonneg _) (h 0)
+  have hsum : ∑ i, dist (u i) (v i) ^ 2 < ∑ _i : Fin d, T ^ 2 :=
+    Finset.sum_lt_sum_of_nonempty Finset.univ_nonempty fun i _ => by
+      rw [Real.dist_eq]
+      exact pow_lt_pow_left₀ (h i) (abs_nonneg _) two_ne_zero
+  rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul] at hsum
+  have hd1 : (1 : ℝ) ≤ d := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne d)
+  calc √(∑ i, dist (u i) (v i) ^ 2) < √(((d : ℝ) * T) ^ 2) :=
+        Real.sqrt_lt_sqrt (Finset.sum_nonneg fun i _ => sq_nonneg _) (by nlinarith)
+    _ = d * T := Real.sqrt_sq (by positivity)
+
 /-! ### Markov's inequality, translation invariance -/
 
 /-- `X ≤ O_s(τ)` gives `P[X ≥ t] ≤ 2 exp(-(t/τ)^s)`. -/
@@ -341,6 +377,22 @@ def badCubeEvent (d m : ℕ) (k : Vertex d) (θ : ℝ) : Set (Configuration d) :
   {ω | θ / 2 ≤ |(infiniteClusterCount (triadicCube d m k) ω : ℝ) /
     ((triadicCube d m k).ncard : ℝ) - θ|}
 
+/-- The `(6d+5)^d` triadic cubes `□_m(3^m k)` of size `3^m` with `|kᵢ - ⌊xᵢ/3^m⌋| ≤ 3d + 2`. -/
+noncomputable def nearCubes (x : Vertex d) (m : ℕ) : Finset (Vertex d) :=
+  Fintype.piFinset fun i =>
+    Finset.Icc (x i / 3 ^ m - (3 * (d : ℤ) + 2)) (x i / 3 ^ m + (3 * (d : ℤ) + 2))
+
+theorem card_nearCubes (x : Vertex d) (m : ℕ) : (nearCubes x m).card = (6 * d + 5) ^ d := by
+  rw [nearCubes, Fintype.card_piFinset]
+  have hc : ∀ i, (Finset.Icc (x i / 3 ^ m - (3 * (d : ℤ) + 2))
+      (x i / 3 ^ m + (3 * (d : ℤ) + 2))).card = 6 * d + 5 := by
+    intro i
+    rw [Int.card_Icc]
+    have e : x i / 3 ^ m + (3 * (d : ℤ) + 2) + 1 - (x i / 3 ^ m - (3 * (d : ℤ) + 2)) =
+        ((6 * d + 5 : ℕ) : ℤ) := by push_cast; ring
+    rw [e, Int.toNat_natCast]
+  simp only [hc, Finset.prod_const, Finset.card_univ, Fintype.card_fin]
+
 theorem measurableSet_badCubeEvent (m : ℕ) (k : Vertex d) (θ : ℝ) :
     MeasurableSet (badCubeEvent d m k θ) :=
   measurableSet_le measurable_const
@@ -360,6 +412,84 @@ theorem measure_badCubeEvent_le {p : unitInterval} {C s₀ : ℝ} (hC : 0 < C) (
     (by positivity : (0 : ℝ) ≤ theta d p / 2) hX
   rwa [badCube_exponent_eq d m hθ hC] at h
 
+/-- The geometric step at scale `3^m`, `100d 3^m ≤ r < 100d 3^{m+1}`: a ball `B(y, r/100)` with
+`|y - x| < r/100` contains a triadic cube `□_m(3^m k)` with `k ∈ nearCubes x m` (`kᵢ` is the
+rounding of `yᵢ/3^m`). -/
+theorem exists_nearCube_subset_ball [NeZero d] {x : Vertex d} {m : ℕ} {r : ℝ}
+    (hm1 : 100 * d * 3 ^ m ≤ r) (hm2 : r < 100 * d * 3 ^ (m + 1))
+    {y : EuclideanSpace ℝ (Fin d)} (hy : dist (latticeEuclideanEmbedding x) y < r / 100) :
+    ∃ k ∈ nearCubes x m, ∀ w ∈ triadicCube d m k,
+      dist (latticeEuclideanEmbedding w) y < r / 100 := by
+  obtain ⟨Q, hQdef⟩ : ∃ Q : ℝ, Q = 3 ^ m := ⟨_, rfl⟩
+  have hQ : 0 < Q := by rw [hQdef]; positivity
+  have hd0 : (0 : ℝ) < d := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
+  have hQ1 : 100 * d * Q ≤ r := by rw [hQdef]; exact hm1
+  have hQ3 : r < 300 * d * Q := by
+    rw [hQdef]
+    rw [pow_succ] at hm2
+    linarith only [hm2]
+  obtain ⟨k, hk⟩ : ∃ k : Vertex d, ∀ i, k i = round (y i / Q) :=
+    ⟨fun i => round (y i / Q), fun i => rfl⟩
+  have hky : ∀ i, |Q * (k i : ℝ) - y i| ≤ Q / 2 := by
+    intro i
+    have h1 := abs_sub_round (y i / Q)
+    have e : Q * (k i : ℝ) - y i = Q * ((round (y i / Q) : ℝ) - y i / Q) := by
+      have : Q * (y i / Q) = y i := by field_simp
+      rw [mul_sub, this, hk i]
+    rw [e, abs_mul, abs_of_pos hQ, abs_sub_comm]
+    calc Q * |y i / Q - (round (y i / Q) : ℝ)| ≤ Q * (1 / 2) := by gcongr
+      _ = Q / 2 := by ring
+  refine ⟨k, ?_, fun w hw => ?_⟩
+  · rw [nearCubes, Fintype.mem_piFinset]
+    intro i
+    have hxy : |y i - (x i : ℝ)| < r / 100 := by
+      have h1 := PiLp.norm_apply_le (y - latticeEuclideanEmbedding x) i
+      have h2 : ‖y - latticeEuclideanEmbedding x‖ < r / 100 := by
+        rw [← dist_eq_norm, dist_comm]
+        exact hy
+      change ‖y i - (x i : ℝ)‖ ≤ _ at h1
+      rw [Real.norm_eq_abs] at h1
+      linarith only [h1, h2]
+    have hreal : |Q * (k i : ℝ) - x i| < (3 * d + 1) * Q := by
+      calc |Q * (k i : ℝ) - x i| ≤ |Q * k i - y i| + |y i - x i| := abs_sub_le _ _ _
+        _ < Q / 2 + 3 * d * Q := by linarith only [hky i, hxy, hQ3]
+        _ ≤ (3 * d + 1) * Q := by linarith only [hQ]
+    rw [hQdef, abs_lt] at hreal
+    have hQz0 : (0 : ℤ) < 3 ^ m := by positivity
+    have hdiv := Int.mul_ediv_add_emod (x i) (3 ^ m)
+    have hmod0 := Int.emod_nonneg (x i) hQz0.ne'
+    have hmodlt := Int.emod_lt_of_pos (x i) hQz0
+    have h1 : (3 : ℤ) ^ m * k i - x i < (3 * d + 1) * 3 ^ m := by
+      have h' : (3 : ℝ) ^ m * (k i : ℝ) - x i < (3 * d + 1) * 3 ^ m := hreal.2
+      exact_mod_cast h'
+    have h2 : -((3 * d + 1) * 3 ^ m) < (3 : ℤ) ^ m * k i - x i := by
+      have h' : -((3 * d + 1) * (3 : ℝ) ^ m) < (3 : ℝ) ^ m * (k i : ℝ) - x i := hreal.1
+      exact_mod_cast h'
+    rw [Finset.mem_Icc]
+    constructor
+    · by_contra hc
+      push Not at hc
+      have := mul_lt_mul_of_pos_left hc hQz0
+      linarith only [this, hdiv, hmod0, hmodlt, h2]
+    · by_contra hc
+      push Not at hc
+      have := mul_lt_mul_of_pos_left hc hQz0
+      linarith only [this, hdiv, hmod0, hmodlt, h1]
+  · have hwi : ∀ i, |(latticeEuclideanEmbedding w) i - y i| < Q := by
+      intro i
+      have h1 : |(w i : ℝ) - Q * (k i : ℝ)| < Q / 2 := by
+        have := hw i
+        rwa [← hQdef] at this
+      have h2 := hky i
+      change |(w i : ℝ) - y i| < Q
+      calc |(w i : ℝ) - y i| ≤ |(w i : ℝ) - Q * k i| + |Q * k i - y i| := abs_sub_le _ _ _
+        _ < Q / 2 + Q / 2 := by linarith only [h1, h2]
+        _ = Q := by ring
+    calc dist (latticeEuclideanEmbedding w) y < d * Q := dist_lt_of_forall_abs_sub_lt hwi
+      _ ≤ r / 100 := by
+        rw [le_div_iff₀ (by norm_num)]
+        linarith only [hQ1]
+
 /-- A good triadic cube contains more than `(θ/2) 3^{dm}` vertices of `𝒞_∞`. -/
 theorem lt_infiniteClusterCount_of_notMem_badCubeEvent {θ : ℝ} {m : ℕ} {k : Vertex d}
     {ω : Configuration d} (hgk : ω ∉ badCubeEvent d m k θ) :
@@ -372,5 +502,141 @@ theorem lt_infiniteClusterCount_of_notMem_badCubeEvent {θ : ℝ} {m : ℕ} {k :
   rw [lt_div_iff₀ hpos] at h'
   push_cast at h'
   linarith only [h']
+
+/-- The deterministic step: if every scale `m ≥ N` is good near `x`, then for `r ≥ 100d 3^N` every
+ball of radius `r/100` whose centre is within `r/100` of `x` contains at least
+`(θ/2)(300d)^{-d} r^d` vertices of `𝒞_∞`. -/
+theorem density_lower_bound_of_good [NeZero d] {θ : ℝ} {ω : Configuration d}
+    (h : HasUniqueInfiniteOpenComponent ω) {x : Vertex d} {N : ℕ}
+    (hgood : ∀ m, N ≤ m → ω ∉ ⋃ k ∈ nearCubes x m, badCubeEvent d m k θ) {r : ℝ}
+    (hr : 100 * d * 3 ^ N ≤ r) {y : EuclideanSpace ℝ (Fin d)}
+    (hy : dist (latticeEuclideanEmbedding x) y < r / 100) (hθ : 0 < θ) :
+    θ / 2 / (300 * d) ^ d * r ^ d ≤
+      ({z : uniqueInfiniteComponent h |
+        dist (latticeEuclideanEmbedding z.val) y < r / 100}.ncard : ℝ) := by
+  have hd0 : (0 : ℝ) < d := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
+  have hL : (0 : ℝ) < 100 * d := by positivity
+  have h3N : (1 : ℝ) ≤ 3 ^ N := one_le_pow₀ (by norm_num)
+  have hr0 : 0 < r := lt_of_lt_of_le (by positivity) hr
+  have hr1 : 1 ≤ r / (100 * d) := by
+    rw [le_div_iff₀ hL]
+    nlinarith only [hr, h3N, hL]
+  obtain ⟨m, hm1, hm2⟩ := exists_nat_pow_near hr1 (by norm_num : (1 : ℝ) < 3)
+  rw [le_div_iff₀ hL] at hm1
+  rw [div_lt_iff₀ hL] at hm2
+  have hNm : N ≤ m := by
+    have h2 : (3 : ℝ) ^ N < 3 ^ (m + 1) := by
+      by_contra hc
+      push Not at hc
+      nlinarith only [hc, hr, hm2, hL]
+    have := (pow_lt_pow_iff_right₀ (by norm_num : (1 : ℝ) < 3)).1 h2
+    omega
+  obtain ⟨k, hkF, hball⟩ := exists_nearCube_subset_ball (x := x) (m := m)
+    (by linarith only [hm1]) (by linarith only [hm2]) hy
+  have hgk : ω ∉ badCubeEvent d m k θ := fun hk' =>
+    hgood m hNm (Set.mem_iUnion₂.2 ⟨k, hkF, hk'⟩)
+  have hcnt := lt_infiniteClusterCount_of_notMem_badCubeEvent hgk
+  have hrc : r / (300 * d) ≤ 3 ^ m := by
+    rw [div_le_iff₀ (by positivity)]
+    rw [pow_succ] at hm2
+    linarith only [hm2]
+  have hfinal : θ / 2 / (300 * d) ^ d * r ^ d ≤ θ / 2 * (3 : ℝ) ^ (d * m) := by
+    have e1 : θ / 2 / (300 * d) ^ d * r ^ d = θ / 2 * (r / (300 * d)) ^ d := by
+      rw [div_pow]
+      ring
+    have e2 : (3 : ℝ) ^ (d * m) = ((3 : ℝ) ^ m) ^ d := by rw [mul_comm, pow_mul]
+    rw [e1, e2]
+    exact mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (by positivity) hrc d) (by positivity)
+  have hcount := infiniteClusterCount_le_ncard h hball
+  calc θ / 2 / (300 * d) ^ d * r ^ d ≤ θ / 2 * (3 : ℝ) ^ (d * m) := hfinal
+    _ ≤ (infiniteClusterCount (triadicCube d m k) ω : ℝ) := hcnt.le
+    _ ≤ _ := by exact_mod_cast hcount
+
+/-- The probability of a bad scale near `x`, `P[scale m bad] ≤ b_m`, with
+`∑_m b_m exp((100d 3^{m+1})^s) < ∞` for `s = d s₀/4` (uniformly in `x`). -/
+theorem exists_badScale_summable [NeZero d] (hd : 2 ≤ d) {p : unitInterval} {C : ℝ}
+    (hC : 0 < C) (hθ : 0 < theta d p)
+    (hX : ∀ (m : ℕ) (k : Vertex d), IsOsBond d p
+      (fun ω => |(infiniteClusterCount (triadicCube d m k) ω : ℝ) /
+        ((triadicCube d m k).ncard : ℝ) - theta d p|)
+      (2 * ((d : ℝ) - 1) / (3 * (d : ℝ) ^ 2 + 2 * (d : ℝ) - 1))
+      (C * (3 : ℝ) ^ (-((d : ℝ) * (m : ℝ)) / 2))) :
+    ∃ s : ℝ, 0 < s ∧ ∃ b : ℕ → ℝ, (∀ m, 0 ≤ b m) ∧
+      (∀ x m, latticeBondLaw d p (⋃ k ∈ nearCubes x m, badCubeEvent d m k (theta d p)) ≤
+        ENNReal.ofReal (b m)) ∧
+      Summable fun m => b m * Real.exp ((100 * d * 3 ^ (m + 1)) ^ s) := by
+  have hd2 : (2 : ℝ) ≤ d := by exact_mod_cast hd
+  obtain ⟨s₀, hs₀def⟩ : ∃ s₀ : ℝ,
+      s₀ = 2 * ((d : ℝ) - 1) / (3 * (d : ℝ) ^ 2 + 2 * (d : ℝ) - 1) := ⟨_, rfl⟩
+  rw [← hs₀def] at hX
+  have hs₀ : 0 < s₀ := by
+    rw [hs₀def]
+    exact div_pos (by linarith only [hd2]) (by nlinarith only [hd2])
+  obtain ⟨s, hsdef⟩ : ∃ s : ℝ, s = s₀ * d / 4 := ⟨_, rfl⟩
+  have hs : 0 < s := by rw [hsdef]; positivity
+  obtain ⟨t, htdef⟩ : ∃ t : ℝ, t = s * Real.log 3 := ⟨_, rfl⟩
+  have ht : 0 < t := by rw [htdef]; exact mul_pos hs (Real.log_pos (by norm_num))
+  obtain ⟨B, hBdef⟩ : ∃ B : ℝ, B = (theta d p / (2 * C)) ^ s₀ := ⟨_, rfl⟩
+  have hB : 0 < B := by rw [hBdef]; exact Real.rpow_pos_of_pos (by positivity) _
+  have hL : (0 : ℝ) < 100 * d := by positivity
+  obtain ⟨b, hbdef⟩ : ∃ b : ℕ → ℝ, b = fun m : ℕ =>
+      (((6 * d + 5) ^ d : ℕ) : ℝ) * (2 * Real.exp (-(B * Real.exp (t * m) ^ 2))) := ⟨_, rfl⟩
+  have hbm : ∀ m, b m =
+      (((6 * d + 5) ^ d : ℕ) : ℝ) * (2 * Real.exp (-(B * Real.exp (t * m) ^ 2))) :=
+    fun m => by rw [hbdef]
+  have hE : ∀ (m : ℕ) (k : Vertex d), latticeBondLaw d p (badCubeEvent d m k (theta d p)) ≤
+      ENNReal.ofReal (2 * Real.exp (-(B * Real.exp (t * m) ^ 2))) := by
+    intro m k
+    have h := measure_badCubeEvent_le hC hs₀ hθ m k (hX m k)
+    rwa [← hsdef, ← htdef, ← hBdef] at h
+  refine ⟨s, hs, b, fun m => by rw [hbm]; positivity, fun x m => ?_, ?_⟩
+  · refine (measure_biUnion_finset_le _ _).trans ?_
+    refine (Finset.sum_le_sum fun k _ => hE m k).trans ?_
+    rw [Finset.sum_const, card_nearCubes, nsmul_eq_mul, hbm,
+      ENNReal.ofReal_mul (p := (((6 * d + 5) ^ d : ℕ) : ℝ)) (Nat.cast_nonneg _),
+      ENNReal.ofReal_natCast]
+  · have h := (summable_exp_mul_sub_sq ((3 * (100 * d)) ^ s) B t hB ht).mul_left
+      (2 * (((6 * d + 5) ^ d : ℕ) : ℝ))
+    refine h.congr fun m => ?_
+    rw [hbm, scale_exponent_eq hL.le m, ← htdef, sub_eq_add_neg, Real.exp_add]
+    ring
+
+/-- **The printed density sentence from Dario–Gu, Proposition A.1** (`ClusterDensityInputFaithful`,
+paper L508-511): a union bound over the `(6d+5)^d` triadic cubes of size `3^m` near `x`, at every
+scale `3^m ≥ 3^{N(x)}`, with `s = d s₀/4` and `𝔠 = (θ/2)(300d)^{-d}`. -/
+theorem clusterDensityInputFaithfulAt_of_concentration [NeZero d] (hd : 2 ≤ d)
+    (p : unitInterval) (hDG : ClusterDensityConcentrationAt d p) :
+    ClusterDensityInputFaithfulAt d p := by
+  obtain ⟨C, hC, hX⟩ := hDG
+  rcases (theta_nonneg d p).eq_or_lt with hθ0 | hθ
+  · refine ⟨1, 1 * 3 ^ ((1 : ℝ) / 1), 1, one_pos, by positivity, one_pos, fun x =>
+      ⟨fun _ => 1, measurable_const, fun _ => zero_le_one, isOsBond_const one_pos one_pos, ?_⟩⟩
+    filter_upwards [ae_not_hasUniqueInfiniteOpenComponent_of_theta_eq_zero p hθ0.symm] with ω hω h
+    exact absurd h hω
+  obtain ⟨s, hs, b, hb0, hBad, hsum⟩ := exists_badScale_summable hd hC hθ hX
+  have hL : (0 : ℝ) < 100 * d := by positivity
+  obtain ⟨A, hAdef⟩ : ∃ A : ℝ,
+      A = Real.exp ((100 * d) ^ s) + ∑' m, b m * Real.exp ((100 * d * 3 ^ (m + 1)) ^ s) :=
+    ⟨_, rfl⟩
+  have hA1 : 1 ≤ A := by
+    rw [hAdef]
+    exact le_add_of_le_of_nonneg (Real.one_le_exp (Real.rpow_nonneg hL.le _))
+      (tsum_nonneg fun m => mul_nonneg (hb0 m) (Real.exp_pos _).le)
+  refine ⟨s, 1 * A ^ (1 / s), theta d p / 2 / (300 * d) ^ d, hs,
+    mul_pos one_pos (Real.rpow_pos_of_pos (by linarith) _), by positivity, fun x => ?_⟩
+  obtain ⟨M, hMm, hM0, hint, hle, hae⟩ := exists_minimalScale_of_summable (latticeBondLaw d p)
+    (fun m => ⋃ k ∈ nearCubes x m, badCubeEvent d m k (theta d p))
+    (fun m => Finset.measurableSet_biUnion _ fun k _ => measurableSet_badCubeEvent m k _)
+    hL b hb0 (hBad x) hsum
+  have e : (fun ω => Real.exp (Real.rpow (max (M ω / 1) 0) s)) = fun ω => Real.exp (M ω ^ s) := by
+    funext ω
+    rw [div_one, max_eq_left (hM0 ω)]
+    rfl
+  refine ⟨M, hMm, hM0, isOsBond_of_integral_le (θ := 1) hs hA1 (by rw [e]; exact hint)
+    (by rw [e, hAdef]; exact hle), ?_⟩
+  filter_upwards [hae] with ω ⟨N, hMN, hgood⟩
+  intro h r hr y hy
+  rw [hMN] at hr
+  exact density_lower_bound_of_good h hgood hr hy hθ
 
 end Rigidity.Proofs.S2
