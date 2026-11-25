@@ -313,14 +313,14 @@ theorem planarHomogenizationError_of_inputs {p : unitInterval}
       _ = B * 3 ^ (c₀ / 16) * (((3 : ℝ) ^ m) ^ 4 * M ^ 2 * R ^ 2) := by ring
   refine ⟨dirichletSolution (constCond fun _ => σ)
     (cubeInterior (⟨m, 0⟩ : TriadicCube 2).toIntegerCube) (planarDatum hP m hU u),
-    fun x hx => condLaplacian_constCond_one_eq_zero hσ _ _ hx, fun x hx hxi => ?_, ?_, ?_⟩
+    fun x hx => condLaplacian_constCond_one_eq_zero (by norm_num) hσ _ _ hx, fun x hx hxi => ?_, ?_, ?_⟩
   · rw [dirichletSolution_eq_of_not_mem _ _ _ hxi]
     exact boundaryInterpolation_of_mem _ u (Finset.mem_filter.2 ⟨hx, hxi⟩)
   · calc innerEdgeEnergy (constCond fun _ => (1 : ℝ)) (⟨m, 0⟩ : TriadicCube 2).toIntegerCube
           (dirichletSolution (constCond fun _ => σ)
             (cubeInterior (⟨m, 0⟩ : TriadicCube 2).toIntegerCube) (planarDatum hP m hU u)) / 9 ^ m
         ≤ innerSqSum (⟨m, 0⟩ : TriadicCube 2).toIntegerCube (planarDatum hP m hU u) / 9 ^ m :=
-          div_le_div_of_nonneg_right (innerEdgeEnergy_constCond_one_le hσ _ _) (by positivity)
+          div_le_div_of_nonneg_right (innerEdgeEnergy_constCond_one_le (by norm_num) hσ _ _) (by positivity)
       _ ≤ A2 * M ^ 2 := hS2div
       _ ≤ Cf * M ^ 2 := mul_le_mul_of_nonneg_right ((le_max_left _ _).trans (le_max_left _ _))
           (sq_nonneg _)
