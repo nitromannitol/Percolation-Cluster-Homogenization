@@ -9,7 +9,7 @@ interior bound `sq_le_of_latticeHarmonic` on a box `Q_{P h}(x₀)`, `P = 2 · 4^
 `g(x₀)² ≤ C₀ h^{-d} B S` with `B` a bound for `|g|` on the larger box and `S = ∑ |g|`, hence
 `|g(x₀)| ≤ B / 2^{d+1} + 2^{d+1} C₀ h^{-d} S` (`abs_le_of_latticeHarmonic_stepD`); along the boxes
 `Q_{j_k}(z)`, `j_k = L + P ∑_{i < k} h_i`, `h_k = ⌊L / (c_d 2^k)⌋`, the maxima `a_k` satisfy
-`a_k ≤ a_{k+1} / 2^{d+1} + b_k`, and the absorption (`le_of_geometric_step`) over
+`a_k ≤ a_{k+1} / 2^{d+1} + b_k`, and the absorption (`le_of_geometric_absorb`) over
 `log₂(L / c_d) + 1` steps gives the bound, the factor `2^{-(d+1) k}` beating the growth `2^{d k}`
 of `h_k^{-d}`. On the balls of `ℤᵈ`, with boxes centred at the points of the ball:
 `‖g‖_{L̲²(B_ρ(z))} ≤ C ρ^{-d} ∑_{B_{4ρ}(z)} |g|` for `g` harmonic on `B_{4ρ}(z)`
@@ -87,7 +87,7 @@ theorem abs_le_of_latticeHarmonic_stepD (g : (Fin d → ℤ) → ℝ) (z : Fin d
 
 /-- **Absorption.** If `a_k ≤ a_{k+1} / q + b_k` for `k < n`, then
 `a_0 ≤ a_n / q^n + ∑_{k < n} b_k / q^k`. -/
-theorem le_of_geometric_step {a b : ℕ → ℝ} {q : ℝ} (hq : 0 < q) (n : ℕ)
+theorem le_of_geometric_absorb {a b : ℕ → ℝ} {q : ℝ} (hq : 0 < q) (n : ℕ)
     (h : ∀ k < n, a k ≤ a (k + 1) / q + b k) :
     a 0 ≤ a n / q ^ n + ∑ k ∈ range n, b k / q ^ k := by
   induction n with
@@ -196,7 +196,7 @@ theorem abs_le_sum_abs_of_latticeHarmonicD (g : (Fin d → ℤ) → ℝ) (z : Fi
     have hjL : js k + 4 ^ d * (2 * hs k) ≤ 2 * L := by rw [← hjs_succ]; exact hjs_le _
     exact abs_le_of_latticeHarmonic_stepD g z (hs_pos k (by omega)) hjL hg
       (B := as (k + 1)) (fun y hy => has_ge (k + 1) y (by rw [hjs_succ]; exact hy)) hx
-  have habs := le_of_geometric_step (a := as)
+  have habs := le_of_geometric_absorb (a := as)
     (b := fun k => 2 ^ (d + 1) * interiorConst d / (hs k : ℝ) ^ d * S) hq0 (K + 1) hstep
   -- the last maximum
   have hlast : as (K + 1) ≤ S := by
