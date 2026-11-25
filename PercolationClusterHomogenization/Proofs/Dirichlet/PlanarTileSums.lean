@@ -23,54 +23,6 @@ namespace Rigidity.Dirichlet
 
 variable {ω : Configuration 2}
 
-/-- **The slopes on the tiles.** -/
-theorem sum_sq_cubeSlope_tiles_le (Q : IntegerCube 2) (uh : Vertex 2 → ℝ) {z : Vertex 2}
-    {M N : ℕ} (hN : 0 < N)
-    (hsub : (cornerCube z (M * N)).vertices ⊆ (shrinkCube Q 1).vertices) :
-    ∑ i ∈ (cornerCube 0 M).vertices, ∑ j, cubeSlope N uh (z + (N : ℤ) • i) j ^ 2 ≤
-      (∑ y ∈ Q.vertices, ∑ j : Fin 2,
-        (if y + unit j ∈ Q.vertices then (uh (y + unit j) - uh y) ^ 2 else 0)) / (N : ℝ) ^ 2 := by
-  have hV : (0 : ℝ) < (N : ℝ) ^ 2 := by positivity
-  have h1 : ∀ i, ∑ j, cubeSlope N uh (z + (N : ℤ) • i) j ^ 2 ≤
-      ∑ j : Fin 2, (∑ y ∈ (cornerCube (z + (N : ℤ) • i) N).vertices,
-        (uh (y + unit j) - uh y) ^ 2) / (N : ℝ) ^ 2 :=
-    fun i => Finset.sum_le_sum fun j _ => sq_cubeSlope_le N uh _ j
-  refine (Finset.sum_le_sum fun i _ => h1 i).trans ?_
-  rw [Finset.sum_comm]
-  simp only [← Finset.sum_div]
-  refine div_le_div_of_nonneg_right ?_ hV.le
-  have hblock : ∀ j : Fin 2, ∑ i ∈ (cornerCube 0 M).vertices,
-      ∑ y ∈ (cornerCube (z + (N : ℤ) • i) N).vertices, (uh (y + unit j) - uh y) ^ 2 =
-      ∑ y ∈ (cornerCube z (M * N)).vertices, (uh (y + unit j) - uh y) ^ 2 := fun j =>
-    (sum_cornerCube_mul hN z M _).symm
-  simp only [hblock]
-  have hB : (cornerCube z (M * N)).vertices ⊆ Q.vertices :=
-    hsub.trans (shrinkCube_vertices_subset_self Q 1)
-  calc ∑ j : Fin 2, ∑ y ∈ (cornerCube z (M * N)).vertices, (uh (y + unit j) - uh y) ^ 2
-      = ∑ y ∈ (cornerCube z (M * N)).vertices, ∑ j : Fin 2, (uh (y + unit j) - uh y) ^ 2 :=
-        Finset.sum_comm
-    _ = ∑ y ∈ (cornerCube z (M * N)).vertices, ∑ j : Fin 2,
-          (if y + unit j ∈ Q.vertices then (uh (y + unit j) - uh y) ^ 2 else 0) :=
-        Finset.sum_congr rfl fun y hy => Finset.sum_congr rfl fun j _ =>
-          (if_pos (add_unit_mem_of_mem_shrinkCube Q le_rfl (hsub hy) j).2).symm
-    _ ≤ _ := Finset.sum_le_sum_of_subset_of_nonneg hB fun _ _ _ =>
-        Finset.sum_nonneg fun _ _ => by split_ifs <;> positivity
-
-/-- Shrinking a cube more gives a smaller cube. -/
-theorem shrinkCube_vertices_mono (Q : IntegerCube 2) {s t : ℕ} (hst : s ≤ t) :
-    (shrinkCube Q t).vertices ⊆ (shrinkCube Q s).vertices := by
-  intro x hx
-  rw [mem_shrinkCube_iff] at hx ⊢
-  intro i
-  have h := hx i
-  constructor <;> omega
-
-/-- The parent of a triadic cube of `□_m` of smaller scale lies in `□_m`. -/
-theorem TriadicCube.parent_vertices_subset {T U : TriadicCube 2} (hTU : T.vertices ⊆ U.vertices)
-    (hs : T.scale + 1 ≤ U.scale) : T.parent.vertices ⊆ U.vertices :=
-  TriadicCube.vertices_subset_of_mem_of_scale_le (T.vertices_subset_parent T.center_mem)
-    (hTU T.center_mem) hs
-
 /-- **The errors of the tiles.** -/
 theorem sum_tileError_le (hP : PlanarPartitionEvent ω) {m k k₀ : ℕ}
     (hU : PlanarResolved ω ⟨m, 0⟩)
