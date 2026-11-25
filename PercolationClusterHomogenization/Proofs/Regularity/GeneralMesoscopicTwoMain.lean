@@ -347,4 +347,274 @@ theorem near_top_auxD {r R T A α C Dr D2R N : ℝ} (hA : 2 ≤ A) (hr0 : 0 < r)
   rw [zero_add] at h1
   linarith
 
+/-- The lower scale of the lattice iterations in every dimension. -/
+noncomputable def coreLatticeScaleD (d : ℕ) : ℝ :=
+  max (latticeLemmaScaleCubic d) (max (latticeHRScale d) (24 * Real.sqrt d))
+
+theorem one_le_coreLatticeScaleD (d : ℕ) : 1 ≤ coreLatticeScaleD d :=
+  (one_le_latticeLemmaScaleCubic d).trans (le_max_left _ _)
+
+/-- **Armstrong–Dario, Lemma 7.3, (7.18) at `k = 2`, in every dimension, for one
+configuration.** -/
+theorem mesoscopicDegreeTwo_coreD [NeZero d] {A α K K₁ K₂ κ cS : ℝ} (hA : 2 ≤ A) (hα0 : 0 < α)
+    (hα1 : α ≤ 1) (hK : 0 ≤ K) (hK₁ : 0 ≤ K₁) (hK₂ : 0 ≤ K₂) (hκ : 0 < κ) (hcS : 0 ≤ cS) :
+    ∃ C r₀ : ℝ, 0 < C ∧ 1 ≤ r₀ ∧ ∀ (ω : Configuration d) (hP : PartitionEvent ω)
+      (h : HasUniqueInfiniteOpenComponent ω) (X ℓ R S' : ℝ) (u : uniqueInfiniteComponent h → ℝ),
+      1 ≤ X → r₀ * X ≤ R → quadLocality d (capFraction d κ) * max ℓ 1 ≤ R →
+      IsHarmonicInBall (uniqueInfiniteComponent h) R u →
+      CubeHarmonicApproximationAt (uniqueInfiniteComponent h) A α K X →
+      0 ≤ S' → Real.sqrt d * S' ≤ R / 4 →
+      Real.sqrt ((4 * Real.sqrt d * S') ^ d) ≤ cS * R ^ (α / 2) →
+      (∀ y : Vertex d,
+        dist (latticeEuclideanEmbedding y) (latticeEuclideanEmbedding (0 : Vertex d)) < R →
+          (3 : ℝ) ^ (partitionCube ω y).scale ≤ S') →
+      (∑ y ∈ latticeBallPointsD 0 R, (3 : ℝ) ^ (partitionCube ω y).scale ≤ K₁ * R ^ d) →
+      (∑ y ∈ latticeBallPointsD 0 R, ((3 : ℝ) ^ (partitionCube ω y).scale) ^ d ≤ K₂ * R ^ d) →
+      ClusterCubeDensity (uniqueInfiniteComponent h) 0 (quadLocality d (capFraction d κ)) ℓ κ →
+      ∀ r : ℝ, r₀ * X ≤ r → r ≤ R / 2 →
+        (⨅ w : clusterHarmonicQuadratic (uniqueInfiniteComponent h),
+            clusterBallVolumeL2 (uniqueInfiniteComponent h) r (u - w)) ≤
+          C * (r / R) ^ 3 * (⨅ w : clusterHarmonicQuadratic (uniqueInfiniteComponent h),
+              clusterBallVolumeL2 (uniqueInfiniteComponent h) R (u - w)) +
+            C * r ^ (-(α / 2)) * (r / R) * clusterBallVolumeL2 (uniqueInfiniteComponent h) R u := by
+  obtain ⟨C₂, hC₂, h72₂⟩ := armstrongDario_lemma_7_2_two_latticeHarmonicD d hA hα0
+  obtain ⟨C₀, hC₀, h72₀⟩ := armstrongDario_lemma_7_2_zero_latticeHarmonic d hA hα0
+  obtain ⟨Ca, Cb, hCa, hCb, htop⟩ := coarse_top_boundsD (d := d) hA hK₁ hK₂ hκ
+  have hA0 : 0 < A := by linarith
+  have hA2 : 1 ≤ 8 * A ^ 2 := by have := pow_le_pow_left₀ (by norm_num) hA 2; linarith
+  set Ct := coarseTopConstD d with hCtdef
+  have hCt0 : 0 ≤ Ct := coarseTopConstD_nonneg d
+  obtain ⟨Xlat, hXlat⟩ : ∃ x : ℝ, x = coreLatticeScaleD d := ⟨_, rfl⟩
+  have hXlat1 : 1 ≤ Xlat := hXlat ▸ one_le_coreLatticeScaleD d
+  have hXlat2 : latticeLemmaScaleCubic d ≤ Xlat := by
+    rw [hXlat, coreLatticeScaleD]; exact le_max_left _ _
+  have hXlat3 : max (latticeHRScale d) (24 * Real.sqrt d) ≤ Xlat := by
+    rw [hXlat, coreLatticeScaleD]; exact le_max_right _ _
+  obtain ⟨Q, hQ⟩ : ∃ x : ℝ, x = 2 * cS + Real.sqrt (2 ^ d) * K := ⟨_, rfl⟩
+  have hQ0 : 0 ≤ Q := by rw [hQ]; positivity
+  obtain ⟨cE, hcE⟩ : ∃ x : ℝ, x = K * (8 * A) * Real.sqrt ((8 * A) ^ d) := ⟨_, rfl⟩
+  have hcE0 : 0 ≤ cE := by rw [hcE]; positivity
+  obtain ⟨C₃, hC₃⟩ : ∃ x : ℝ, x = 8 * A * (Ct * Q + Ca) := ⟨_, rfl⟩
+  have hC₃0 : 0 ≤ C₃ := by rw [hC₃]; positivity
+  obtain ⟨C₄, hC₄⟩ : ∃ x : ℝ, x = C₀ * (2 * C₃ + cE) := ⟨_, rfl⟩
+  obtain ⟨B₀, hB₀⟩ : ∃ x : ℝ, x = Real.sqrt ((16 * A) ^ d) * (16 * A) := ⟨_, rfl⟩
+  have hB₀0 : 0 ≤ B₀ := by rw [hB₀]; positivity
+  obtain ⟨c₃, hc₃⟩ : ∃ x : ℝ, x = (5 : ℝ) ^ d := ⟨_, rfl⟩
+  have hc₃0 : 0 ≤ c₃ := by rw [hc₃]; positivity
+  obtain ⟨C₅, hC₅⟩ : ∃ x : ℝ, x = max B₀ (2 * c₃ * C₄) := ⟨_, rfl⟩
+  have hC₅0 : 0 ≤ C₅ := by rw [hC₅]; exact hB₀0.trans (le_max_left _ _)
+  obtain ⟨ρ₁, hρ₁⟩ : ∃ x : ℝ, x = 2 * K * A + 1 := ⟨_, rfl⟩
+  obtain ⟨r₀, hr₀⟩ : ∃ x : ℝ, x = max (8 * A ^ 2 * Xlat) (max (topScaleD d A) (max C₂ (max C₀
+      (max ρ₁ 3)))) := ⟨_, rfl⟩
+  obtain ⟨C, hC⟩ : ∃ x : ℝ, x = c₃ * C₂ * (8 * A) ^ 3 * Ca + Real.sqrt ((16 * A) ^ d) * (16 * A) ^ 3 +
+      (K * A * C₅ + c₃ * C₂ * (8 * A) ^ 3 * (Ct * Q + Cb) + c₃ * C₂ * (C₃ + cE)) + 1 :=
+    ⟨_, rfl⟩
+  have hC6p : 0 ≤ c₃ * C₂ * (8 * A) ^ 3 * Ca := by positivity
+  have hC7p : 0 ≤ K * A * C₅ + c₃ * C₂ * (8 * A) ^ 3 * (Ct * Q + Cb) + c₃ * C₂ * (C₃ + cE) := by
+    positivity
+  have hC16p : 0 ≤ Real.sqrt ((16 * A) ^ d) * (16 * A) ^ 3 := by positivity
+  have hC6 : c₃ * C₂ * (8 * A) ^ 3 * Ca ≤ C := by rw [hC]; linarith
+  have hC7 : K * A * C₅ + c₃ * C₂ * (8 * A) ^ 3 * (Ct * Q + Cb) + c₃ * C₂ * (C₃ + cE) ≤ C := by
+    rw [hC]; linarith
+  have hC16 : Real.sqrt ((16 * A) ^ d) * (16 * A) ^ 3 ≤ C := by rw [hC]; linarith
+  have hCpos : 0 < C := by rw [hC]; linarith
+  have hr₀a : 8 * A ^ 2 * Xlat ≤ r₀ := by rw [hr₀]; exact le_max_left _ _
+  have hr₀b : topScaleD d A ≤ r₀ := by rw [hr₀]; exact (le_max_left _ _).trans (le_max_right _ _)
+  have hr₀c : C₂ ≤ r₀ := by
+    rw [hr₀]; exact ((le_max_left _ _).trans (le_max_right _ _)).trans (le_max_right _ _)
+  have hr₀d : C₀ ≤ r₀ := by
+    rw [hr₀]; exact (((le_max_left _ _).trans (le_max_right _ _)).trans
+      (le_max_right _ _)).trans (le_max_right _ _)
+  have hr₀e : ρ₁ ≤ r₀ := by
+    rw [hr₀]; exact ((((le_max_left _ _).trans (le_max_right _ _)).trans
+      (le_max_right _ _)).trans (le_max_right _ _)).trans (le_max_right _ _)
+  have hr₀f : 3 ≤ r₀ := by
+    rw [hr₀]; exact ((((le_max_right _ _).trans (le_max_right _ _)).trans
+      (le_max_right _ _)).trans (le_max_right _ _)).trans (le_max_right _ _)
+  have hr₀1 : 1 ≤ r₀ := by linarith
+  have hXlatr₀ : Xlat ≤ r₀ := (le_mul_of_one_le_left (by linarith) hA2).trans hr₀a
+  refine ⟨C, r₀, hCpos, hr₀1, ?_⟩
+  intro ω hP h X ℓ R S' u hX hR hRq harm hca hS'0 hS' hS'c hsize hm₁ hm₂ hcube r hr hrR
+  -- the scales
+  have hX0 : 0 ≤ X := zero_le_one.trans hX
+  have hr₀R : r₀ ≤ R := le_trans (le_mul_of_one_le_right (zero_le_one.trans hr₀1) hX) hR
+  have hr₀r : r₀ ≤ r := le_trans (le_mul_of_one_le_right (zero_le_one.trans hr₀1) hX) hr
+  have hRtop : topScaleD d A ≤ R := hr₀b.trans hr₀R
+  obtain ⟨-, -, hT3', -, hR1, hR4⟩ := topScaleD_facts hA hRtop
+  have hR0 : 0 < R := by linarith
+  have hr1 : 1 ≤ r := hr₀1.trans hr₀r
+  have hr0 : 0 < r := by linarith
+  have hrRle : r ≤ R := hrR.trans (half_le_self hR0.le)
+  obtain ⟨T, hT⟩ : ∃ x : ℝ, x = R / (8 * A) := ⟨_, rfl⟩
+  obtain ⟨hT0, hTR, hThalf, hAThalf, hRT, h4TR⟩ := scale_facts hA hR0 hT
+  have hT1 : 1 ≤ T := by rw [hT]; linarith
+  obtain ⟨X', hX'⟩ : ∃ x : ℝ, x = max X Xlat := ⟨_, rfl⟩
+  have hXX' : X ≤ X' := by rw [hX']; exact le_max_left _ _
+  have hXlatX' : Xlat ≤ X' := by rw [hX']; exact le_max_right _ _
+  have hX'X : X' ≤ Xlat * X := by
+    rw [hX']
+    exact max_le (le_mul_of_one_le_left hX0 hXlat1)
+      (le_mul_of_one_le_right (zero_le_one.trans hXlat1) hX)
+  have hX'1 : 1 ≤ X' := hX.trans hXX'
+  have hAX'T : A * X' ≤ T := by
+    rw [hT, le_div_iff₀ (by positivity)]
+    have h1 : 8 * A ^ 2 * Xlat * X ≤ R := (mul_le_mul_of_nonneg_right hr₀a hX0).trans hR
+    have h2 := mul_le_mul_of_nonneg_left hX'X (by positivity : (0 : ℝ) ≤ 8 * A ^ 2)
+    have e : A * X' * (8 * A) = 8 * A ^ 2 * X' := by ring
+    have e2 : 8 * A ^ 2 * (Xlat * X) = 8 * A ^ 2 * Xlat * X := by ring
+    rw [e]
+    linarith
+  have hX'T : X' ≤ T / A := by rw [le_div_iff₀ hA0]; linarith
+  have hAXT : A * X ≤ T := (mul_le_mul_of_nonneg_left hXX' hA0.le).trans hAX'T
+  have hX4T : X ≤ 4 * T := by
+    have : X ≤ A * X := le_mul_of_one_le_left hX0 (by linarith)
+    linarith
+  -- the hypotheses at the radii `T`, `R / 2` and `R`
+  obtain ⟨HA_T, -, -⟩ := hca T hAXT u (harm.of_le (hTR.trans (half_le_self hR0.le)))
+  obtain ⟨HA_H, -, -⟩ := hca (R / 2) (hAXT.trans hTR) u (harm.of_le (half_le_self hR0.le))
+  obtain ⟨-, CC, -⟩ := hca R ((hAXT.trans hTR).trans (half_le_self hR0.le)) u harm
+  obtain ⟨D0R, hD0R⟩ : ∃ x : ℝ,
+      x = ⨅ a : ℝ, clusterBallVolumeL2 (uniqueInfiniteComponent h) R (u - fun _ => a) :=
+    ⟨_, rfl⟩
+  obtain ⟨D2R, hD2R⟩ : ∃ x : ℝ, x = ⨅ w : clusterHarmonicQuadratic (uniqueInfiniteComponent h),
+      clusterBallVolumeL2 (uniqueInfiniteComponent h) R (u - w) := ⟨_, rfl⟩
+  have hD0R0 : 0 ≤ D0R := by
+    rw [hD0R]; exact iInf_nonneg_of_nonneg fun _ => Real.sqrt_nonneg _
+  have hD2R0 : 0 ≤ D2R := by
+    rw [hD2R]; exact iInf_nonneg_of_nonneg fun _ => Real.sqrt_nonneg _
+  -- the harmonic approximation error at `4T` and the top-scale bounds
+  have hB := harmonicApproximation_error_leD hP h u hA hK hR4 hS'0 hS'
+    (by rw [← hT]; exact hX4T) hsize HA_H
+  rw [← hD0R, ← hT] at hB
+  obtain ⟨G, hG⟩ : ∃ x : ℝ, x = D0R / R := ⟨_, rfl⟩
+  have hG0 : 0 ≤ G := by rw [hG]; exact div_nonneg hD0R0 hR0.le
+  have hD0RG : D0R = R * G := by rw [hG, mul_div_assoc', eq_div_iff hR0.ne']; ring
+  rw [← hG] at hB
+  have hcrude : 2 * Real.sqrt ((4 * Real.sqrt d * S') ^ d) * G ≤ 2 * (cS * R ^ (α / 2)) * G :=
+    mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hS'c (by norm_num)) hG0
+  have hBB' := coarse_error_le_auxD (T := T) (R := R) (G := G) (c := cS)
+    (Kq := Real.sqrt (2 ^ d) * K) hT1 h4TR hα0 hα1 hcS (by positivity) hG0
+  have hrp : 0 ≤ (4 * T) ^ (1 - α) := Real.rpow_nonneg (by positivity) _
+  obtain ⟨B', hB'⟩ : ∃ x : ℝ, x = Q * R ^ (1 - α / 2) * G := ⟨_, rfl⟩
+  have hBle : ballDist (componentBallSeminorm (latticeComponent d) 0)
+      (latticeHarmonicClass 0 (4 * (R / (8 * A)))) (4 * (R / (8 * A)))
+      (fun x => partitionCoarse (uniqueInfiniteComponent h) u x.val) ≤ B' := by
+    rw [← hT, hB', hQ]
+    refine hB.trans ((mul_le_mul_of_nonneg_left
+      (c := 2 * (cS * R ^ (α / 2)) * G + Real.sqrt (2 ^ d) * K * G / T) ?_ hrp).trans hBB')
+    linarith
+  obtain ⟨hD2T, hD0T⟩ := htop ω hP h ℓ R S' B' u hRtop hRq hS'0 hS' hsize hm₁ hm₂ hcube hBle
+  rw [← hD0R, ← hD2R, ← hT] at hD2T
+  rw [← hD0R, ← hT] at hD0T
+  rw [← hG] at hD2T
+  -- the error term at `T`
+  obtain ⟨ET, hET⟩ : ∃ x : ℝ, x = K / T * ⨅ a : ℝ,
+      clusterBallVolumeL2 (uniqueInfiniteComponent h) T (u - fun _ => a) := ⟨_, rfl⟩
+  rw [← hET] at HA_T
+  have hET0 : 0 ≤ ET := by
+    rw [hET]
+    exact mul_nonneg (div_nonneg hK hT0.le)
+      (iInf_nonneg_of_nonneg fun _ => Real.sqrt_nonneg _)
+  have hETG : ET ≤ cE * G := by
+    have h1 := iInf_clusterBallVolumeL2_le_of_leD (ι := ℝ) (uniqueInfiniteComponent h) hT0
+      (hTR.trans (half_le_self hR0.le)) u fun a => fun _ => a
+    rw [zero_add, ← hD0R, hRT] at h1
+    rw [hET]
+    have e : K / T * (Real.sqrt ((8 * A) ^ d) * D0R) = cE * G := by
+      rw [hD0RG, hcE, hT]; field_simp
+    rw [← e]
+    exact mul_le_mul_of_nonneg_left h1 (div_nonneg hK hT0.le)
+  -- the top-scale oscillation
+  have hB'R : B' ≤ Q * R * G := by
+    have : R ^ (1 - α / 2) ≤ R := by
+      calc R ^ (1 - α / 2) ≤ R ^ (1 : ℝ) :=
+            Real.rpow_le_rpow_of_exponent_le hR1 (sub_le_self _ (half_pos hα0).le)
+        _ = R := Real.rpow_one R
+    rw [hB']
+    exact mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left this hQ0) hG0
+  have hD0TT := top_zero_auxD hA0 hR0 hT hG hCt0 hC₃ hD0T hB'R
+  -- Lemma 7.2 at `k = 0` below the top scale
+  have hHA_T' := HA_T.mono_scale hXX'
+  have hXs : max (latticeHRScale d) (24 * Real.sqrt d) ≤ X' := hXlat3.trans hXlatX'
+  have hk0 : ∀ ρ : ℝ, max X' C₀ ≤ ρ → ρ ≤ T / 2 →
+      ballExcess (componentBallSeminorm (latticeComponent d) 0)
+        (clusterConstants (latticeComponent d)) ρ
+        (fun x : latticeComponent d => partitionCoarse (uniqueInfiniteComponent h) u x.val) ≤
+        C₄ * ρ * G := fun ρ hρ hρT =>
+    zero_step_auxD hC₄ (hX'1.trans ((le_max_left _ _).trans hρ)) hα0 hT0 hC₀.le hcE0 hG0
+      (ballExcess_nonneg _ _ _ _) hET0 hD0TT hETG
+      (h72₀ 0 T X' ET _ hX'1 hXs hX'T hET0 hHA_T' ρ hρ hρT)
+  -- the Lipschitz bound of order zero
+  obtain ⟨s₁, hs₁⟩ : ∃ x : ℝ, x = max (max X' C₀) (max ρ₁ 3) := ⟨_, rfl⟩
+  have hs₁ρ : ρ₁ ≤ s₁ := by rw [hs₁]; exact (le_max_left _ _).trans (le_max_right _ _)
+  have hs₁3 : 3 ≤ s₁ := by rw [hs₁]; exact (le_max_right _ _).trans (le_max_right _ _)
+  have hs₁X : max X' C₀ ≤ s₁ := by rw [hs₁]; exact le_max_left _ _
+  have hs₁KA : 2 * K * A < s₁ := by rw [hρ₁] at hs₁ρ; linarith
+  have hs₁0 : 0 < s₁ := by linarith
+  have hlip : ∀ s, s₁ ≤ s → s ≤ R / 2 →
+      (⨅ a : ℝ, clusterBallVolumeL2 (uniqueInfiniteComponent h) s (u - fun _ => a)) ≤
+        C₅ * s * G := by
+    rw [hC₅]
+    refine le_of_scale_inductionD (f := fun s => ⨅ a : ℝ,
+      clusterBallVolumeL2 (uniqueInfiniteComponent h) s (u - fun _ => a)) hA hK hG0 hB₀0
+      hs₁KA hs₁0 hAThalf ?_ ?_
+    · intro s hsT hsR
+      have hs0 : 0 < s := by linarith
+      have h1 := iInf_clusterBallVolumeL2_le_of_leD (ι := ℝ) (uniqueInfiniteComponent h) hs0
+        (hsR.trans (half_le_self hR0.le)) u fun a => fun _ => a
+      rw [← hD0R] at h1
+      rw [hB₀]
+      exact base_auxD hs0 hR0.le hG0 (lt_mul_of_half_div_lt hA (by rw [← hT]; exact hsT)).le
+        hD0RG h1
+    · intro s hs hsT
+      have h1 := clusterExcess_zero_leD h u (by linarith : (1 : ℝ) ≤ s)
+      have h2 := CC s (hXX'.trans ((le_max_left _ _).trans (hs₁X.trans hs))) (hsT.trans hThalf)
+      have h3 := hk0 s (hs₁X.trans hs) hsT
+      rw [← hc₃] at h1
+      have h4 := add_le_add h2 (mul_le_mul_of_nonneg_left h3 hc₃0)
+      have e : c₃ * (C₄ * s * G) = c₃ * C₄ * s * G := by ring
+      rw [e] at h4
+      exact h1.trans h4
+  -- the conclusion
+  have hGu : G ≤ clusterBallVolumeL2 (uniqueInfiniteComponent h) R u / R := by
+    have h1 : (⨅ a : ℝ, clusterBallVolumeL2 (uniqueInfiniteComponent h) R (u - fun _ => a)) ≤
+        clusterBallVolumeL2 (uniqueInfiniteComponent h) R (u - fun _ => (0 : ℝ)) :=
+      iInf_le_of_le (fun _ => Real.sqrt_nonneg _) 0
+    have e : (u - fun _ => (0 : ℝ)) = u := by funext x; simp
+    rw [e, ← hD0R] at h1
+    rw [hG]
+    exact div_le_div_of_nonneg_right h1 hR0.le
+  have hu0 : 0 ≤ clusterBallVolumeL2 (uniqueInfiniteComponent h) R u := Real.sqrt_nonneg _
+  rw [← hD2R]
+  by_cases hrT : r ≤ T / 2
+  · -- below the top scale
+    have h1 := clusterExcess_two_leD h u hr1
+    rw [← hc₃] at h1
+    have hXr : X ≤ r := le_trans (le_mul_of_one_le_left hX0 hr₀1) hr
+    have h2 := CC r hXr (hrT.trans hThalf)
+    have hX'r : X' ≤ r := hX'X.trans ((mul_le_mul_of_nonneg_right hXlatr₀ hX0).trans hr)
+    have hs₁r : s₁ ≤ r := by
+      rw [hs₁]
+      exact max_le (max_le hX'r (hr₀d.trans hr₀r)) (max_le (hr₀e.trans hr₀r) (hr₀f.trans hr₀r))
+    have hAr1 : s₁ ≤ A * r := hs₁r.trans (le_mul_of_one_le_left hr0.le (one_le_two.trans hA))
+    have hArR : A * r ≤ R / 2 := (mul_le_mul_of_nonneg_left hrT hA0.le).trans hAThalf
+    have h3 := hlip (A * r) hAr1 hArR
+    have hcc : clusterBallVolumeL2 (uniqueInfiniteComponent h) r
+        (u - fun x => partitionCoarse (uniqueInfiniteComponent h) u x.val) ≤ K * A * C₅ * G := by
+      refine h2.trans ?_
+      have e : K / r * (C₅ * (A * r) * G) = K * A * C₅ * G := by field_simp
+      rw [← e]
+      exact mul_le_mul_of_nonneg_left h3 (div_nonneg hK hr0.le)
+    have hrX'C : max X' C₂ ≤ r := max_le hX'r (hr₀c.trans hr₀r)
+    have h4 := h72₂ 0 T X' ET _ (hXlat2.trans hXlatX') hX'T hET0 hHA_T' r hrX'C hrT
+    exact below_top_auxD hr1 hrRle hA0 hT hα0 hα1 hK hQ0 hcE0 hc₃0 hCt0 hCa hCb hC₂.le hC₅0 hG0
+      hD2R0 (ballExcess_nonneg _ _ _ _) hET0 hB' hGu hC6 hC7 h1 hcc h4 hD2T hD0TT hETG
+  · -- near the top scale
+    push Not at hrT
+    have h1 := iInf_clusterBallVolumeL2_le_of_leD
+      (ι := clusterHarmonicQuadratic (uniqueInfiniteComponent h)) (uniqueInfiniteComponent h) hr0
+      hrRle u fun w => (w : uniqueInfiniteComponent h → ℝ)
+    rw [← hD2R] at h1
+    exact near_top_auxD hA hr0 hR0 hT hrT hD2R0 hu0 hC16 h1
+
 end Rigidity.Proofs.Regularity
