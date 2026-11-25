@@ -49,7 +49,7 @@ theorem abs_coord_le_of_mem_componentEuclideanBall (C : OpenComponent ω) {ρ : 
     ((mem_componentEuclideanBall _ _ _ _).1 hx).le
   simpa using h
 
-theorem abs_componentSlope_le (C : OpenComponent ω) (q : Fin d → ℝ) {r : ℝ} {x : C}
+theorem abs_componentSlope_le_mul (C : OpenComponent ω) (q : Fin d → ℝ) {r : ℝ} {x : C}
     (hx : x ∈ componentEuclideanBall C 0 r) :
     |componentSlope C q x| ≤ (∑ i, |q i|) * r := by
   rw [componentSlope, sum_mul]
@@ -101,7 +101,7 @@ theorem excess_two_le_of_slopeAsymptotics (C : OpenComponent ω) {X A δ : ℝ} 
     apply clusterBallVolumeL2_le_of_abs_le C hR1 (by positivity)
     intro x hx
     have h2 := hR₀b R hRR₀ x hx
-    have h3 := abs_componentSlope_le C q hx
+    have h3 := abs_componentSlope_le_mul C q hx
     have : |u x| ≤ |u x - componentSlope C q x| + |componentSlope C q x| := by
       have := abs_add_le (u x - componentSlope C q x) (componentSlope C q x)
       rwa [sub_add_cancel] at this
