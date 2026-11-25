@@ -884,3 +884,14 @@ report lists only `propext`, `Classical.choice` and `Quot.sound`.
 #print axioms Rigidity.Proofs.Regularity.orderOneEndpointData_clusterL2
 #print axioms Rigidity.Proofs.Regularity.orderOneOrigin_of_mesoscopicDegreeTwoAt_of_sublinear
 #print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_correctorSublinear
+
+-- Theorem 2 (ii) at k = 1 in every dimension: (1.18) from the approximation of affine functions and the corrected planes from (1.18)
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.correctorSublinearL2Ae_of_affineApproximationAe
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.exists_corrector_of_scales
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.exists_all_centres_constant_approximation
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.abs_le_of_coarseData
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.ae_eventually_scale_le_three
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.componentSlopeAsymptotics_of_scale_bound
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.abs_corrector_le_at_scale
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.corrector_scale_arith
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.correctedPlaneExistence_of_sublinearL2Ae

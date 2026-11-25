@@ -34,7 +34,7 @@ is [`Audit/Axioms.lean`](Audit/Axioms.lean).
 | Theorem 1 | `Rigidity.Dirichlet.planarHomogenizationError_holds`; `Rigidity.Dirichlet.cubeHomogenizationError_holds` | `d = 2` for the planar partition; every `d ≥ 2` for the partition into good cubes; every exponent `p' > 2`, no hypothesis; the homogenized matrix is `σ I` |
 | Theorem 2 (iii), `k = 0` | `Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_holds`; `Rigidity.Proofs.Regularity.armstrongDarioOrderZero_holds` | `d = 2`; every `d ≥ 2` (the input `LatticeProb.External.ArmstrongDarioOrderZero`); no hypothesis |
 | Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_correctorSublinear`, `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d ≥ 2`, from (1.18) (Theorem 2 (ii) at `k = 1`) alone; or from Lemma 7.3 at `k = 2` and the corrector inputs |
-| Theorem 2 (ii), `k = 1` | `Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_sublinearL2Ae` | `d = 2`, the corrected planes from the sublinearity (1.18) |
+| Theorem 2 (ii), `k = 1` | `Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_sublinearL2Ae`, `Rigidity.Proofs.Regularity.GeneralDim.correctedPlaneExistence_of_sublinearL2Ae`, `Rigidity.Proofs.Regularity.GeneralDim.correctorSublinearL2Ae_of_affineApproximationAe` | `d = 2`, the corrected planes from the sublinearity (1.18); every `d ≥ 2`, the corrected planes from (1.18) with an almost surely finite scale, and (1.18) from the approximation of affine functions on growing balls |
 | Proposition 2.1 | `Rigidity.Percolation.partition_estimates`, `Rigidity.Percolation.partition_estimates_general` | every `d`; the partition into good cubes, and for any family of good cubes with stretched exponential failure bounds |
 | Proposition 2.4 | `Rigidity.Percolation.exists_minimalScale`, `Rigidity.Percolation.exists_minimalScale_general`, `Rigidity.Proofs.Cluster.exists_planar_minimalScale`, `Rigidity.Proofs.Cluster.planarMinimalScales_holds` | every `d`, and for the planar partition |
 | Lemma 2.7 | `Rigidity.Percolation.exists_measure_not_mem_goodCubes_le` | every `d` |
@@ -1541,6 +1541,41 @@ Departures from Armstrong and Dario and from Armstrong, Kuusi and Mourrat:
 - **The lattice route.** The harmonic functions in the approximation are on the balls of the cluster, and the approximation
   uses the maximizers of `ν` on `□_{j+3}` (AD Lemma 5.8 (5.33) and Lemma 5.10 in place of the energy of the continuum
   corrector), with reach at most `3^{(j+3)/4}` from the minimal scales with `α = 1/4`.
+
+## Corrected planes in every dimension from the sublinearity (1.18)
+
+AD Theorem 2 (ii) at `k = 1`, with the sublinearity in the uniform norm of the remark after (1.19)
+(AD18.tex:527-562), is proved in every dimension `d ≥ 2` from (1.18) with an almost surely finite scale
+(`correctedPlaneExistence_of_sublinearL2Ae`), and (1.18) with an almost surely finite scale from the
+approximation of affine functions on growing balls (`correctorSublinearL2Ae_of_affineApproximationAe`), by
+Step 3 of AKM2 Proposition 3.1 (`exists_harmonic_of_approximations`, the planar construction stated for every
+`d`) and the order-zero regularity in every dimension (`armstrongDarioOrderZero_holds`). The declarations are in
+the namespace `Rigidity.Proofs.Regularity.GeneralDim`.
+
+| Lean declaration | Statement |
+| --- | --- |
+| [`componentCorrector`, `abs_corrector_sub_le`, `card_componentEuclideanBall_ge`, `exists_origin_constant_approximation`, `exists_all_centres_constant_approximation`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCorrectorBasic.lean) | the corrector, its increments from the approximation by constants, the density of the cluster in the balls around the vertices of a box, and the order-zero regularity at the origin and, by stationarity, at every centre. |
+| [`CubeAffineApproximationAe`, `CorrectorSublinearL2Ae`, `exists_corrector_of_scales`, `correctorSublinearL2Ae_of_affineApproximationAe`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCorrectorFromApproximation.lean) | (1.18) with an almost surely finite scale from the approximation of affine functions on growing balls. |
+| [`abs_sub_le_of_fwd_box`, `sum_coarsen_sq_le`, `abs_le_of_coarseData`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCorrectorSupBound.lean) | the uniform bound at a vertex of a cluster by the open increments and the sum of squares, through the coarsening on coarse-graining data and the interpolation inequality on a box. |
+| [`triScaleBox`, `ae_eventually_scale_le_three`](PercolationClusterHomogenization/Proofs/Regularity/GeneralScaleMaxima.lean) | the maximum of the minimal scales over the boxes `{|z_i| ≤ 3^{k+2}}`, almost surely for all large `k`, by Borel–Cantelli. |
+| [`partitionCoarseData_card_bounds`, `abs_corrector_sub_le_of_lipschitz`, `componentBallL2_le_of_density`, `componentSlopeAsymptotics_of_scale_bound`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCorrectorScaleBounds.lean) | the sizes of the regions of the coarse-graining data, the increments from the Lipschitz estimate at every centre, the ball norms, and the slope asymptotics from bounds at the triadic scales. |
+| [`abs_corrector_le_at_scale`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCorrectorAtScale.lean) | the uniform bound of the corrector on the box of side `3^m`. |
+| [`corrector_scale_arith`, `CorrectedPlaneExistence`, `correctedPlaneExistence_of_sublinearL2Ae`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCorrectedPlaneExistence.lean) | the bound `c |q|₁ E^{1-η}`, `η = δ/(2d)`, at the scale `E = 3^m`, and the corrected planes. |
+
+The nine reports for the declarations of this section are in [`Audit/Axioms.lean`](Audit/Axioms.lean)
+and depend only on `propext`, `Classical.choice` and `Quot.sound`.
+
+Departures from Armstrong and Dario:
+
+- **The uniform bound.** As in the plane, the uniform norm comes from the comparison with the coarsening `[χ]_𝒫`
+  along the local open paths of the partition into good cubes (the pointwise forms of Lemmas 3.2 and 3.3) and the
+  interpolation inequality on a box `x + [0, t]ᵈ`, with the increments of `χ` along the open edges bounded by the
+  Lipschitz estimate at their endpoints. The scales are chosen qualitatively: with `δ` the exponent of (1.18),
+  the minimal scales and the partition cubes of `□_{m+3}` are at most `3 E^γ`, `γ = δ/(2d(2d+1))`, and the box has
+  side `⌊E^{1-δ/d}⌋`; this gives `|χ| ≤ c |q|₁ E^{1-δ/(2d)}` on `{|x_i| ≤ E}`, enough for the slope asymptotics.
+- **The scale of (1.18) is almost surely finite.** The input `CubeAffineApproximationAe d` and the conclusion
+  `CorrectorSublinearL2Ae d` carry an almost surely finite scale, not a scale of class `O_s`; this suffices for the
+  corrected planes.
 
 ## The quantitative sublinearity of the correctors in dimension two
 

@@ -856,6 +856,16 @@ groups = {
          'Rigidity.Proofs.Regularity.orderOneEndpointData_clusterL2',
          'Rigidity.Proofs.Regularity.orderOneOrigin_of_mesoscopicDegreeTwoAt_of_sublinear',
          'Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_correctorSublinear'],
+    'Theorem 2 (ii) at k = 1 in every dimension: (1.18) from the approximation of affine functions and the corrected planes from (1.18)':
+        ['Rigidity.Proofs.Regularity.GeneralDim.correctorSublinearL2Ae_of_affineApproximationAe',
+         'Rigidity.Proofs.Regularity.GeneralDim.exists_corrector_of_scales',
+         'Rigidity.Proofs.Regularity.GeneralDim.exists_all_centres_constant_approximation',
+         'Rigidity.Proofs.Regularity.GeneralDim.abs_le_of_coarseData',
+         'Rigidity.Proofs.Regularity.GeneralDim.ae_eventually_scale_le_three',
+         'Rigidity.Proofs.Regularity.GeneralDim.componentSlopeAsymptotics_of_scale_bound',
+         'Rigidity.Proofs.Regularity.GeneralDim.abs_corrector_le_at_scale',
+         'Rigidity.Proofs.Regularity.GeneralDim.corrector_scale_arith',
+         'Rigidity.Proofs.Regularity.GeneralDim.correctedPlaneExistence_of_sublinearL2Ae'],
 }
 standard = {'propext', 'Classical.choice', 'Quot.sound'}
 
