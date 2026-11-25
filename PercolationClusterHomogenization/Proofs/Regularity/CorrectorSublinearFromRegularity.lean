@@ -1,4 +1,5 @@
 import PercolationClusterHomogenization.Proofs.Regularity.OrderOneOriginSublinear
+import LatticeProb.External.SupercriticalBondCorrectorInput
 
 /-!
 # The sublinearity (1.18) of the correctors from (7.18) and the corrected planes
@@ -622,5 +623,171 @@ theorem exists_const_sublinear_of_excess (C : OpenComponent ω) (hd : 0 < d) {X 
       Real.sqrt (2 ^ d) * (K * (2 * t ^ (1 - δ))) + 5 ^ d * d * e₁ * K * (2 * t ^ (1 - δ)) +
         5 ^ d * e₂ * K * (2 * t ^ (1 - δ)) := by ring
   linarith
+
+theorem sublinearConstD_nonneg (hd : 0 < d) {κ δ : ℝ} (hκ : 0 < κ) (hδ0 : 0 < δ) (hδ1 : δ < 1) :
+    0 ≤ sublinearConstD d κ δ := by
+  have h1 : (2 : ℝ) ^ (-δ) < 1 := Real.rpow_lt_one_of_one_lt_of_neg (by norm_num) (by linarith)
+  have h2 : 1 < (2 : ℝ) ^ (1 - δ) := Real.one_lt_rpow (by norm_num) (by linarith)
+  have h3 := quadSlopeConstD_nonneg hd hκ
+  have h4 : 0 < 1 - (2 : ℝ) ^ (-δ) := by linarith
+  have h5 : 0 < (2 : ℝ) ^ (1 - δ) - 1 := by linarith
+  unfold sublinearConstD
+  positivity
+
+/-! ### Step C: the minimal scale -/
+
+/-- **Armstrong–Dario, (1.18), with a minimal scale of class `O_s`, in every dimension**, from
+(7.18) at `k = 2` (`mesoscopicDegreeTwoAt_holds`), the density of the cluster in cubes and the
+existence of the corrected planes. -/
+theorem correctorSublinearL2At_of_correctedPlanes [NeZero d] (hd : 2 ≤ d) {p : unitInterval}
+    (hpc : criticalProbability d < (p : ℝ)) (hp1 : (p : ℝ) < 1)
+    (hcp : ∀ᵐ ω ∂latticeBondLaw d p, ∀ h : HasUniqueInfiniteOpenComponent ω, ∀ q : Fin d → ℝ,
+      ∀ _ : uniqueInfiniteComponent h, ∃ u, IsCorrectedPlane (uniqueInfiniteComponent h) q u) :
+    CorrectorSublinearL2At d p := by
+  have hd0 : 0 < d := by omega
+  obtain ⟨s₁, C₁, δ₀, hs₁, hC₁, hδ₀, X₁, hX₁m, hX₁0, hX₁os, A₀, hae₁⟩ :=
+    mesoscopicDegreeTwoAt_holds hd hpc hp1
+  have hθp : 0 < LatticeProb.Percolation.theta d p :=
+    Rigidity.Percolation.theta_pos_of_criticalProbability_lt d p hpc
+  obtain ⟨κ, hκdef⟩ : ∃ κ, κ = LatticeProb.Percolation.theta d p / 2 := ⟨_, rfl⟩
+  have hκ : 0 < κ := by rw [hκdef]; positivity
+  have hΛ24 := le_quadLocality hd0 (capFraction_pos hd0 hκ)
+  have hsd1 : 1 ≤ Real.sqrt d := Real.one_le_sqrt.2 (Nat.one_le_cast.2 hd0)
+  have hΛ1 : 1 ≤ quadLocality d (capFraction d κ) := by linarith
+  obtain ⟨s₂, C₂, hs₂, hC₂, hcube⟩ := exists_clusterCubeDensity_of_concentration hd p
+    (cluster_density_concentration d hd p hpc hp1) (quadLocality d (capFraction d κ))
+  obtain ⟨M₂, hM₂m, hM₂0, hM₂os, hae₂⟩ := hcube 0
+  obtain ⟨δ, hδdef⟩ : ∃ δ : ℝ, δ = min δ₀ (1 / 2) := ⟨_, rfl⟩
+  have hδ0 : 0 < δ := hδdef ▸ lt_min hδ₀ (by norm_num)
+  have hδ1 : δ < 1 := hδdef ▸ (min_le_right _ _).trans_lt (by norm_num)
+  have hδδ₀ : δ ≤ δ₀ := hδdef ▸ min_le_left _ _
+  obtain ⟨A, hAdef⟩ : ∃ A : ℝ, A = max A₀ 0 := ⟨_, rfl⟩
+  have hA : 0 ≤ A := hAdef ▸ le_max_right _ _
+  have hAA₀ : A₀ ≤ A := hAdef ▸ le_max_left _ _
+  -- the scale
+  obtain ⟨s, hsdef⟩ : ∃ s : ℝ, s = min s₁ s₂ := ⟨_, rfl⟩
+  have hs : 0 < s := hsdef ▸ lt_min hs₁ hs₂
+  have h1os := IsOsBond.mono_exponent hs (hsdef ▸ min_le_left _ _) hX₁m hX₁os
+  have h2os := IsOsBond.mono_exponent hs (hsdef ▸ min_le_right _ _) hM₂m hM₂os
+  have h3os := isOsBond_const (d := d) (p := p) one_pos hs
+  have h23 := IsOsBond.max hs (by positivity) (by positivity) hM₂m measurable_const h2os h3os
+  have h123 := IsOsBond.max hs (by positivity) (by positivity) hX₁m
+    (hM₂m.max measurable_const) h1os h23
+  have hc₀ : 0 < quadLocality d (capFraction d κ) + 1 := by linarith
+  have hXos := IsOsBond.const_mul hc₀ h123
+  obtain ⟨K, hK⟩ : ∃ K : ℝ, K = Real.sqrt (1 / ballDensityConst d κ) * sublinearConstD d κ δ *
+      (A * 5 ^ d + 1) := ⟨_, rfl⟩
+  have hK0 : 0 ≤ K := by
+    rw [hK]
+    exact mul_nonneg (mul_nonneg (Real.sqrt_nonneg _)
+      (sublinearConstD_nonneg hd0 hκ hδ0 hδ1)) (by positivity)
+  refine ⟨s, δ, _, K, hs, hδ0, by positivity, hK0,
+    fun ω => (quadLocality d (capFraction d κ) + 1) * max (X₁ ω) (max (M₂ ω) 1),
+    (hX₁m.max (hM₂m.max measurable_const)).const_mul _, fun ω => ?_, hXos, ?_⟩
+  · exact mul_nonneg hc₀.le ((hX₁0 ω).trans (le_max_left _ _))
+  filter_upwards [hae₁, hae₂, hcp] with ω h₁ h₂ h₃
+  intro h q
+  have hc : ClusterCubeDensity (uniqueInfiniteComponent h) 0 (quadLocality d (capFraction d κ))
+      (M₂ ω) κ := by
+    have h' := h₂ h
+    rwa [← hκdef] at h'
+  obtain ⟨m, hm⟩ : ∃ m, m = max (X₁ ω) (max (M₂ ω) 1) := ⟨_, rfl⟩
+  have hm1 : 1 ≤ m := hm ▸ (le_max_right _ _).trans (le_max_right _ _)
+  have hmX : X₁ ω ≤ m := hm ▸ le_max_left _ _
+  have hmM : max (M₂ ω) 1 ≤ m := hm ▸ le_max_right _ _
+  obtain ⟨Xω, hXω⟩ : ∃ x, x = (quadLocality d (capFraction d κ) + 1) * m := ⟨_, rfl⟩
+  have hXΛ : quadLocality d (capFraction d κ) * max (M₂ ω) 1 ≤ Xω := by
+    rw [hXω]
+    have h1 := mul_le_mul_of_nonneg_left hmM (by linarith : 0 ≤ quadLocality d (capFraction d κ))
+    nlinarith
+  have hXX₁ : X₁ ω ≤ Xω := by rw [hXω]; nlinarith
+  have hX1 : 1 ≤ Xω := by rw [hXω]; nlinarith
+  have hscale : ∀ r : ℝ, (quadLocality d (capFraction d κ) + 1) *
+      max (X₁ ω) (max (M₂ ω) 1) ≤ r → Xω ≤ r := fun r hr => by rw [hXω, hm]; exact hr
+  by_cases hq : ∑ i, |q i| = 0
+  · refine ⟨0, Submodule.zero_mem _, fun r _ => ?_⟩
+    have hq0 : q = 0 := funext fun i => abs_eq_zero.1 (le_antisymm
+      ((single_le_sum (fun j _ => abs_nonneg (q j)) (mem_univ i)).trans hq.le) (abs_nonneg _))
+    subst hq0
+    have e : (fun x : uniqueInfiniteComponent h =>
+        (0 : uniqueInfiniteComponent h → ℝ) x - componentSlope (uniqueInfiniteComponent h) 0 x) =
+        fun _ => 0 := by
+      funext x; simp [componentSlope]
+    rw [e, componentBallL2_zero_fun]
+    simp
+  have hB : 0 < ∑ i, |q i| := lt_of_le_of_ne (sum_nonneg fun _ _ => abs_nonneg _) (Ne.symm hq)
+  -- a vertex of the cluster
+  have hcard := card_ball_ge_of_quadLocality (uniqueInfiniteComponent h) hd0 hκ hc hXΛ
+  have hcard' : (0 : ℝ) < (componentEuclideanBall (uniqueInfiniteComponent h) 0 Xω).card :=
+    lt_of_lt_of_le (mul_pos (ballDensityConst_pos hκ) (pow_pos (by linarith) d)) hcard
+  obtain ⟨o, -⟩ := Finset.card_pos.1 (by exact_mod_cast hcard')
+  obtain ⟨u, hu, hasy⟩ := h₃ h q o
+  have hharm : ∀ x, componentLaplacian (uniqueInfiniteComponent h) u x = 0 := hu.1
+  -- (7.18) above `Xω`
+  have hmeso : ∀ R, 2 * Xω ≤ R → ∀ r, Xω ≤ r → r ≤ R / 2 →
+      (⨅ w : clusterHarmonicQuadratic (uniqueInfiniteComponent h),
+          clusterBallVolumeL2 (uniqueInfiniteComponent h) r (u - w)) ≤
+        A * (r / R) ^ 3 * (⨅ w : clusterHarmonicQuadratic (uniqueInfiniteComponent h),
+            clusterBallVolumeL2 (uniqueInfiniteComponent h) R (u - w)) +
+          A * r ^ (-δ) * (r / R) * clusterBallVolumeL2 (uniqueInfiniteComponent h) R u := by
+    intro R hR r hr hrR
+    have hr1 : 1 ≤ r := hX1.trans hr
+    have hh := h₁ h R (by linarith) u (fun z _ _ => hharm z) r (hXX₁.trans hr) hrR
+    have hE : 0 ≤ ⨅ w : clusterHarmonicQuadratic (uniqueInfiniteComponent h),
+        clusterBallVolumeL2 (uniqueInfiniteComponent h) R (u - w) :=
+      Real.iInf_nonneg fun _ => Real.sqrt_nonneg _
+    have hV : 0 ≤ clusterBallVolumeL2 (uniqueInfiniteComponent h) R u := Real.sqrt_nonneg _
+    have hrR0 : 0 ≤ r / R := div_nonneg (by linarith) (by linarith)
+    have hδr : r ^ (-δ₀) ≤ r ^ (-δ) :=
+      Real.rpow_le_rpow_of_exponent_le hr1 (neg_le_neg hδδ₀)
+    have h1 := mul_le_mul_of_nonneg_right
+      (mul_le_mul_of_nonneg_right hAA₀ (pow_nonneg hrR0 3)) hE
+    have h2 := mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right
+      (mul_le_mul hAA₀ hδr (Real.rpow_nonneg (by linarith) _) hA) hrR0) hV
+    linarith
+  have hexA := excess_two_le_of_slopeAsymptotics (uniqueInfiniteComponent h) hX1 hA hmeso hasy
+  have hexc : ∀ r, Xω ≤ r → ∃ w ∈ clusterHarmonicQuadratic (uniqueInfiniteComponent h),
+      clusterBallVolumeL2 (uniqueInfiniteComponent h) r (u - w) ≤
+        (A * 5 ^ d + 1) * (∑ i, |q i|) * r ^ (1 - δ) := by
+    intro r hr
+    have h1 := hexA r hr
+    have hr0 : 0 < r ^ (1 - δ) := Real.rpow_pos_of_pos (by linarith) _
+    have hlt : (⨅ w : clusterHarmonicQuadratic (uniqueInfiniteComponent h),
+        clusterBallVolumeL2 (uniqueInfiniteComponent h) r (u - w)) <
+        (A * 5 ^ d + 1) * (∑ i, |q i|) * r ^ (1 - δ) := by
+      have : 0 < (∑ i, |q i|) * r ^ (1 - δ) := mul_pos hB hr0
+      nlinarith
+    obtain ⟨w, hw⟩ := exists_lt_of_ciInf_lt hlt
+    exact ⟨(w : uniqueInfiniteComponent h → ℝ), w.2, hw.le⟩
+  obtain ⟨c, hc'⟩ := exists_const_sublinear_of_excess (uniqueInfiniteComponent h) hd0 hκ hc hXΛ
+    hδ0 hδ1 (by positivity) hexc hasy
+  refine ⟨u - fun _ => c, (harmonicGrowthSpace (uniqueInfiniteComponent h) 1).sub_mem hu
+    (const_mem_harmonicGrowthSpace _ 1 c), fun r hr => ?_⟩
+  have hr' : Xω ≤ r := hscale r hr
+  have h1 := hc' r hr'
+  have h2 := componentBallL2_le_of_quadLocality (uniqueInfiniteComponent h) hd0 hκ hc
+    (hXΛ.trans hr') (fun x => u x - componentSlope (uniqueInfiniteComponent h) q x - c)
+  have e : (fun x : uniqueInfiniteComponent h =>
+      (u - (fun _ => c : uniqueInfiniteComponent h → ℝ)) x -
+        componentSlope (uniqueInfiniteComponent h) q x) =
+      fun x => u x - componentSlope (uniqueInfiniteComponent h) q x - c := by
+    funext x; simp only [Pi.sub_apply]; ring
+  rw [e]
+  calc _ ≤ _ := h2
+    _ ≤ Real.sqrt (1 / ballDensityConst d κ) * (sublinearConstD d κ δ *
+          ((A * 5 ^ d + 1) * ∑ i, |q i|) * r ^ (1 - δ)) :=
+        mul_le_mul_of_nonneg_left h1 (Real.sqrt_nonneg _)
+    _ = K * (∑ i, |q i|) * r ^ (1 - δ) := by rw [hK]; ring
+
+/-- **Armstrong–Dario, Theorem 2 (iii) at `k = 1`, at the origin, in every dimension**, from the
+existence of the corrected planes alone: (7.18) at `k = 2` and the density of the cluster are
+proved, and they make the sublinearity of the corrected planes quantitative. -/
+theorem armstrongDarioOrderOneOrigin_of_supercriticalBondCorrectorInput
+    (hqual : LatticeProb.External.SupercriticalBondCorrectorInput) :
+    ArmstrongDarioOrderOneOrigin :=
+  armstrongDarioOrderOneOrigin_of_correctorSublinear fun d _ hd p hpc hp1 =>
+    correctorSublinearL2At_of_correctedPlanes hd hpc hp1 (by
+      filter_upwards [hqual d hd p hpc hp1] with ω hω h q o
+      exact ((hω h).1 q o).exists.imp fun _ hu => hu.1)
 
 end Rigidity.Proofs.Regularity
