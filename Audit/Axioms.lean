@@ -884,3 +884,10 @@ report lists only `propext`, `Classical.choice` and `Quot.sound`.
 #print axioms Rigidity.Proofs.Regularity.orderOneEndpointData_clusterL2
 #print axioms Rigidity.Proofs.Regularity.orderOneOrigin_of_mesoscopicDegreeTwoAt_of_sublinear
 #print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_correctorSublinear
+
+-- The sublinearity (1.18) of the corrected planes with a minimal scale, and Theorem 2 (iii) at k = 1 from their existence, in every dimension
+#print axioms Rigidity.Proofs.Regularity.excess_two_le_of_slopeAsymptotics
+#print axioms Rigidity.Proofs.Regularity.quadSlopeD_mul_le_clusterBallVolumeL2
+#print axioms Rigidity.Proofs.Regularity.exists_const_sublinear_of_excess
+#print axioms Rigidity.Proofs.Regularity.correctorSublinearL2At_of_correctedPlanes
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_supercriticalBondCorrectorInput

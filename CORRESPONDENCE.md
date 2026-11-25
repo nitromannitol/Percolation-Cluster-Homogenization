@@ -33,8 +33,8 @@ is [`Audit/Axioms.lean`](Audit/Axioms.lean).
 | --- | --- | --- |
 | Theorem 1 | `Rigidity.Dirichlet.planarHomogenizationError_holds`; `Rigidity.Dirichlet.cubeHomogenizationError_holds` | `d = 2` for the planar partition; every `d ≥ 2` for the partition into good cubes; every exponent `p' > 2`, no hypothesis; the homogenized matrix is `σ I` |
 | Theorem 2 (iii), `k = 0` | `Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_holds`; `Rigidity.Proofs.Regularity.armstrongDarioOrderZero_holds` | `d = 2`; every `d ≥ 2` (the input `LatticeProb.External.ArmstrongDarioOrderZero`); no hypothesis |
-| Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_correctorSublinear`, `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d ≥ 2`, from (1.18) (Theorem 2 (ii) at `k = 1`) alone; or from Lemma 7.3 at `k = 2` and the corrector inputs |
-| Theorem 2 (ii), `k = 1` | `Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_sublinearL2Ae` | `d = 2`, the corrected planes from the sublinearity (1.18) |
+| Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_supercriticalBondCorrectorInput`, `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_correctorSublinear`, `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d ≥ 2`, from the existence of the corrected planes alone; or from (1.18) (Theorem 2 (ii) at `k = 1`) alone; or from Lemma 7.3 at `k = 2` and the corrector inputs |
+| Theorem 2 (ii), `k = 1` | `Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_sublinearL2Ae`, `Rigidity.Proofs.Regularity.correctorSublinearL2At_of_correctedPlanes` | `d = 2`, the corrected planes from the sublinearity (1.18); every `d ≥ 2`, (1.18) with a minimal scale of class `O_s` from the existence of the corrected planes |
 | Proposition 2.1 | `Rigidity.Percolation.partition_estimates`, `Rigidity.Percolation.partition_estimates_general` | every `d`; the partition into good cubes, and for any family of good cubes with stretched exponential failure bounds |
 | Proposition 2.4 | `Rigidity.Percolation.exists_minimalScale`, `Rigidity.Percolation.exists_minimalScale_general`, `Rigidity.Proofs.Cluster.exists_planar_minimalScale`, `Rigidity.Proofs.Cluster.planarMinimalScales_holds` | every `d`, and for the planar partition |
 | Lemma 2.7 | `Rigidity.Percolation.exists_measure_not_mem_goodCubes_le` | every `d` |
@@ -1277,7 +1277,10 @@ in cubes, by the proof of AD (AD18.tex:5489-5650), as in the plane. Lemma 7.2 at
 `[u]_𝒫` on the balls of `ℤᵈ` needs the excess decay of order three of lattice harmonic functions and the
 comparison of the harmonic cubic polynomials `Ā_3` with `Ā_2`, proved here in every dimension. Theorem 2 (iii)
 at `k = 1` follows from (7.18) at `k = 2` and the sublinearity (1.18) of the correctors (AD Theorem 2 (ii) at
-`k = 1`, `CorrectorSublinearL2At`), with no other input (`armstrongDarioOrderOneOrigin_of_correctorSublinear`).
+`k = 1`, `CorrectorSublinearL2At`), with no other input (`armstrongDarioOrderOneOrigin_of_correctorSublinear`),
+and (1.18) with a minimal scale of class `O_s` follows from (7.18) at `k = 2` and the existence of the corrected
+planes (`correctorSublinearL2At_of_correctedPlanes`), so that Theorem 2 (iii) at `k = 1` needs only that existence
+(`armstrongDarioOrderOneOrigin_of_supercriticalBondCorrectorInput`).
 
 | Lean declaration | Statement |
 | --- | --- |
@@ -1292,9 +1295,10 @@ at `k = 1` follows from (7.18) at `k = 2` and the sublinearity (1.18) of the cor
 | [`mesoscopicDegreeTwo_coreD`](PercolationClusterHomogenization/Proofs/Regularity/GeneralMesoscopicTwoMain.lean) | (7.18) at `k = 2` for one configuration, on `[r₀X, R/2]`, from Lemma 7.1 in the form of the proof of Lemma 7.3, partition cubes of side `S'` in `B_R` with `(4√d S')^{d/2} ≤ c R^{α/2}`, `√d S' ≤ R/4`, moments `∑ 3^s ≤ K₁ R^d`, `∑ 3^{ds} ≤ K₂ R^d`, and the density of the cluster in cubes. |
 | [`cube_boundsD`, `mesoscopicDegreeTwoAt_holds`, `armstrongDarioMesoscopicDegreeTwo_holds`](PercolationClusterHomogenization/Proofs/Regularity/GeneralMesoscopicDegreeTwo.lean) | the bounds on the partition cubes in `B_R` from the minimal scales (exponents `t = 1`, `t = d` and `t = d²/α`), and (7.18) at `k = 2` almost surely, with `δ = α/2`, in every dimension. |
 | [`CorrectorSublinearL2At`, `orderOneEndpointData_clusterL2`, `orderOneOrigin_of_mesoscopicDegreeTwoAt_of_sublinear`, `armstrongDarioOrderOneOrigin_of_correctorSublinear`](PercolationClusterHomogenization/Proofs/Regularity/OrderOneOriginSublinear.lean) | (1.18) for one dimension and law; the endpoint data with the lift bound in `L̲²`; Theorem 2 (iii) at `k = 1` from (7.18) and (1.18). |
+| [`excess_two_le_of_slopeAsymptotics`, `quadSlopeD_mul_le_clusterBallVolumeL2`, `exists_const_sublinear_of_excess`, `correctorSublinearL2At_of_correctedPlanes`, `armstrongDarioOrderOneOrigin_of_supercriticalBondCorrectorInput`](PercolationClusterHomogenization/Proofs/Regularity/CorrectorSublinearFromRegularity.lean) | the excess of order two of a corrected plane of slope `q` on `B_r`, `r ≥ X`, is at most `A 5^d |q|₁ r^{1−δ}` (letting `R → ∞` in (7.18)); the bound (7.23) in the normalized `L²` norm; the telescoping of the near-best harmonic quadratic polynomials on the balls `B_{2^k X}`; (1.18) with a minimal scale of class `O_s` in every dimension; Theorem 2 (iii) at `k = 1` from the existence of the corrected planes. |
 
-The twenty-six reports for the declarations of this section are in [`Audit/Axioms.lean`](Audit/Axioms.lean)
-and depend only on `propext`, `Classical.choice` and `Quot.sound`.
+The thirty-one reports for the declarations of this section (two groups) are in
+[`Audit/Axioms.lean`](Audit/Axioms.lean) and depend only on `propext`, `Classical.choice` and `Quot.sound`.
 
 Departures from Armstrong and Dario:
 
@@ -1311,6 +1315,15 @@ Departures from Armstrong and Dario:
 - **Theorem 2 (iii) at `k = 1`.** The lifts of the affine functions are the functions of (1.18) for the slopes
   `eᵢ`, whose correctors are at most `ε t / √d` in `L̲²(𝒞_∞ ∩ B_t)` above the scale `(C √d / ε + 1)^{1/δ}`;
   the endpoint iteration of the section on regularity of order one uses them in `L̲²`.
+- **(1.18) from (7.18).** AD prove (1.18) as Armstrong, Kuusi and Mourrat, Proposition 3.1, by constructing
+  the corrected planes from the approximations of affine functions given by Theorem 1, with the minimal scale
+  of the flatness (5.33); in every dimension (5.33) is proved here in expectation only. Instead (1.18) is
+  derived from (7.18) at `k = 2` and the existence of the corrected planes: for a corrected plane `u` of slope
+  `q`, letting `R → ∞` in (7.18) with `‖u‖_{L̲²(B_R)} ≤ C (|q|₁ + o(1)) R` bounds its excess of order two on
+  `B_r` by `C |q|₁ r^{1−δ}`; the near-best harmonic quadratic polynomials on the balls `B_{2^k X}` then have
+  slopes converging to `q` and quadratic parts converging to `0`, with increments bounded by (7.23), and the
+  telescoping gives `‖u − q · x − c‖_{L̲²(B_r)} ≤ C |q|₁ r^{1−δ}` for `r ≥ X`. The minimal scale is that of (7.18)
+  and of the density of the cluster in cubes, of class `O_s`, and `δ` is `min(α/2, 1/2)`.
 
 ## Regularity of order one at the origin from the mesoscopic estimate
 
@@ -1323,7 +1336,9 @@ for bond percolation at the origin, with `Ā₂` the harmonic quadratic polynomi
 dimension `d ≥ 2` (`armstrongDarioMesoscopicDegreeTwo_holds`, see
 [Lemma 7.3 at k = 2 in every dimension](#lemma-73-at-k--2-in-every-dimension)), and the two corrector
 inputs are replaced there by the sublinearity (1.18) of the correctors
-(`armstrongDarioOrderOneOrigin_of_correctorSublinear`); in dimension two (7.18) is also proved from the
+(`armstrongDarioOrderOneOrigin_of_correctorSublinear`), and (1.18) by the existence of the corrected planes, the
+first part of `LatticeProb.External.SupercriticalBondCorrectorInput`
+(`armstrongDarioOrderOneOrigin_of_supercriticalBondCorrectorInput`); in dimension two (7.18) is also proved from the
 estimates on squares of Lemma 7.1 (see
 [Lemma 7.3 at k = 2 and regularity of order one at the origin in dimension two](#lemma-73-at-k--2-and-regularity-of-order-one-at-the-origin-in-dimension-two)).
 

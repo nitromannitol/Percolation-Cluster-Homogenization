@@ -856,6 +856,12 @@ groups = {
          'Rigidity.Proofs.Regularity.orderOneEndpointData_clusterL2',
          'Rigidity.Proofs.Regularity.orderOneOrigin_of_mesoscopicDegreeTwoAt_of_sublinear',
          'Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_correctorSublinear'],
+    'The sublinearity (1.18) of the corrected planes with a minimal scale, and Theorem 2 (iii) at k = 1 from their existence, in every dimension':
+        ['Rigidity.Proofs.Regularity.excess_two_le_of_slopeAsymptotics',
+         'Rigidity.Proofs.Regularity.quadSlopeD_mul_le_clusterBallVolumeL2',
+         'Rigidity.Proofs.Regularity.exists_const_sublinear_of_excess',
+         'Rigidity.Proofs.Regularity.correctorSublinearL2At_of_correctedPlanes',
+         'Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_supercriticalBondCorrectorInput'],
 }
 standard = {'propext', 'Classical.choice', 'Quot.sound'}
 
