@@ -324,4 +324,303 @@ theorem mul_div_two_mul_add_one_le {t η : ℝ} (ht : 0 ≤ t) (hη : 0 < η) :
   rw [mul_div_assoc', div_le_div_iff₀ (by positivity) (by norm_num)]
   nlinarith
 
+/-- The constant of (1.18) obtained by the telescoping. -/
+noncomputable def sublinearConstD (d : ℕ) (κ δ : ℝ) : ℝ :=
+  2 * (Real.sqrt (2 ^ d) +
+    5 ^ d * d * (quadSlopeConstD d κ * (1 + 2 * Real.sqrt (2 ^ d)) / (1 - (2 : ℝ) ^ (-δ))) +
+    5 ^ d * ((Real.sqrt (1 / ballDensityConst d κ) + d * quadSlopeConstD d κ) *
+      (1 + 2 * Real.sqrt (2 ^ d)) / ((2 : ℝ) ^ (1 - δ) - 1)))
+
+/-- **Step B: the telescoping.** If above the radius `X` the excess of `u` over the harmonic
+quadratic polynomials on `B_r` is at most `K r^{1-δ}` and `u - q · x` is sublinear, then
+`u - q · x` is within `C K r^{1-δ}` of one constant on every `B_r`, `r ≥ X`. -/
+theorem exists_const_sublinear_of_excess (C : OpenComponent ω) (hd : 0 < d) {X K δ κ ℓ : ℝ}
+    {q : Fin d → ℝ} {u : C → ℝ} (hκ : 0 < κ)
+    (hcube : ClusterCubeDensity C 0 (quadLocality d (capFraction d κ)) ℓ κ)
+    (hX : quadLocality d (capFraction d κ) * max ℓ 1 ≤ X) (hδ0 : 0 < δ) (hδ1 : δ < 1)
+    (hK : 0 ≤ K)
+    (hexc : ∀ r, X ≤ r → ∃ w ∈ clusterHarmonicQuadratic C,
+      clusterBallVolumeL2 C r (u - w) ≤ K * r ^ (1 - δ))
+    (hsub : componentSlopeAsymptotics C q u) :
+    ∃ c : ℝ, ∀ r, X ≤ r → clusterBallVolumeL2 C r (fun x => u x - componentSlope C q x - c) ≤
+      sublinearConstD d κ δ * K * r ^ (1 - δ) := by
+  classical
+  have hX1 : 1 ≤ X := one_le_of_quadLocality_le hd hκ hX
+  have hX0 : 0 < X := by linarith
+  obtain ⟨r, hr⟩ : ∃ r : ℕ → ℝ, ∀ k, r k = 2 ^ k * X := ⟨_, fun _ => rfl⟩
+  have hr0 : ∀ k, 0 < r k := fun k => by rw [hr]; positivity
+  have hrX : ∀ k, X ≤ r k := fun k => by
+    rw [hr]; exact le_mul_of_one_le_left hX0.le (one_le_pow₀ (by norm_num))
+  have hrs : ∀ k, r (k + 1) = 2 * r k := fun k => by rw [hr, hr, pow_succ]; ring
+  have hrle : ∀ k, r k ≤ r (k + 1) := fun k => by rw [hrs]; linarith [hr0 k]
+  have hRk : ∀ k, quadLocality d (capFraction d κ) * max ℓ 1 ≤ r k := fun k => hX.trans (hrX k)
+  have hr1 : ∀ k, 1 ≤ r k := fun k => hX1.trans (hrX k)
+  choose w hwm hw using fun k => hexc (r k) (hrX k)
+  have hwm' : ∀ k, ∃ (a : ℝ) (p : EuclideanSpace ℝ (Fin d)) (M : Matrix (Fin d) (Fin d) ℝ),
+      M.trace = 0 ∧ ∀ x, w k x = a + inner ℝ p (latticeEuclideanEmbedding x.val) +
+        quadForm M (latticeEuclideanEmbedding x.val) := fun k => hwm k
+  choose a p M _hMt hwe using hwm'
+  have hwq : ∀ k (x : C), w k x = latticeQuadFunD (a k) (p k) (M k) x.val := fun k x => hwe k x
+  -- the constants
+  obtain ⟨cS, hcS⟩ : ∃ c, c = quadSlopeConstD d κ := ⟨_, rfl⟩
+  have hcS0 : 0 ≤ cS := hcS ▸ quadSlopeConstD_nonneg hd hκ
+  obtain ⟨κ₁, hκ₁⟩ : ∃ c, c = ballDensityConst d κ := ⟨_, rfl⟩
+  have hκ₁0 : 0 < κ₁ := hκ₁ ▸ ballDensityConst_pos hκ
+  have hsq : 0 ≤ Real.sqrt (2 ^ d) := Real.sqrt_nonneg _
+  obtain ⟨c₁, hc₁⟩ : ∃ c, c = 1 + 2 * Real.sqrt (2 ^ d) := ⟨_, rfl⟩
+  have hc₁0 : 0 ≤ c₁ := by rw [hc₁]; positivity
+  obtain ⟨θ, hθ⟩ : ∃ c, c = (2 : ℝ) ^ (-δ) := ⟨_, rfl⟩
+  have hθ0 : 0 ≤ θ := hθ ▸ Real.rpow_nonneg (by norm_num) _
+  have hθ1 : θ < 1 := hθ ▸ Real.rpow_lt_one_of_one_lt_of_neg (by norm_num) (by linarith)
+  obtain ⟨ρ, hρ⟩ : ∃ c, c = (2 : ℝ) ^ (1 - δ) := ⟨_, rfl⟩
+  have hρ1 : 1 < ρ := hρ ▸ Real.one_lt_rpow (by norm_num) (by linarith)
+  have hpowθ : ∀ k, (r k) ^ (-δ) = X ^ (-δ) * θ ^ k := fun k => by
+    rw [hr, hθ]; exact two_pow_mul_rpow k hX0 _
+  have hpowρ : ∀ k, (r k) ^ (1 - δ) = X ^ (1 - δ) * ρ ^ k := fun k => by
+    rw [hr, hρ]; exact two_pow_mul_rpow k hX0 _
+  have hXθ : X ^ (-δ) ≤ 1 := Real.rpow_le_one_of_one_le_of_nonpos hX1 (by linarith)
+  have hrr : ∀ k, (r k) ^ (1 - δ) = (r k) ^ (-δ) * r k := fun k => by
+    rw [sub_eq_neg_add, Real.rpow_add (hr0 k), Real.rpow_one]
+  -- the differences of consecutive polynomials
+  have hD : ∀ k, clusterBallVolumeL2 C (r k)
+      (fun x => latticeQuadFunD (a k - a (k + 1)) (p k - p (k + 1)) (M k - M (k + 1)) x.val) ≤
+      c₁ * K * (r k) ^ (1 - δ) := by
+    intro k
+    have e : (fun x : C => latticeQuadFunD (a k - a (k + 1)) (p k - p (k + 1)) (M k - M (k + 1))
+        x.val) = (u - w (k + 1)) - (u - w k) := by
+      funext x; simp only [Pi.sub_apply, hwq, latticeQuadFunD_sub]; ring
+    rw [e]
+    have h1 := clusterBallVolumeL2_sub_leD C (hr0 k).le (u - w (k + 1)) (u - w k)
+    have h2 := clusterBallVolumeL2_le_sqrt_mul C (hr0 k) (hrle k) (u - w (k + 1))
+    have h3 : r (k + 1) / r k = 2 := by rw [hrs, mul_div_assoc, div_self (hr0 k).ne', mul_one]
+    rw [h3] at h2
+    have h5 : (r (k + 1)) ^ (1 - δ) ≤ 2 * (r k) ^ (1 - δ) :=
+      rpow_le_two_mul_rpow hδ0.le hδ1 (hr0 k) (hrle k) (hrs k).le
+    have h6 := mul_le_mul_of_nonneg_left
+      ((hw (k + 1)).trans (mul_le_mul_of_nonneg_left h5 hK)) hsq
+    have h7 := hw k
+    rw [hc₁]
+    linarith
+  -- the slopes of the differences
+  have hsD : ∀ k, quadSlopeD (p k - p (k + 1)) (M k - M (k + 1)) (r k) ≤
+      cS * c₁ * K * X ^ (-δ) * θ ^ k := by
+    intro k
+    have h1 := quadSlopeD_mul_le_clusterBallVolumeL2 C hd hκ hcube (hRk k) (a k - a (k + 1))
+      (p k - p (k + 1)) (M k - M (k + 1)) 0
+    simp only [sub_zero] at h1
+    rw [← hcS] at h1
+    have h2 := h1.trans (mul_le_mul_of_nonneg_left (hD k) hcS0)
+    rw [hrr k, hpowθ k] at h2
+    have h3 : quadSlopeD (p k - p (k + 1)) (M k - M (k + 1)) (r k) * r k ≤
+        (cS * c₁ * K * X ^ (-δ) * θ ^ k) * r k := h2.trans (le_of_eq (by ring))
+    exact le_of_mul_le_mul_right h3 (hr0 k)
+  -- the slopes against `q`
+  obtain ⟨qE, hqE⟩ : ∃ v : EuclideanSpace ℝ (Fin d), v = WithLp.toLp 2 q := ⟨_, rfl⟩
+  obtain ⟨S, hS⟩ : ∃ S : ℕ → ℝ, ∀ n, S n = quadSlopeD (p n - qE) (M n) (r n) :=
+    ⟨_, fun _ => rfl⟩
+  have hSn : ∀ ε, 0 < ε → ∃ n₂ : ℕ, ∀ n, n₂ ≤ n → S n ≤ cS * K * θ ^ n + cS * 5 ^ d * ε := by
+    intro ε hε
+    obtain ⟨R₀, -, hR₀⟩ := hsub ε hε
+    obtain ⟨n₂, hn₂⟩ := pow_unbounded_of_one_lt R₀ (by norm_num : (1 : ℝ) < 2)
+    refine ⟨n₂, fun n hn => ?_⟩
+    have hRn : R₀ ≤ r n := by
+      have h1 : (2 : ℝ) ^ n₂ ≤ 2 ^ n := pow_le_pow_right₀ (by norm_num) hn
+      have h2 : (2 : ℝ) ^ n ≤ r n := by
+        rw [hr]; exact le_mul_of_one_le_right (by positivity) hX1
+      linarith
+    have h1 := quadSlopeD_mul_le_clusterBallVolumeL2 C hd hκ hcube (hRk n) (a n) (p n - qE)
+      (M n) 0
+    rw [← hcS] at h1
+    have e : (fun x : C => latticeQuadFunD (a n) (p n - qE) (M n) x.val - 0) =
+        (u - fun x => componentSlope C q x) - (u - w n) := by
+      funext x
+      simp only [Pi.sub_apply, hwq, latticeQuadFunD, inner_sub_left, componentSlope_eq_inner, hqE]
+      ring
+    rw [e] at h1
+    have h2 := clusterBallVolumeL2_sub_leD C (hr0 n).le (u - fun x => componentSlope C q x)
+      (u - w n)
+    have h3 : clusterBallVolumeL2 C (r n) (u - fun x => componentSlope C q x) ≤
+        5 ^ d * (ε * r n) :=
+      clusterBallVolumeL2_le_of_abs_le C (hr1 n) (by positivity [hr0 n])
+        fun x hx => hR₀ (r n) hRn x hx
+    have h4 := hw n
+    rw [hrr n, hpowθ n] at h4
+    have h5 : S n * r n ≤ (cS * K * X ^ (-δ) * θ ^ n + cS * 5 ^ d * ε) * r n := by
+      calc S n * r n = quadSlopeD (p n - qE) (M n) (r n) * r n := by rw [hS]
+        _ ≤ cS * clusterBallVolumeL2 C (r n)
+            ((u - fun x => componentSlope C q x) - (u - w n)) := h1
+        _ ≤ cS * (5 ^ d * (ε * r n) + K * (X ^ (-δ) * θ ^ n * r n)) :=
+            mul_le_mul_of_nonneg_left (h2.trans (add_le_add h3 h4)) hcS0
+        _ = _ := by ring
+    have h6 := le_of_mul_le_mul_right h5 (hr0 n)
+    have h7 := mul_le_mul_of_nonneg_left hXθ
+      (mul_nonneg (mul_nonneg hcS0 hK) (pow_nonneg hθ0 n))
+    linarith
+  have hlim : ∀ η, 0 < η → ∃ n₀, ∀ n, n₀ ≤ n → S n ≤ η := by
+    intro η hη
+    have hε : 0 < η / (2 * (cS * 5 ^ d + 1)) := by positivity
+    obtain ⟨n₂, hn₂⟩ := hSn _ hε
+    obtain ⟨n₁, hn₁⟩ := exists_pow_lt_of_lt_one
+      (show 0 < η / (2 * (cS * K + 1)) by positivity) hθ1
+    refine ⟨max n₁ n₂, fun n hn => ?_⟩
+    have h1 := hn₂ n (le_of_max_le_right hn)
+    have h2 : θ ^ n ≤ θ ^ n₁ := pow_le_pow_of_le_one hθ0 hθ1.le (le_of_max_le_left hn)
+    have h3 := mul_div_two_mul_add_one_le (mul_nonneg hcS0 hK) hη
+    have h4 := mul_div_two_mul_add_one_le
+      (mul_nonneg hcS0 (by positivity : (0 : ℝ) ≤ 5 ^ d)) hη
+    have h5 : cS * K * θ ^ n ≤ cS * K * (η / (2 * (cS * K + 1))) :=
+      mul_le_mul_of_nonneg_left (h2.trans hn₁.le) (mul_nonneg hcS0 hK)
+    linarith
+  have hstep : ∀ n, S n ≤ quadSlopeD (p n - p (n + 1)) (M n - M (n + 1)) (r n) + S (n + 1) := by
+    intro n
+    have e1 : p n - qE = (p n - p (n + 1)) + (p (n + 1) - qE) := by abel
+    have e2 : M n = (M n - M (n + 1)) + M (n + 1) := by abel
+    have h1 := quadSlopeD_add_le (p n - p (n + 1)) (p (n + 1) - qE) (M n - M (n + 1))
+      (M (n + 1)) (hr0 n).le
+    rw [← e1, ← e2] at h1
+    rw [hS, hS]
+    exact h1.trans (add_le_add le_rfl (quadSlopeD_mono _ _ (hrle n)))
+  have hc₂ : 0 ≤ cS * c₁ * K * X ^ (-δ) :=
+    mul_nonneg (mul_nonneg (mul_nonneg hcS0 hc₁0) hK) (Real.rpow_nonneg hX0.le _)
+  have hSj : ∀ j, S j ≤ cS * c₁ * K * X ^ (-δ) * θ ^ j / (1 - θ) := fun j =>
+    le_of_telescoping (s := fun n => quadSlopeD (p n - p (n + 1)) (M n - M (n + 1)) (r n))
+      hc₂ hθ0 hθ1 hstep hsD hlim j
+  -- the constants of the polynomials
+  have hcard : ∀ k, (componentEuclideanBall C 0 (r k)).Nonempty := fun k => by
+    have h := card_ball_ge_of_quadLocality C hd hκ hcube (hRk k)
+    rw [← hκ₁] at h
+    have h' : (0 : ℝ) < (componentEuclideanBall C 0 (r k)).card :=
+      lt_of_lt_of_le (mul_pos hκ₁0 (pow_pos (hr0 k) d)) h
+    exact Finset.card_pos.1 (by exact_mod_cast h')
+  obtain ⟨c₄, hc₄⟩ : ∃ c, c = (Real.sqrt (1 / κ₁) + d * cS) * c₁ := ⟨_, rfl⟩
+  have hc₄0 : 0 ≤ c₄ := by rw [hc₄]; positivity
+  have ha : ∀ k, |a k - a (k + 1)| ≤ c₄ * K * X ^ (1 - δ) * ρ ^ k := by
+    intro k
+    obtain ⟨f, hf⟩ : ∃ f : C → ℝ, f = fun x => latticeQuadFunD (a k - a (k + 1))
+        (p k - p (k + 1)) (M k - M (k + 1)) x.val := ⟨_, rfl⟩
+    have h1 : |a k - a (k + 1)| = componentBallL2 C 0 (r k) (fun _ => a k - a (k + 1)) :=
+      (LatticeProb.Percolation.componentBallL2_const C 0 (r k) _ (hcard k)).symm
+    have e : (fun _ : C => a k - a (k + 1)) = f + fun x => (a k - a (k + 1)) - f x := by
+      funext x; simp
+    have h2 := LatticeProb.Percolation.componentBallL2_add_le C 0 (r k) f
+      (fun x => (a k - a (k + 1)) - f x)
+    have h3 := componentBallL2_le_of_quadLocality C hd hκ hcube (hRk k) f
+    rw [← hκ₁] at h3
+    have hsk0 := quadSlopeD_nonneg (p k - p (k + 1)) (M k - M (k + 1)) (hr0 k).le
+    have h4 : componentBallL2 C 0 (r k) (fun x => (a k - a (k + 1)) - f x) ≤
+        d * r k * quadSlopeD (p k - p (k + 1)) (M k - M (k + 1)) (r k) := by
+      apply componentBallL2_le_of_abs_le C 0 (r k)
+        (mul_nonneg (mul_nonneg (Nat.cast_nonneg d) (hr0 k).le) hsk0)
+      intro x hx
+      rw [abs_sub_comm, hf]
+      exact abs_latticeQuadFunD_sub_const_le _ _ _ (hr0 k).le
+        (abs_coord_le_of_mem_componentEuclideanBall C hx)
+    have h5 := mul_le_mul_of_nonneg_left (hf ▸ hD k) (Real.sqrt_nonneg (1 / κ₁))
+    have h6 : d * r k * quadSlopeD (p k - p (k + 1)) (M k - M (k + 1)) (r k) ≤
+        d * r k * (cS * c₁ * K * r k ^ (-δ)) :=
+      (mul_le_mul_of_nonneg_left (hsD k) (mul_nonneg (Nat.cast_nonneg d) (hr0 k).le)).trans
+        (le_of_eq (by rw [hpowθ k]; ring))
+    rw [show c₄ * K * X ^ (1 - δ) * ρ ^ k = c₄ * K * (r k ^ (-δ) * r k) by
+      rw [← hrr k, hpowρ k]; ring]
+    rw [hrr k] at h5
+    rw [h1, e]
+    have h7 : c₄ * K * (r k ^ (-δ) * r k) = Real.sqrt (1 / κ₁) * (c₁ * K * (r k ^ (-δ) * r k)) +
+        d * r k * (cS * c₁ * K * r k ^ (-δ)) := by rw [hc₄]; ring
+    linarith
+  have hc₅ : 0 ≤ c₄ * K * X ^ (1 - δ) :=
+    mul_nonneg (mul_nonneg hc₄0 hK) (Real.rpow_nonneg hX0.le _)
+  have haj : ∀ j, |a 0 - a j| ≤ c₄ * K * X ^ (1 - δ) * ρ ^ j / (ρ - 1) :=
+    abs_sub_le_of_geometric hc₅ hρ1 ha
+  -- every radius
+  refine ⟨a 0, fun t ht => ?_⟩
+  have ht0 : 0 < t := by linarith
+  have ht1 : 1 ≤ t := hX1.trans ht
+  have hex : ∃ j, t ≤ r j := by
+    obtain ⟨n, hn⟩ := pow_unbounded_of_one_lt (t / X) (by norm_num : (1 : ℝ) < 2)
+    refine ⟨n, ?_⟩
+    rw [hr]; rw [div_lt_iff₀ hX0] at hn; linarith
+  obtain ⟨j, hjdef⟩ : ∃ j, j = Nat.find hex := ⟨_, rfl⟩
+  have hj1 : t ≤ r j := hjdef ▸ Nat.find_spec hex
+  have hj2 : r j ≤ 2 * t := by
+    rcases Nat.eq_zero_or_pos j with h0 | hpos
+    · rw [h0, hr, pow_zero, one_mul]; linarith
+    · obtain ⟨i, hi⟩ : ∃ i, j = i + 1 := ⟨j - 1, by omega⟩
+      have : ¬ t ≤ r i := Nat.find_min hex (by omega)
+      rw [hi, hrs]; linarith
+  have e : (fun x => u x - componentSlope C q x - a 0) =
+      ((u - w j) + fun x => latticeQuadFunD 0 (p j - qE) (M j) x.val) + fun _ => a j - a 0 := by
+    funext x
+    simp only [Pi.add_apply, Pi.sub_apply, hwq, latticeQuadFunD, inner_sub_left,
+      componentSlope_eq_inner, hqE]
+    ring
+  rw [e]
+  have h1 := clusterBallVolumeL2_triangle C ht0.le
+    ((u - w j) + fun x => latticeQuadFunD 0 (p j - qE) (M j) x.val) (fun _ => a j - a 0)
+  have h2 := clusterBallVolumeL2_triangle C ht0.le (u - w j)
+    (fun x => latticeQuadFunD 0 (p j - qE) (M j) x.val)
+  have hrt : (r j) ^ (1 - δ) ≤ 2 * t ^ (1 - δ) := rpow_le_two_mul_rpow hδ0.le hδ1 ht0 hj1 hj2
+  -- the first term
+  have h3 := clusterBallVolumeL2_le_sqrt_mul C ht0 hj1 (u - w j)
+  have h3' : Real.sqrt ((r j / t) ^ d) ≤ Real.sqrt (2 ^ d) :=
+    Real.sqrt_le_sqrt (pow_le_pow_left₀ (by positivity [hr0 j])
+      (by rw [div_le_iff₀ ht0]; linarith) d)
+  have hP1 : clusterBallVolumeL2 C t (u - w j) ≤ Real.sqrt (2 ^ d) * (K * (2 * t ^ (1 - δ))) :=
+    h3.trans (mul_le_mul h3' ((hw j).trans (mul_le_mul_of_nonneg_left hrt hK))
+      (Real.sqrt_nonneg _) hsq)
+  -- the second term
+  obtain ⟨e₁, he₁⟩ : ∃ c, c = cS * c₁ / (1 - θ) := ⟨_, rfl⟩
+  have he₁0 : 0 ≤ e₁ := by rw [he₁]; exact div_nonneg (mul_nonneg hcS0 hc₁0) (by linarith)
+  have hSj' : S j ≤ e₁ * K * r j ^ (-δ) := by
+    rw [hpowθ j, he₁]
+    have := hSj j
+    have e' : cS * c₁ * K * X ^ (-δ) * θ ^ j / (1 - θ) =
+        cS * c₁ / (1 - θ) * K * (X ^ (-δ) * θ ^ j) := by ring
+    linarith
+  have hSj0 : 0 ≤ S j := by rw [hS]; exact quadSlopeD_nonneg _ _ (hr0 j).le
+  have hP2 : clusterBallVolumeL2 C t (fun x => latticeQuadFunD 0 (p j - qE) (M j) x.val) ≤
+      5 ^ d * (d * r j * S j) := by
+    apply clusterBallVolumeL2_le_of_abs_le C ht1
+      (mul_nonneg (mul_nonneg (Nat.cast_nonneg d) (hr0 j).le) hSj0)
+    intro x hx
+    have h := abs_latticeQuadFunD_sub_const_le 0 (p j - qE) (M j) (hr0 j).le (y := x.val)
+      (fun i => (abs_coord_le_of_mem_componentEuclideanBall C hx i).trans hj1)
+    rw [sub_zero] at h
+    rw [hS]
+    exact h
+  have hP2' : 5 ^ d * (d * r j * S j) ≤ 5 ^ d * d * e₁ * K * (2 * t ^ (1 - δ)) := by
+    have h5 := mul_le_mul_of_nonneg_left hSj'
+      (mul_nonneg (by positivity : (0 : ℝ) ≤ 5 ^ d) (mul_nonneg (Nat.cast_nonneg d) (hr0 j).le))
+    have h6 := mul_le_mul_of_nonneg_left hrt
+      (mul_nonneg (mul_nonneg (mul_nonneg (by positivity : (0 : ℝ) ≤ 5 ^ d)
+        (Nat.cast_nonneg d)) he₁0) hK)
+    rw [hrr j] at h6
+    calc 5 ^ d * (d * r j * S j) ≤ 5 ^ d * (d * r j) * (e₁ * K * r j ^ (-δ)) := by linarith
+      _ = 5 ^ d * d * e₁ * K * (r j ^ (-δ) * r j) := by ring
+      _ ≤ _ := h6
+  -- the third term
+  obtain ⟨e₂, he₂⟩ : ∃ c, c = c₄ / (ρ - 1) := ⟨_, rfl⟩
+  have he₂0 : 0 ≤ e₂ := by rw [he₂]; exact div_nonneg hc₄0 (by linarith)
+  have hP3 : clusterBallVolumeL2 C t (fun _ => a j - a 0) ≤ 5 ^ d * |a j - a 0| :=
+    clusterBallVolumeL2_le_of_abs_le C ht1 (abs_nonneg _) fun _ _ => le_rfl
+  have hP3' : 5 ^ d * |a j - a 0| ≤ 5 ^ d * e₂ * K * (2 * t ^ (1 - δ)) := by
+    have h5 := haj j
+    rw [abs_sub_comm] at h5
+    have e' : c₄ * K * X ^ (1 - δ) * ρ ^ j / (ρ - 1) = e₂ * K * (X ^ (1 - δ) * ρ ^ j) := by
+      rw [he₂]; ring
+    rw [e', ← hpowρ j] at h5
+    have h6 := mul_le_mul_of_nonneg_left hrt
+      (mul_nonneg (mul_nonneg (by positivity : (0 : ℝ) ≤ 5 ^ d) he₂0) hK)
+    have h7 := mul_le_mul_of_nonneg_left h5 (by positivity : (0 : ℝ) ≤ 5 ^ d)
+    calc 5 ^ d * |a j - a 0| ≤ 5 ^ d * (e₂ * K * r j ^ (1 - δ)) := h7
+      _ = 5 ^ d * e₂ * K * r j ^ (1 - δ) := by ring
+      _ ≤ _ := h6
+  have hconst : sublinearConstD d κ δ =
+      2 * (Real.sqrt (2 ^ d) + 5 ^ d * d * e₁ + 5 ^ d * e₂) := by
+    rw [he₁, he₂, hc₄, hc₁, hcS, hκ₁, hθ, hρ, sublinearConstD]
+  rw [hconst]
+  have hfin : 2 * (Real.sqrt (2 ^ d) + 5 ^ d * d * e₁ + 5 ^ d * e₂) * K * t ^ (1 - δ) =
+      Real.sqrt (2 ^ d) * (K * (2 * t ^ (1 - δ))) + 5 ^ d * d * e₁ * K * (2 * t ^ (1 - δ)) +
+        5 ^ d * e₂ * K * (2 * t ^ (1 - δ)) := by ring
+  linarith
+
 end Rigidity.Proofs.Regularity
