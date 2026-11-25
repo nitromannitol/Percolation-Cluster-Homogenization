@@ -267,4 +267,288 @@ theorem abs_sub_latticeHarmonicTaylorThree_le (hd : 0 < d) (f : (Fin d → ℤ) 
         linarith
     _ = taylorThreeConst d * S ^ 4 * M₄ := by rw [taylorThreeConst]; ring
 
+/-! ### The excess decay of order three -/
+
+/-- **Excess decay of order three below the interior scale.** -/
+theorem ballExcess_cubicPoly_le_of_latticeHarmonic [NeZero d] (z : Vertex d) {r s : ℝ} {m : ℕ}
+    (hm : 0 < m)
+    (hbox : Real.sqrt d * ((2 * (2 * (4 * (4 ^ d * (2 * m)) + 6) + 2) + 2 : ℕ) : ℝ) < r)
+    (hsm : s + 1 ≤ m) (hs1 : 1 ≤ s) {v : latticeComponent d → ℝ}
+    (hv : v ∈ latticeHarmonicClass z r) {w : latticeComponent d → ℝ}
+    (hw : w ∈ latticeHarmonicCubicPoly d) :
+    ballExcess (componentBallSeminorm (latticeComponent d) z) (latticeHarmonicCubicPoly d) s v ≤
+      taylorThreeConst d * (2 * s) ^ 4 * Real.sqrt (fourthDiffCoeff d m *
+        (((componentEuclideanBall (latticeComponent d) z r).card : ℝ) *
+          componentBallL2 (latticeComponent d) z r (v - w) ^ 2)) := by
+  classical
+  have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
+  obtain ⟨F, hvF, hF⟩ := hv
+  have hW := latticeLaplacian_latticeExt_eq_zero hw
+  set ρ := 4 ^ d * (2 * m) with hρ
+  have hρm : m ≤ ρ := by
+    have := Nat.one_le_pow d 4 (by norm_num); rw [hρ]; nlinarith
+  set f : (Fin d → ℤ) → ℝ := fun y => F y - latticeExt w y with hfdef
+  have hf : ∀ x ∈ supBox z (2 * (2 * (4 * ρ + 6) + 2) + 2), latticeLaplacian f x = 0 := by
+    intro x hx
+    rw [hfdef, latticeLaplacian_sub, hW x, sub_zero]
+    exact hF x ((dist_le_of_mem_supBox hx).trans_lt hbox)
+  have hs0 : 0 ≤ s := by linarith
+  set n := ⌊s⌋₊ with hn
+  have hns : (n : ℝ) ≤ s := Nat.floor_le hs0
+  have hn1 : 1 ≤ n := Nat.le_floor (by exact_mod_cast hs1)
+  have hnm : n + 1 ≤ m := by
+    have : ((n + 1 : ℕ) : ℝ) ≤ m := by push_cast; linarith
+    exact_mod_cast this
+  set M := Real.sqrt (fourthDiffCoeff d m *
+    ∑ y ∈ supBox z (2 * (2 * (4 * ρ + 6) + 2) + 2), f y ^ 2) with hMdef
+  have hM0 : 0 ≤ M := Real.sqrt_nonneg _
+  have hM : ∀ y ∈ supBox z m, ∀ a b e g, |fwd g (fwd e (fwd a (fwd b f))) y| ≤ M := by
+    intro y hy a b e g
+    apply Real.abs_le_sqrt
+    exact sq_fwd4_le f z hm (fun x hx => hf x (by
+      rw [mem_supBox_iff_supDist_le] at hx ⊢; omega)) a b e g hy
+  set c : Fin d → ℤ := fun i => z i - n with hc
+  have hcn : c ∈ supBox z n := corner_mem_supBox z n
+  have hΔc : latticeLaplacian f c = 0 := hf c (by
+    rw [mem_supBox_iff_supDist_le] at hcn ⊢; omega)
+  have hΔk : ∀ k, latticeLaplacian f (c + unit k) = 0 := fun k => hf _ (by
+    rw [mem_supBox_iff_supDist_le] at hcn ⊢
+    have := supDist_add_unit_le' c z k; omega)
+  have hP := mem_latticeHarmonicCubicPoly_latticeHarmonicTaylorThree f c
+  have hsum := (latticeHarmonicCubicPoly d).add_mem hw hP
+  refine (ballExcess_le _ _ hsum).trans ?_
+  rw [componentBallSeminorm_apply]
+  have hK := taylorThreeConst_nonneg d
+  have hbound : 0 ≤ taylorThreeConst d * ((2 * n : ℕ) : ℝ) ^ 4 * M := by positivity
+  refine (componentBallL2_le_of_abs_le (latticeComponent d) z s hbound ?_).trans ?_
+  · intro x hx
+    have hxz := abs_sub_le_floor_of_mem_ball hx
+    have hcx : ∀ i, c i ≤ x.val i := fun i => by
+      have := abs_le.1 (hxz i); simp only [hc]; rw [← hn] at this; omega
+    have hs2 : ∀ i, x.val i - c i ≤ (2 * n : ℕ) := fun i => by
+      have := abs_le.1 (hxz i); simp only [hc]; rw [← hn] at this; push_cast; omega
+    have htay := abs_sub_latticeHarmonicTaylorThree_le hd f hcx (S := 2 * n) (by omega) hs2 hM0
+      (fun y hy a b e g => hM y (by
+        rw [mem_supBox_iff_supDist_le]
+        simp only [supDist, Finset.sup_le_iff, mem_univ, true_implies]
+        intro i
+        have h1 := hy i
+        have h2 := abs_le.1 (hxz i)
+        simp only [hc] at h1
+        rw [← hn] at h2
+        omega) a b e g) hΔc hΔk
+    have hval : (v - (w + fun x : latticeComponent d => latticeHarmonicTaylorThree f c x.val)) x =
+        f x.val - latticeHarmonicTaylorThree f c x.val := by
+      show v x - (w x + latticeHarmonicTaylorThree f c x.val) =
+        F x.val - w x - latticeHarmonicTaylorThree f c x.val
+      rw [hvF]
+      ring
+    rw [hval]
+    exact htay
+  · have ht : ((2 * n : ℕ) : ℝ) ≤ 2 * s := by push_cast; linarith
+    have ht0 : (0 : ℝ) ≤ ((2 * n : ℕ) : ℝ) := Nat.cast_nonneg _
+    have h4 : ((2 * n : ℕ) : ℝ) ^ 4 ≤ (2 * s) ^ 4 := pow_le_pow_left₀ ht0 ht 4
+    have hMle : M ≤ Real.sqrt (fourthDiffCoeff d m *
+        (((componentEuclideanBall (latticeComponent d) z r).card : ℝ) *
+          componentBallL2 (latticeComponent d) z r (v - w) ^ 2)) := by
+      apply Real.sqrt_le_sqrt
+      apply mul_le_mul_of_nonneg_left _ (fourthDiffCoeff_nonneg d m)
+      rw [← sum_sq_eq_card_mul_componentBallL2_sq]
+      have hball := sum_sq_supBox_le_ball z hbox f
+      refine hball.trans (le_of_eq (sum_congr rfl fun x _ => ?_))
+      rw [Pi.sub_apply, hvF]
+      rfl
+    calc taylorThreeConst d * ((2 * n : ℕ) : ℝ) ^ 4 * M ≤ taylorThreeConst d * (2 * s) ^ 4 * M :=
+          mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left h4 hK) hM0
+      _ ≤ _ := mul_le_mul_of_nonneg_left hMle (by positivity)
+
+/-- The lower radius `X₃ = 2 √d (32 · 4^d + 30)` of the excess decay of order three. -/
+noncomputable def latticeHRScaleCubic (d : ℕ) : ℝ := 2 * Real.sqrt d * (32 * 4 ^ d + 30)
+
+/-- The constant of the excess decay of order three of lattice harmonic functions. -/
+noncomputable def latticeHRConstCubic (d : ℕ) : ℝ :=
+  16 * taylorThreeConst d * Real.sqrt (fourthDiffConst d * 5 ^ d *
+      (2 * latticeHRScaleCubic d) ^ (d + 8)) +
+    Real.sqrt ((5 * (6 * Real.sqrt d)) ^ d / 1) * (2 * (2 * latticeHRScaleCubic d)) ^ ((d : ℝ) / 2) *
+      (2 * (2 * latticeHRScaleCubic d)) ^ 4
+
+theorem latticeHRScaleCubic_nonneg (d : ℕ) : 0 ≤ latticeHRScaleCubic d := by
+  unfold latticeHRScaleCubic; positivity
+
+theorem latticeHRConstCubic_nonneg (d : ℕ) : 0 ≤ latticeHRConstCubic d := by
+  have := latticeHRScaleCubic_nonneg d
+  have := taylorThreeConst_nonneg d
+  rw [latticeHRConstCubic]; positivity
+
+/-- **Excess decay of order three, against one lattice harmonic cubic polynomial.** -/
+theorem ballExcess_le_latticeHRConstCubic_mul [NeZero d] (z : Vertex d) {R r s : ℝ} (hrR : r ≤ R)
+    {v : latticeComponent d → ℝ} (hv : v ∈ latticeHarmonicClass z r)
+    (hXs : latticeHRScaleCubic d ≤ s) (hsr : s ≤ r / 2) {w : latticeComponent d → ℝ}
+    (hw : w ∈ latticeHarmonicCubicPoly d) :
+    ballExcess (componentBallSeminorm (latticeComponent d) z) (latticeHarmonicCubicPoly d) s v ≤
+      latticeHRConstCubic d * (s / r) ^ 4 * componentBallL2 (latticeComponent d) z r (v - w) := by
+  have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
+  have hsd1 : 1 ≤ Real.sqrt d := Real.one_le_sqrt.2 (Nat.one_le_cast.2 hd)
+  set X₀ := latticeHRScaleCubic d with hX₀
+  set Λ : ℝ := 32 * 4 ^ d + 30 with hΛ
+  have hΛ1 : 62 ≤ Λ := by
+    rw [hΛ]; have : (1 : ℝ) ≤ 4 ^ d := one_le_pow₀ (by norm_num); linarith
+  have hX₀def : X₀ = 2 * Real.sqrt d * Λ := rfl
+  have hX₀pos : 0 < X₀ := by rw [hX₀def]; positivity
+  set B := 2 * X₀ with hB
+  have hBpos : 0 < B := by positivity
+  have hs0 : 0 < s := hX₀pos.trans_le hXs
+  have hX₀1 : 1 ≤ X₀ := by rw [hX₀def]; nlinarith
+  have hs1 : 1 ≤ s := hX₀1.trans hXs
+  have hr2 : 2 * X₀ ≤ r := by linarith
+  have hr0 : 0 < r := by linarith
+  have hr1 : 1 ≤ r := by linarith
+  set N := componentBallL2 (latticeComponent d) z r (v - w) with hN
+  have hN0 : 0 ≤ N := componentBallL2_nonneg _ _ _ _
+  set m := ⌊r / X₀⌋₊ with hmdef
+  have hrX : 2 ≤ r / X₀ := by rw [le_div_iff₀ hX₀pos]; linarith
+  have hm2 : 2 ≤ m := Nat.le_floor (by exact_mod_cast hrX)
+  have hm0 : 0 < m := by omega
+  have hmle : (m : ℝ) ≤ r / X₀ := Nat.floor_le (by positivity)
+  have hmge : r / B ≤ m := by
+    have h1 := Nat.lt_floor_add_one (r / X₀)
+    rw [← hmdef] at h1
+    have : r / B = r / X₀ / 2 := by rw [hB]; field_simp
+    rw [this]; linarith
+  have hmpos : (0 : ℝ) < m := by exact_mod_cast hm0
+  have hbox : Real.sqrt d * ((2 * (2 * (4 * (4 ^ d * (2 * m)) + 6) + 2) + 2 : ℕ) : ℝ) < r := by
+    have hm1 : (1 : ℝ) ≤ m := by exact_mod_cast (by omega : 1 ≤ m)
+    have h1 : ((2 * (2 * (4 * (4 ^ d * (2 * m)) + 6) + 2) + 2 : ℕ) : ℝ) ≤ Λ * m := by
+      push_cast; rw [hΛ]; nlinarith
+    have h2 : Λ * m ≤ Λ * (r / X₀) := mul_le_mul_of_nonneg_left hmle (by linarith)
+    have h3 : Real.sqrt d * (Λ * (r / X₀)) = r / 2 := by
+      rw [hX₀def]; field_simp
+    have h4 := mul_le_mul_of_nonneg_left (h1.trans h2) (by positivity : 0 ≤ Real.sqrt d)
+    linarith
+  have hT := taylorThreeConst_nonneg d
+  have hCH1 : 0 ≤ 16 * taylorThreeConst d * Real.sqrt (fourthDiffConst d * 5 ^ d *
+      (2 * latticeHRScaleCubic d) ^ (d + 8)) := by positivity
+  have hCH2 : 0 ≤ Real.sqrt ((5 * (6 * Real.sqrt d)) ^ d / 1) *
+      (2 * (2 * latticeHRScaleCubic d)) ^ ((d : ℝ) / 2) * (2 * (2 * latticeHRScaleCubic d)) ^ 4 := by
+    positivity
+  have hsr4 : 0 ≤ (s / r) ^ 4 := by positivity
+  by_cases hsm : s + 1 ≤ m
+  · have h := ballExcess_cubicPoly_le_of_latticeHarmonic z hm0 hbox hsm hs1 hv hw
+    refine h.trans ?_
+    set K₀ : ℝ := fourthDiffConst d with hK₀
+    have hK₀0 : 0 ≤ K₀ := fourthDiffConst_nonneg d
+    have hcoef := fourthDiffCoeff_le d hm0
+    have hcard : ((componentEuclideanBall (latticeComponent d) z r).card : ℝ) ≤ (5 * r) ^ d :=
+      (card_componentEuclideanBall_le _ z hr0.le).trans
+        (pow_le_pow_left₀ (by linarith) (by linarith) d)
+    have hinv : 1 / (m : ℝ) ^ (d + 8) ≤ (B / r) ^ (d + 8) := by
+      rw [one_div, ← inv_pow]
+      apply pow_le_pow_left₀ (by positivity)
+      rw [inv_le_comm₀ hmpos (by positivity), inv_div]
+      exact hmge
+    have hin : fourthDiffCoeff d m *
+        (((componentEuclideanBall (latticeComponent d) z r).card : ℝ) * N ^ 2) ≤
+        (K₀ * 5 ^ d * B ^ (d + 8)) * (N / r ^ 4) ^ 2 := by
+      calc fourthDiffCoeff d m *
+            (((componentEuclideanBall (latticeComponent d) z r).card : ℝ) * N ^ 2)
+          ≤ K₀ / (m : ℝ) ^ (d + 8) * ((5 * r) ^ d * N ^ 2) :=
+            mul_le_mul hcoef (mul_le_mul_of_nonneg_right hcard (sq_nonneg _)) (by positivity)
+              (by positivity)
+        _ ≤ K₀ * (B / r) ^ (d + 8) * ((5 * r) ^ d * N ^ 2) := by
+            apply mul_le_mul_of_nonneg_right _ (by positivity)
+            rw [div_eq_mul_one_div]
+            exact mul_le_mul_of_nonneg_left hinv hK₀0
+        _ = (K₀ * 5 ^ d * B ^ (d + 8)) * (N / r ^ 4) ^ 2 := by
+            rw [div_pow, div_pow, mul_pow]
+            field_simp
+            ring
+    have hsq : Real.sqrt (fourthDiffCoeff d m *
+        (((componentEuclideanBall (latticeComponent d) z r).card : ℝ) * N ^ 2)) ≤
+        Real.sqrt (K₀ * 5 ^ d * B ^ (d + 8)) * (N / r ^ 4) := by
+      calc _ ≤ Real.sqrt ((K₀ * 5 ^ d * B ^ (d + 8)) * (N / r ^ 4) ^ 2) := Real.sqrt_le_sqrt hin
+        _ = _ := by
+          rw [Real.sqrt_mul (by positivity), Real.sqrt_sq (by positivity)]
+    calc taylorThreeConst d * (2 * s) ^ 4 * Real.sqrt (fourthDiffCoeff d m *
+          (((componentEuclideanBall (latticeComponent d) z r).card : ℝ) * N ^ 2))
+        ≤ taylorThreeConst d * (2 * s) ^ 4 *
+            (Real.sqrt (K₀ * 5 ^ d * B ^ (d + 8)) * (N / r ^ 4)) :=
+          mul_le_mul_of_nonneg_left hsq (by positivity)
+      _ = 16 * taylorThreeConst d * Real.sqrt (K₀ * 5 ^ d * B ^ (d + 8)) * (s / r) ^ 4 * N := by
+          field_simp
+          ring
+      _ ≤ latticeHRConstCubic d * (s / r) ^ 4 * N := by
+          apply mul_le_mul_of_nonneg_right _ hN0
+          apply mul_le_mul_of_nonneg_right _ hsr4
+          rw [latticeHRConstCubic, ← hX₀, ← hB, ← hK₀]
+          linarith
+  · push Not at hsm
+    have hm2s : (m : ℝ) < 2 * s := by linarith
+    have hsm' : r / B < 2 * s := lt_of_le_of_lt hmge hm2s
+    have hvol := clusterBallVolumeComparison_of_clusterCubeDensity (latticeComponent d) z R hd
+      one_pos (clusterCubeDensity_latticeComponent z (24 * Real.sqrt d) 1)
+    have h6 : 6 * Real.sqrt d * max 1 1 ≤ s := by
+      rw [max_self, mul_one]
+      have : 6 * Real.sqrt d ≤ X₀ := by rw [hX₀def]; nlinarith
+      linarith
+    have hmono := radiusMonotone_componentBallSeminorm (latticeComponent d) z
+      (by positivity : (0 : ℝ) < 6 * Real.sqrt d * max 1 1) (by positivity) hvol
+    have h1 := ballExcess_le (componentBallSeminorm (latticeComponent d) z)
+      (latticeHarmonicCubicPoly d) (s := s) (u := v) hw
+    have h2 := hmono (v - w) s r h6 (by linarith) hrR
+    rw [componentBallSeminorm_apply, componentBallSeminorm_apply] at h2
+    rw [componentBallSeminorm_apply] at h1
+    have h2B : 0 < 2 * B := by positivity
+    have hrs : r / s ≤ 2 * B := by
+      rw [div_le_iff₀ hs0]; rw [div_lt_iff₀ hBpos] at hsm'; linarith
+    have hrs0 : 0 ≤ r / s := by positivity
+    have h3 : (r / s) ^ ((d : ℝ) / 2) ≤ (2 * B) ^ ((d : ℝ) / 2) :=
+      Real.rpow_le_rpow hrs0 hrs (by positivity)
+    have h4 : 1 ≤ (2 * B) ^ 4 * (s / r) ^ 4 := by
+      rw [← mul_pow]
+      have : 1 ≤ 2 * B * (s / r) := by
+        rw [div_lt_iff₀ hBpos] at hsm'
+        rw [mul_div_assoc', le_div_iff₀ hr0]; linarith
+      exact one_le_pow₀ this
+    have hK : 0 ≤ Real.sqrt ((5 * (6 * Real.sqrt d)) ^ d / 1) := Real.sqrt_nonneg _
+    calc ballExcess (componentBallSeminorm (latticeComponent d) z) (latticeHarmonicCubicPoly d) s v
+        ≤ Real.sqrt ((5 * (6 * Real.sqrt d)) ^ d / 1) * (r / s) ^ ((d : ℝ) / 2) * N :=
+          h1.trans h2
+      _ ≤ Real.sqrt ((5 * (6 * Real.sqrt d)) ^ d / 1) * (2 * B) ^ ((d : ℝ) / 2) * N :=
+          mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left h3 hK) hN0
+      _ ≤ Real.sqrt ((5 * (6 * Real.sqrt d)) ^ d / 1) * (2 * B) ^ ((d : ℝ) / 2) *
+            ((2 * B) ^ 4 * (s / r) ^ 4) * N := by
+          have h5 : 0 ≤ Real.sqrt ((5 * (6 * Real.sqrt d)) ^ d / 1) * (2 * B) ^ ((d : ℝ) / 2) *
+              N := by positivity
+          nlinarith
+      _ ≤ latticeHRConstCubic d * (s / r) ^ 4 * N := by
+          have e : Real.sqrt ((5 * (6 * Real.sqrt d)) ^ d / 1) * (2 * B) ^ ((d : ℝ) / 2) *
+              ((2 * B) ^ 4 * (s / r) ^ 4) * N = (Real.sqrt ((5 * (6 * Real.sqrt d)) ^ d / 1) *
+                (2 * B) ^ ((d : ℝ) / 2) * (2 * B) ^ 4) * (s / r) ^ 4 * N := by ring
+          rw [e]
+          apply mul_le_mul_of_nonneg_right _ hN0
+          apply mul_le_mul_of_nonneg_right _ hsr4
+          rw [latticeHRConstCubic, ← hX₀, ← hB]
+          linarith
+
+/-- **Excess decay of order three of lattice harmonic functions on the balls of `ℤᵈ`**:
+`HarmonicRegularity` with `j = 3` for the class `latticeHarmonicClass z` and the lattice harmonic
+cubic polynomials, above the radius `latticeHRScaleCubic d`. -/
+theorem harmonicRegularity_cubicPoly_latticeHarmonicClass [NeZero d] (z : Vertex d) (R : ℝ) :
+    HarmonicRegularity (componentBallSeminorm (latticeComponent d) z) (latticeHarmonicClass z)
+      (latticeHarmonicCubicPoly d) 3 (latticeHRScaleCubic d) R (latticeHRConstCubic d) := by
+  intro r hrR v hv s hXs hsr
+  have hK : 0 ≤ latticeHRConstCubic d * (s / r) ^ (3 + 1) := by
+    have hr : 0 ≤ r := by have := latticeHRScaleCubic_nonneg d; linarith
+    have hs : 0 ≤ s := (latticeHRScaleCubic_nonneg d).trans hXs
+    exact mul_nonneg (latticeHRConstCubic_nonneg d) (pow_nonneg (div_nonneg hs hr) _)
+  have e : latticeHRConstCubic d * (s / r) ^ (3 + 1) *
+      ballExcess (componentBallSeminorm (latticeComponent d) z) (latticeHarmonicCubicPoly d) r v =
+      ⨅ w : latticeHarmonicCubicPoly d, latticeHRConstCubic d * (s / r) ^ (3 + 1) *
+        componentBallSeminorm (latticeComponent d) z r (v - w) :=
+    Real.mul_iInf_of_nonneg hK _
+  rw [e]
+  refine le_ciInf fun w => ?_
+  rw [componentBallSeminorm_apply]
+  exact ballExcess_le_latticeHRConstCubic_mul z hrR hv hXs hsr w.2
+
 end Rigidity.Proofs.Regularity
