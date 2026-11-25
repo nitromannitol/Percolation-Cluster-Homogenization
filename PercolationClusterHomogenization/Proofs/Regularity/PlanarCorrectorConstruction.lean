@@ -25,7 +25,8 @@ open Finset Filter Topology LatticeProb LatticeProb.Percolation Rigidity.Percola
 variable {d : ℕ} {ω : Configuration d}
 
 /-- Adjacent vertices of `ℤ^d` are at Euclidean distance at most `1`. -/
-theorem dist_le_one_of_lattice_adj_general {x y : Vertex d} (h : (nearestNeighborGraph d).Adj x y) :
+theorem dist_le_one_of_lattice_adj_general {x y : Vertex d}
+    (h : (nearestNeighborGraph d).Adj x y) :
     dist (latticeEuclideanEmbedding y) (latticeEuclideanEmbedding x) ≤ 1 := by
   have key : ∀ (a : Vertex d) (i : Fin d),
       dist (latticeEuclideanEmbedding (a + unit i)) (latticeEuclideanEmbedding a) ≤ 1 := by
