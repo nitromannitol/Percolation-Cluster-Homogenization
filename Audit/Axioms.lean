@@ -856,3 +856,31 @@ report lists only `propext`, `Classical.choice` and `Quot.sound`.
 #print axioms Rigidity.Proofs.Regularity.cubeEstimatesAS_holds
 #print axioms Rigidity.Proofs.Regularity.cubeHarmonicApproximation_holds
 #print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderZero_holds
+
+-- Lemma 7.3 at k = 2 in every dimension, and Theorem 2 (iii) at k = 1 from the sublinearity (1.18)
+#print axioms Rigidity.Proofs.Regularity.fwd_fwd_fwd_tensorCubicPart
+#print axioms Rigidity.Proofs.Regularity.latticeLaplacian_tensorCubicPart
+#print axioms Rigidity.Proofs.Regularity.mem_latticeHarmonicCubicPoly_latticeHarmonicTaylorThree
+#print axioms Rigidity.Proofs.Regularity.abs_sub_latticeHarmonicTaylorThree_le
+#print axioms Rigidity.Proofs.Regularity.harmonicRegularity_cubicPoly_latticeHarmonicClass
+#print axioms Rigidity.Proofs.Regularity.le_componentBallL2_of_fwd3
+#print axioms Rigidity.Proofs.Regularity.polynomialComparison_latticeHarmonicCubicPoly
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2_two_latticeHarmonicD
+#print axioms Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_two_latticeHarmonicD
+#print axioms Rigidity.Proofs.Regularity.abs_le_sum_abs_of_latticeHarmonicD
+#print axioms Rigidity.Proofs.Regularity.componentBallL2_le_sum_abs_of_latticeHarmonicD
+#print axioms Rigidity.Proofs.Regularity.componentBallL2_coarse_sub_const_leD
+#print axioms Rigidity.Proofs.Regularity.sum_abs_coarse_sub_leD
+#print axioms Rigidity.Proofs.Regularity.abs_latticeQuadFunD_sub_le
+#print axioms Rigidity.Proofs.Regularity.quadSlopeD_le_of_clusterCubeDensity
+#print axioms Rigidity.Proofs.Regularity.clusterExcess_two_leD
+#print axioms Rigidity.Proofs.Regularity.componentBallL2_coarse_sub_quad_leD
+#print axioms Rigidity.Proofs.Regularity.harmonicApproximation_error_leD
+#print axioms Rigidity.Proofs.Regularity.coarse_top_boundsD
+#print axioms Rigidity.Proofs.Regularity.mesoscopicDegreeTwo_coreD
+#print axioms Rigidity.Proofs.Regularity.cube_boundsD
+#print axioms Rigidity.Proofs.Regularity.mesoscopicDegreeTwoAt_holds
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioMesoscopicDegreeTwo_holds
+#print axioms Rigidity.Proofs.Regularity.orderOneEndpointData_clusterL2
+#print axioms Rigidity.Proofs.Regularity.orderOneOrigin_of_mesoscopicDegreeTwoAt_of_sublinear
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_correctorSublinear
