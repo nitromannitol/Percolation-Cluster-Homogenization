@@ -136,7 +136,7 @@ theorem TriadicCube.add_sub_unit_mem_of_isLatticeInterior {U : TriadicCube d} {x
 
 /-- The edge energy of `f` on the open edges of `C_*(U')` reduces to `C_*(U)` when `f` vanishes
 off the vertices of `C_*(U)` whose lattice neighbours lie in `U`. -/
-theorem sum_edges_le_of_support (hd : 0 < d) (hP : PartitionEvent ω) {U U' : TriadicCube d}
+theorem cube_sum_edges_le_of_support (hd : 0 < d) (hP : PartitionEvent ω) {U U' : TriadicCube d}
     (hUU' : U.vertices ⊆ U'.vertices) (hU : PartitionResolved ω U) (hscale : U.scale ≤ U'.scale)
     (f : Vertex d → ℝ)
     (hf : ∀ x, ¬(x ∈ crossingClusterVertices ω U ∧ U.IsLatticeInterior x) → f x = 0) :
@@ -218,7 +218,7 @@ theorem sum_gradNormIn_sq_le_of_support (hd : 0 < d) (hP : PartitionEvent ω)
       (if z + unit j ∈ C ∧ (openGraph ω).Adj z (z + unit j) then
         (f (z + unit j) - f z) ^ 2 else 0) := fun z j => by split_ifs <;> ring
   simp only [e]
-  have := sum_edges_le_of_support hd hP hUU' hU hscale f hf
+  have := cube_sum_edges_le_of_support hd hP hUU' hU hscale f hf
   linarith
 
 /-- The factor of the Sobolev inequality after the bound of the reach scales and the power-mean
