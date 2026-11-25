@@ -22,7 +22,29 @@ namespace Rigidity.Proofs.Regularity
 
 open Finset Filter Topology LatticeProb LatticeProb.Percolation Rigidity.Percolation
 
-variable {ω : Configuration 2}
+variable {d : ℕ} {ω : Configuration d}
+
+/-- Adjacent vertices of `ℤ^d` are at Euclidean distance at most `1`. -/
+theorem dist_le_one_of_lattice_adj_general {x y : Vertex d} (h : (nearestNeighborGraph d).Adj x y) :
+    dist (latticeEuclideanEmbedding y) (latticeEuclideanEmbedding x) ≤ 1 := by
+  have key : ∀ (a : Vertex d) (i : Fin d),
+      dist (latticeEuclideanEmbedding (a + unit i)) (latticeEuclideanEmbedding a) ≤ 1 := by
+    intro a i
+    rw [EuclideanSpace.dist_eq]
+    have hterm : ∀ j, dist (latticeEuclideanEmbedding (a + unit i) j)
+        (latticeEuclideanEmbedding a j) ^ 2 = if j = i then 1 else 0 := by
+      intro j
+      simp only [latticeEuclideanEmbedding, unit, Real.dist_eq]
+      by_cases hj : j = i
+      · subst hj
+        simp
+      · simp [hj]
+    simp only [hterm, Finset.sum_ite_eq', Finset.mem_univ, if_true, Real.sqrt_one, le_refl]
+  obtain ⟨i, hi | hi⟩ := h
+  · rw [hi]
+    exact key x i
+  · rw [hi, dist_comm]
+    exact key y i
 
 /-- Harmonicity on the cluster of the ball `B_R` around the origin. -/
 def HarmonicOnBall (C : OpenComponent ω) (v : C → ℝ) (R : ℝ) : Prop :=
@@ -44,12 +66,12 @@ theorem HarmonicOnBall.sub {C : OpenComponent ω} {v v' : C → ℝ} {R : ℝ}
   intro x hx hy
   rw [componentLaplacian_sub, h x hx hy, h' x hx hy, sub_zero]
 
-theorem componentBallL2_zero (C : OpenComponent ω) (z : Vertex 2) (r : ℝ) :
+theorem componentBallL2_zero (C : OpenComponent ω) (z : Vertex d) (r : ℝ) :
     componentBallL2 C z r (fun _ => 0) = 0 := by
   unfold componentBallL2
   simp
 
-theorem componentBallL2_sum_le (C : OpenComponent ω) (z : Vertex 2) (r : ℝ) (s : Finset ℕ)
+theorem componentBallL2_sum_le (C : OpenComponent ω) (z : Vertex d) (r : ℝ) (s : Finset ℕ)
     (g : ℕ → C → ℝ) :
     componentBallL2 C z r (fun x => ∑ m ∈ s, g m x) ≤ ∑ m ∈ s, componentBallL2 C z r (g m) := by
   induction s using Finset.induction_on with
@@ -58,7 +80,7 @@ theorem componentBallL2_sum_le (C : OpenComponent ω) (z : Vertex 2) (r : ℝ) (
       simp only [Finset.sum_insert ha]
       exact (Rigidity.Proofs.S2.componentBallL2_add_le C z r (g a) _).trans (by linarith)
 
-theorem componentBallL2_const_le (C : OpenComponent ω) (z : Vertex 2) (r c : ℝ) :
+theorem componentBallL2_const_le (C : OpenComponent ω) (z : Vertex d) (r c : ℝ) :
     componentBallL2 C z r (fun _ => c) ≤ |c| :=
   componentBallL2_le_of_abs_le C z r (abs_nonneg c) fun _ _ => le_rfl
 
@@ -161,14 +183,14 @@ theorem telescoping_bound (C : OpenComponent ω) (ℓ : C → ℝ) (v : ℕ → 
         linarith
     _ = _ := by ring
 
-theorem componentBallL2_sub_le' (C : OpenComponent ω) (z : Vertex 2) (r : ℝ) (f g : C → ℝ) :
+theorem componentBallL2_sub_le' (C : OpenComponent ω) (z : Vertex d) (r : ℝ) (f g : C → ℝ) :
     componentBallL2 C z r (fun x => f x - g x) ≤
       componentBallL2 C z r f + componentBallL2 C z r g := by
   have h := Rigidity.Proofs.S2.componentBallL2_add_le C z r f (fun x => -g x)
   rw [Rigidity.Proofs.S2.componentBallL2_neg] at h
   simpa only [sub_eq_add_neg] using h
 
-theorem componentBallL2_const_eq (C : OpenComponent ω) (z : Vertex 2) (r c : ℝ)
+theorem componentBallL2_const_eq (C : OpenComponent ω) (z : Vertex d) (r c : ℝ)
     (hpos : 0 < (componentEuclideanBall C z r).card) :
     componentBallL2 C z r (fun _ => c) = |c| := by
   unfold componentBallL2
@@ -272,7 +294,7 @@ theorem componentLaplacian_sub_const (C : OpenComponent ω) (f : C → ℝ) (a :
   refine Finset.sum_congr rfl fun y _ => ?_
   ring
 
-theorem tendsto_componentBallL2 (C : OpenComponent ω) (z : Vertex 2) (r : ℝ) {g : ℕ → C → ℝ}
+theorem tendsto_componentBallL2 (C : OpenComponent ω) (z : Vertex d) (r : ℝ) {g : ℕ → C → ℝ}
     {g₀ : C → ℝ} (h : ∀ x, Tendsto (fun k => g k x) atTop (𝓝 (g₀ x))) :
     Tendsto (fun k => componentBallL2 C z r (g k)) atTop (𝓝 (componentBallL2 C z r g₀)) := by
   unfold componentBallL2
@@ -323,11 +345,11 @@ theorem exists_harmonic_of_approximations (C : OpenComponent ω) (ℓ : C → �
     exact this
   -- the radius of a vertex
   have hrad : ∀ x : C, ∃ j : ℕ, m₀ + 1 ≤ j ∧
-      dist (latticeEuclideanEmbedding x.val) (latticeEuclideanEmbedding (0 : Vertex 2)) + 1 <
+      dist (latticeEuclideanEmbedding x.val) (latticeEuclideanEmbedding (0 : Vertex d)) + 1 <
         3 ^ j := by
     intro x
     obtain ⟨j, hj⟩ := pow_unbounded_of_one_lt
-      (dist (latticeEuclideanEmbedding x.val) (latticeEuclideanEmbedding (0 : Vertex 2)) + 1)
+      (dist (latticeEuclideanEmbedding x.val) (latticeEuclideanEmbedding (0 : Vertex d)) + 1)
       (by norm_num : (1 : ℝ) < 3)
     refine ⟨max j (m₀ + 1), le_max_right _ _, hj.trans_le ?_⟩
     exact pow_le_pow_right₀ (by norm_num) (le_max_left _ _)
@@ -385,9 +407,9 @@ theorem exists_harmonic_of_approximations (C : OpenComponent ω) (ℓ : C → �
       · rw [mem_componentEuclideanBall]; linarith [hJ x]
       · rw [mem_componentEuclideanBall]
         have hadj : (openGraph ω).Adj x.val y.val := hxy
-        have hd1 := dist_le_one_of_lattice_adj (openGraph_le ω hadj)
+        have hd1 := dist_le_one_of_lattice_adj_general (openGraph_le ω hadj)
         have := dist_triangle (latticeEuclideanEmbedding y.val) (latticeEuclideanEmbedding x.val)
-          (latticeEuclideanEmbedding (0 : Vertex 2))
+          (latticeEuclideanEmbedding (0 : Vertex d))
         linarith [hJ x]
     exact tendsto_nhds_unique hlap (tendsto_const_nhds.congr' (hzero.mono fun k hk => hk.symm))
   · -- the bound
