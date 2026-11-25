@@ -14,6 +14,7 @@ Bou-Rabee, Cooperman and Dario, *Rigidity of harmonic functions on the supercrit
 cluster*, whose Theorems 2.4 and 2.5 quote Theorem 2 of Armstrong and Dario.
 
 [![CI](https://github.com/nitromannitol/Percolation-Cluster-Homogenization/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/nitromannitol/Percolation-Cluster-Homogenization/actions/workflows/build.yml)
+[![Comparator audit](https://github.com/nitromannitol/Percolation-Cluster-Homogenization/actions/workflows/comparator.yml/badge.svg?branch=main)](https://github.com/nitromannitol/Percolation-Cluster-Homogenization/actions/workflows/comparator.yml)
 
 ## What is proved
 
@@ -73,6 +74,14 @@ none of them unless the table says so.
   `propext`, `Classical.choice` and `Quot.sound`, checked by [`Audit/Axioms.lean`](Audit/Axioms.lean)
   and [`scripts/check_axioms.py`](scripts/check_axioms.py) in CI.
 - The library is compiled with `warningAsError`.
+- **Independent check of a statement.** Theorem 2 (iii) at `k = 0` is restated using mathlib alone in
+  [`HomogenizationAudit/OrderZero/`](HomogenizationAudit/OrderZero/). `Challenge.lean` restates every
+  definition that the statement unfolds to, `Solution.lean` proves the restatement from
+  `Rigidity.Proofs.Regularity.armstrongDarioOrderZero_holds`, and
+  [leanprover/comparator](https://github.com/leanprover/comparator) checks that the two statements
+  agree, that only `propext`, `Classical.choice` and `Quot.sound` are used, and replays the proof
+  through the Lean kernel and the independent kernel nanoda. The other results have no comparator
+  pair.
 
 ## Building
 
@@ -86,6 +95,25 @@ lake build                # the library, with zero warnings
 lake env lean Audit/Axioms.lean 2>&1 | tee axioms-audit.log
 python3 scripts/check_axioms.py axioms-audit.log
 ```
+
+## Running the comparator
+
+The pair has a configuration [`HomogenizationAudit/OrderZero/comparator.json`](HomogenizationAudit/OrderZero/comparator.json),
+which permits exactly `propext`, `Classical.choice` and `Quot.sound` and enables nanoda. Build
+`leanprover/comparator`, `lean4export`, `landrun` and `nanoda` at the revisions listed in
+[`.github/workflows/comparator.yml`](.github/workflows/comparator.yml), then run from the repository
+root
+
+```bash
+COMPARATOR_BIN=<comparator> COMPARATOR_LANDRUN=<landrun> \
+COMPARATOR_LEAN4EXPORT=<lean4export> COMPARATOR_NANODA=<nanoda_bin> \
+  ./scripts/run_comparators.sh
+```
+
+The script builds the library and, in a fresh copy of the source tree, the audit modules, runs the
+comparator on every pair under `HomogenizationAudit/` and fails if a pair is missing or rejected;
+its logs are kept under `.lake/comparator-logs/`. The **Comparator audit** workflow runs it when
+started manually from the [Actions page](https://github.com/nitromannitol/Percolation-Cluster-Homogenization/actions).
 
 To use the library from another Lake project:
 
@@ -109,7 +137,8 @@ require «percolation-cluster-homogenization» from git
 | `PercolationClusterHomogenization/Percolation/` | well-connected cubes, slab connectivity and triadic localization |
 | `PercolationClusterHomogenization/External/` | the literature statements |
 | `PercolationClusterHomogenization/Vendor/` | copied modules (below) |
-| `Audit/Axioms.lean`, `scripts/` | the axiom report and its check |
+| `Audit/Axioms.lean`, `scripts/` | the axiom report and its check, and the comparator runner |
+| `HomogenizationAudit/` | the mathlib-only comparator pair of Theorem 2 (iii) at `k = 0` |
 
 ## How this was built
 

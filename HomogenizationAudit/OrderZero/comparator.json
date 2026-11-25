@@ -1,0 +1,14 @@
+{
+  "challenge_module": "HomogenizationAudit.OrderZero.Challenge",
+  "solution_module": "HomogenizationAudit.OrderZero.Solution",
+  "theorem_names": [
+    "PercolationClusterHomogenization.StatementAudit.OrderZero.armstrong_dario_order_zero"
+  ],
+  "definition_names": [],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}
