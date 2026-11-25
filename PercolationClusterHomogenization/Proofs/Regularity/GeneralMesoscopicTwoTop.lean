@@ -133,4 +133,115 @@ theorem sum_abs_coarse_sub_quad_top_leD [NeZero d] (hP : PartitionEvent ω)
     mul_le_mul_of_nonneg_left hm₁' (by positivity)
   linarith
 
+/-- **The harmonic approximation error at `4T`.** -/
+theorem harmonicApproximation_error_leD [NeZero d] (hP : PartitionEvent ω)
+    (h : HasUniqueInfiniteOpenComponent ω) (u : uniqueInfiniteComponent h → ℝ)
+    {A α K X R S' : ℝ} (hA : 2 ≤ A) (hK : 0 ≤ K) (hR4 : 4 * Real.sqrt d ≤ R) (hS'0 : 0 ≤ S')
+    (hS' : Real.sqrt d * S' ≤ R / 4) (hXT : X ≤ 4 * (R / (8 * A)))
+    (hsize : ∀ y : Vertex d,
+      dist (latticeEuclideanEmbedding y) (latticeEuclideanEmbedding (0 : Vertex d)) < R →
+        (3 : ℝ) ^ (partitionCube ω y).scale ≤ S')
+    (hHA : HarmonicApproximation (componentBallSeminorm (latticeComponent d) 0)
+      (latticeHarmonicClass 0) (clusterConstants (latticeComponent d)) A α X (R / 2)
+      (K / (R / 2) * ⨅ a : ℝ, clusterBallVolumeL2 (uniqueInfiniteComponent h) (R / 2)
+        (u - fun _ => a))
+      (fun x => partitionCoarse (uniqueInfiniteComponent h) u x.val)) :
+    ballDist (componentBallSeminorm (latticeComponent d) 0)
+        (latticeHarmonicClass 0 (4 * (R / (8 * A)))) (4 * (R / (8 * A)))
+        (fun x => partitionCoarse (uniqueInfiniteComponent h) u x.val) ≤
+      (4 * (R / (8 * A))) ^ (1 - α) *
+        (2 * Real.sqrt ((4 * Real.sqrt d * S') ^ d) *
+            ((⨅ a : ℝ, clusterBallVolumeL2 (uniqueInfiniteComponent h) R (u - fun _ => a)) / R) +
+          Real.sqrt (2 ^ d) * K * ((⨅ a : ℝ, clusterBallVolumeL2 (uniqueInfiniteComponent h) R
+            (u - fun _ => a)) / R) / (R / (8 * A))) := by
+  have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
+  have hsd : 0 < Real.sqrt d := Real.sqrt_pos.2 (Nat.cast_pos.2 hd)
+  have hA0 : 0 < A := by linarith
+  have hR0 : 0 < R := lt_of_lt_of_le (by positivity) hR4
+  obtain ⟨T, hT⟩ : ∃ x : ℝ, x = R / (8 * A) := ⟨_, rfl⟩
+  rw [← hT]
+  have hT0 : 0 < T := by rw [hT]; positivity
+  obtain ⟨D0R, hD0R⟩ : ∃ x : ℝ,
+      x = ⨅ a : ℝ, clusterBallVolumeL2 (uniqueInfiniteComponent h) R (u - fun _ => a) :=
+    ⟨_, rfl⟩
+  rw [← hD0R]
+  have hD0R0 : 0 ≤ D0R := by rw [hD0R]; exact iInf_nonneg_of_nonneg fun _ => Real.sqrt_nonneg _
+  obtain ⟨U, hU⟩ : ∃ f : latticeComponent d → ℝ,
+      f = fun x => partitionCoarse (uniqueInfiniteComponent h) u x.val := ⟨_, rfl⟩
+  rw [← hU] at hHA ⊢
+  have h4T : 4 * T ≤ R / 2 / A := by
+    rw [hT, le_div_iff₀ hA0]; field_simp; linarith
+  have hHA' := hHA (4 * T) (by rw [hT]; exact hXT) h4T
+  have hAT : A * (4 * T) = R / 2 := by rw [hT]; field_simp; ring
+  rw [hAT] at hHA'
+  have hsup := iSup_Icc_self_le (f := fun s => ballExcess (componentBallSeminorm
+    (latticeComponent d) 0) (clusterConstants (latticeComponent d)) s U / s) (R / 2)
+  -- the crude bound of the coarse oscillation at `R/2`
+  set c₁ := Real.sqrt ((4 * Real.sqrt d * S') ^ d) with hc₁
+  have hc₁0 : 0 ≤ c₁ := Real.sqrt_nonneg _
+  have hcrude : ballExcess (componentBallSeminorm (latticeComponent d) 0)
+      (clusterConstants (latticeComponent d)) (R / 2) U ≤ 0 + c₁ * D0R := by
+    rw [hD0R]
+    apply le_add_mul_iInf hc₁0
+    intro c
+    have hc : (fun _ : latticeComponent d => c) ∈ clusterConstants (latticeComponent d) :=
+      ⟨c, fun _ => rfl⟩
+    have h1 := ballExcess_le (componentBallSeminorm (latticeComponent d) 0)
+      (clusterConstants (latticeComponent d)) (s := R / 2) (u := U) hc
+    rw [componentBallSeminorm_apply] at h1
+    have h2 := componentBallL2_coarse_sub_const_leD hP h u (ρ := R / 2) (R := R) (S := S')
+      (by linarith) hR0 hS'0
+      (fun y hy => (anchor_boundsD hP hS'0 hS' le_rfl (mem_latticeBallPointsD.1 hy)
+        (hsize y ((mem_latticeBallPointsD.1 hy).trans (by linarith)))).1)
+      (fun y hy => hsize y ((mem_latticeBallPointsD.1 hy).trans (by linarith))) c
+    have e : S' ^ d * (2 * Real.sqrt d) ^ d * R ^ d / (R / 2) ^ d =
+        (4 * Real.sqrt d * S') ^ d := by
+      rw [← mul_pow, ← mul_pow, ← div_pow]
+      congr 1
+      field_simp
+      ring
+    rw [e, ← hc₁] at h2
+    rw [hU] at h1
+    calc ballExcess (componentBallSeminorm (latticeComponent d) 0)
+          (clusterConstants (latticeComponent d)) (R / 2) U
+        ≤ componentBallL2 (latticeComponent d) 0 (R / 2) (U - fun _ => c) := by
+          rw [hU]; exact h1
+      _ ≤ c₁ * clusterBallVolumeL2 (uniqueInfiniteComponent h) R (u - fun _ => c) := by
+          rw [hU]; exact h2
+      _ = 0 + c₁ * clusterBallVolumeL2 (uniqueInfiniteComponent h) R (u - fun _ => c) := by
+          ring
+  -- the oscillation at `R/2`
+  have hosc : (⨅ a : ℝ, clusterBallVolumeL2 (uniqueInfiniteComponent h) (R / 2)
+      (u - fun _ => a)) ≤ 0 + Real.sqrt (2 ^ d) * D0R := by
+    rw [hD0R]
+    apply le_add_mul_iInf (Real.sqrt_nonneg _)
+    intro c
+    have h1 := iInf_le_of_le (f := fun a : ℝ => clusterBallVolumeL2 (uniqueInfiniteComponent h)
+      (R / 2) (u - fun _ => a)) (fun _ => Real.sqrt_nonneg _) c
+    have h2 := clusterBallVolumeL2_le_sqrt_mul (uniqueInfiniteComponent h)
+      (by linarith : 0 < R / 2) (by linarith : R / 2 ≤ R) (u - fun _ => c)
+    have e : R / (R / 2) = 2 := by field_simp
+    rw [e] at h2
+    linarith
+  have hrpow : 0 ≤ (4 * T) ^ (1 - α) := Real.rpow_nonneg (by positivity) _
+  refine hHA'.trans (mul_le_mul_of_nonneg_left ?_ hrpow)
+  have hE : K / (R / 2) * (⨅ a : ℝ, clusterBallVolumeL2 (uniqueInfiniteComponent h) (R / 2)
+      (u - fun _ => a)) / (4 * T) ≤ Real.sqrt (2 ^ d) * K * (D0R / R) / T := by
+    have hK' : 0 ≤ K / (R / 2) := by positivity
+    have := mul_le_mul_of_nonneg_left hosc hK'
+    rw [div_le_iff₀ (by positivity)]
+    calc K / (R / 2) * (⨅ a : ℝ, clusterBallVolumeL2 (uniqueInfiniteComponent h) (R / 2)
+          (u - fun _ => a)) ≤ K / (R / 2) * (0 + Real.sqrt (2 ^ d) * D0R) := this
+      _ = Real.sqrt (2 ^ d) * K * (D0R / R) / T * (2 * T) := by field_simp; ring
+      _ ≤ Real.sqrt (2 ^ d) * K * (D0R / R) / T * (4 * T) := by
+          have : 0 ≤ Real.sqrt (2 ^ d) * K * (D0R / R) / T := by positivity
+          nlinarith
+  have hS : ballExcess (componentBallSeminorm (latticeComponent d) 0)
+      (clusterConstants (latticeComponent d)) (R / 2) U / (R / 2) ≤ 2 * c₁ * (D0R / R) := by
+    rw [div_le_iff₀ (by positivity)]
+    calc _ ≤ 0 + c₁ * D0R := hcrude
+      _ = 2 * c₁ * (D0R / R) * (R / 2) := by field_simp; ring
+  have := hsup.trans hS
+  linarith
+
 end Rigidity.Proofs.Regularity
