@@ -223,4 +223,144 @@ theorem componentBallL2_le_of_sums (C : OpenComponent ω) (w g : Vertex d → �
   have hG0 : 0 ≤ G := le_trans (Finset.sum_nonneg fun _ _ => sq_nonneg _) hG
   exact mul_le_mul hsum hcard hκ'.le (by positivity)
 
+theorem abs_sub_le_one_of_lattice_adj {x y : Vertex d} (h : (nearestNeighborGraph d).Adj x y)
+    (k : Fin d) : |y k - x k| ≤ 1 := by
+  obtain ⟨i, hi | hi⟩ := h
+  · rw [hi]
+    simp only [Pi.add_apply, unit, Pi.single_apply, add_sub_cancel_left]
+    split_ifs <;> simp
+  · rw [hi]
+    simp only [Pi.add_apply, unit, Pi.single_apply, sub_add_cancel_left]
+    split_ifs <;> simp
+
+/-- **The approximation at one scale**: on the partition event, for a resolved cube `□_{j+3}` whose
+partition cubes have scales at most `j` and sizes at most `Z` on its crossing cluster, the
+combination `Σᵢ qᵢ v(·, □_{j+3}, eᵢ)` minus a constant is harmonic on `𝒞 ∩ B_{3^{j+1}}` and within
+`(2 (F + G) / κ')^{1/2}` of `q · x` in `L̲²(𝒞 ∩ B_{3^{j+1}})`, with `F` from the flatness errors
+and `G` from Lemma 3.2 and the energy bound. -/
+theorem affineApproximation_at_scale [NeZero d] (hP : PartitionEvent ω) (C : OpenComponent ω)
+    (hinf : C.supp.Infinite) {j : ℕ} (hres : PartitionResolved ω ⟨j + 3, 0⟩)
+    (hsc : ∀ x ∈ Rigidity.Proofs.S2.triadicCubeFinset d (j + 3) 0, (partitionCube ω x).scale ≤ j)
+    {Z Fl κ' : ℝ}
+    (hZ : ∀ x ∈ crossingClusterVertices ω ⟨j + 3, 0⟩, (3 : ℝ) ^ (partitionCube ω x).scale ≤ Z)
+    (hfl : ∀ i : Fin d, cubeFlatnessError ⟨j + 3, 0⟩
+      (fun x => cubeExtend ω ⟨j + 3, 0⟩ (cubeNuSolution ω ⟨j + 3, 0⟩ (Pi.single i 1))
+        (partitionAnchor ω x)) (Pi.single i 1) ≤ Fl)
+    (hκ' : 0 < κ') (hcard : κ' ≤ (componentEuclideanBall C 0 ((3 : ℝ) ^ (j + 1))).card)
+    (q : Fin d → ℝ) :
+    ∃ v : C → ℝ, HarmonicOnBall C v (3 ^ (j + 1)) ∧
+      componentBallL2 C 0 (3 ^ (j + 1)) (fun x => v x - componentSlope C q x) ≤
+        Real.sqrt (2 * (d * (⟨j + 3, 0⟩ : TriadicCube d).latticeVolume * ((∑ i, q i ^ 2) * Fl) +
+          d * (∑ i, q i ^ 2) * (coarseErrorConst d ^ 2 * Z ^ (2 * d) *
+            (3 ^ d / 2 * (⟨j + 3, 0⟩ : TriadicCube d).latticeVolume))) / κ') := by
+  have hd0 : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
+  set V : TriadicCube d := ⟨j + 3, 0⟩ with hVdef
+  set vi : Fin d → CubeFun ω V := fun i => cubeNuSolution ω V (Pi.single i 1) with hvi
+  set v : CubeFun ω V := ∑ i, q i • vi i with hvdef
+  set w : Fin d → Vertex d → ℝ := fun i x => cubeExtend ω V (vi i) (partitionAnchor ω x) with hw
+  set c : ℝ := ∑ i, q i * finsetMean V.toIntegerCube.vertices
+    (fun y => w i y - affineFun (Pi.single i 1) y) with hc
+  have hvH : v ∈ cubeHarmonic ω V :=
+    Submodule.sum_mem _ fun i _ => Submodule.smul_mem _ _ (cubeNuSolution_mem_cubeHarmonic hP hres _)
+  -- the inclusions
+  have hin : ∀ x : C, x ∈ componentEuclideanBall C 0 ((3 : ℝ) ^ (j + 1)) →
+      x.val ∈ crossingClusterVertices ω V ∧ V.IsLatticeInterior x.val := by
+    intro x hx
+    rw [mem_componentEuclideanBall] at hx
+    have hcoord : ∀ k, |((x.val k : ℤ) : ℝ)| < 3 * 3 ^ j := by
+      intro k
+      have h1 := abs_sub_le_dist_latticeEuclideanEmbedding x.val (0 : Vertex d) k
+      have e : (((0 : Vertex d) k : ℤ) : ℝ) = 0 := by simp
+      rw [e, sub_zero] at h1
+      have : (3 : ℝ) ^ (j + 1) = 3 * 3 ^ j := by ring
+      linarith
+    have hcoordZ : ∀ k, |x.val k| < 3 * 3 ^ j := by
+      intro k
+      have := hcoord k
+      have h' : ((|x.val k| : ℤ) : ℝ) < ((3 * 3 ^ j : ℤ) : ℝ) := by push_cast; exact this
+      exact_mod_cast h'
+    refine ⟨mem_crossingClusterVertices_inner_cube hd0 hP C hinf hsc x.2 fun k => ?_,
+      fun y hy => ?_⟩
+    · have := hcoordZ k
+      have h0 : (0 : ℤ) < 3 ^ j := by positivity
+      linarith
+    · rw [mem_triadicCube_zero_iff']
+      intro k
+      have h1 := hcoordZ k
+      have h2 := abs_sub_le_one_of_lattice_adj hy k
+      have h0 : (1 : ℤ) ≤ 3 ^ j := one_le_pow₀ (by norm_num)
+      have e : (3 : ℤ) ^ (j + 3) = 27 * 3 ^ j := by ring
+      have a := abs_sub_abs_le_abs_sub (y k) (x.val k)
+      rw [e]
+      linarith
+  refine ⟨fun x => cubeExtend ω V v x.val - c, harmonicOnBall_of_cubeHarmonic C hvH c hin, ?_⟩
+  -- linearity
+  have hext : ∀ x, cubeExtend ω V v x = ∑ i, q i * cubeExtend ω V (vi i) x := by
+    intro x
+    rw [hvdef, map_sum, Finset.sum_apply]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [map_smul, Pi.smul_apply, smul_eq_mul]
+  have hcoarse : ∀ x, cubeExtend ω V v (partitionAnchor ω x) = ∑ i, q i * w i x :=
+    fun x => hext _
+  -- the flatness part
+  have hF : ∑ x ∈ crossingClusterVertices ω V,
+      (cubeExtend ω V v (partitionAnchor ω x) - affineFun q x - c) ^ 2 ≤
+        d * V.latticeVolume * ((∑ i, q i ^ 2) * Fl) := by
+    have hsub : crossingClusterVertices ω V ⊆ V.toIntegerCube.vertices := Finset.filter_subset _ _
+    refine (Finset.sum_le_sum_of_subset_of_nonneg hsub fun _ _ _ => sq_nonneg _).trans ?_
+    simp only [hcoarse]
+    refine (sum_sq_coarsen_combo_le (V := V) w q).trans ?_
+    refine mul_le_mul_of_nonneg_left ?_ (mul_nonneg (Nat.cast_nonneg _) V.latticeVolume_pos.le)
+    rw [Finset.sum_mul]
+    exact Finset.sum_le_sum fun i _ => mul_le_mul_of_nonneg_left (hfl i) (sq_nonneg _)
+  -- the coarsening part
+  have hone : ∀ i : Fin d, ∑ k, |(Pi.single i (1 : ℝ) : Fin d → ℝ) k| = 1 := by
+    intro i
+    rw [Finset.sum_eq_single_of_mem i (Finset.mem_univ i) fun b _ hb => by simp [hb]]
+    simp
+  have hG : ∑ x ∈ crossingClusterVertices ω V,
+      (cubeExtend ω V v x - cubeExtend ω V v (partitionAnchor ω x)) ^ 2 ≤
+        d * (∑ i, q i ^ 2) * (coarseErrorConst d ^ 2 * Z ^ (2 * d) *
+          (3 ^ d / 2 * V.latticeVolume)) := by
+    set D : Fin d → Vertex d → ℝ := fun i x =>
+      cubeExtend ω V (vi i) x - cubeExtend ω V (vi i) (partitionAnchor ω x) with hD
+    have hpt : ∀ x, (cubeExtend ω V v x - cubeExtend ω V v (partitionAnchor ω x)) ^ 2 ≤
+        d * ∑ i, q i ^ 2 * D i x ^ 2 := by
+      intro x
+      rw [hext x, hext (partitionAnchor ω x), ← Finset.sum_sub_distrib]
+      have h := sq_sum_le_card_mul_sum_sq (s := (Finset.univ : Finset (Fin d)))
+        (f := fun i => q i * cubeExtend ω V (vi i) x - q i * cubeExtend ω V (vi i)
+          (partitionAnchor ω x))
+      simp only [Finset.card_univ, Fintype.card_fin] at h
+      refine h.trans (le_of_eq ?_)
+      congr 1
+      exact Finset.sum_congr rfl fun i _ => by rw [hD]; ring
+    have hEi : ∀ i, ∑ x ∈ crossingClusterVertices ω V, D i x ^ 2 ≤
+        coarseErrorConst d ^ 2 * Z ^ (2 * d) * (3 ^ d / 2 * V.latticeVolume) := by
+      intro i
+      refine (sum_sq_extend_sub_anchor_le hd0 hP hres (vi i) hZ).trans ?_
+      refine mul_le_mul_of_nonneg_left ?_
+        (mul_nonneg (sq_nonneg _) (by rw [pow_mul]; exact pow_nonneg (sq_nonneg Z) d))
+      have h := cubeForm_cubeNuSolution_le hP hres (Pi.single i 1)
+      rw [hone i, one_pow, mul_one] at h
+      exact h
+    calc ∑ x ∈ crossingClusterVertices ω V,
+          (cubeExtend ω V v x - cubeExtend ω V v (partitionAnchor ω x)) ^ 2
+        ≤ ∑ x ∈ crossingClusterVertices ω V, (d : ℝ) * ∑ i, q i ^ 2 * D i x ^ 2 :=
+          Finset.sum_le_sum fun x _ => hpt x
+      _ = d * ∑ i, q i ^ 2 * ∑ x ∈ crossingClusterVertices ω V, D i x ^ 2 := by
+          rw [← Finset.mul_sum, Finset.sum_comm]
+          congr 1
+          exact Finset.sum_congr rfl fun i _ => by rw [Finset.mul_sum]
+      _ ≤ d * ∑ i, q i ^ 2 * (coarseErrorConst d ^ 2 * Z ^ (2 * d) *
+            (3 ^ d / 2 * V.latticeVolume)) := by
+          refine mul_le_mul_of_nonneg_left (Finset.sum_le_sum fun i _ => ?_) (by positivity)
+          exact mul_le_mul_of_nonneg_left (hEi i) (sq_nonneg _)
+      _ = d * (∑ i, q i ^ 2) * (coarseErrorConst d ^ 2 * Z ^ (2 * d) *
+            (3 ^ d / 2 * V.latticeVolume)) := by
+          rw [← Finset.sum_mul]; ring
+  exact componentBallL2_le_of_sums C (cubeExtend ω V v)
+    (fun x => cubeExtend ω V v (partitionAnchor ω x)) (crossingClusterVertices ω V) q c hκ'
+    (fun x hx => (hin x hx).1) hcard hF hG
+
 end Rigidity.Proofs.Regularity.GeneralDim
