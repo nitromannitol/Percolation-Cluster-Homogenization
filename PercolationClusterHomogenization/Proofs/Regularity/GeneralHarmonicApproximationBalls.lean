@@ -254,7 +254,7 @@ proof of Lemma 7.3, in dimension `d`). Let `f` be a function on `ℤᵈ` and `Γ
 such that, for `3^j ≥ X₀` and `L 3^{j + 3} ≤ R`,
 `inf_{w ∈ Ā(□_j)} ‖f - w‖_{L̲²(□_j)} ≤ C₁ 3^{-j α} Γ_{j + 3}` and
 `Γ_j ≤ inf_a ‖f - a‖_{L̲²(□_j)} + K 3^{-j} Γ_{j + 3}`, and `Γ_j ≤ (R / 3^j) B` for `3^j ≥ X₀`
-and `L 3^j ≤ R`. Then, for `L ≥ max(1, √d)`, `A ≥ 4374 L` and `X` above `X₀` and `cubeScale`,
+and `L 3^j ≤ R < 27 L 3^j`. Then, for `L ≥ max(1, √d)`, `A ≥ 4374 L` and `X` above `X₀` and `cubeScale`,
 `f` satisfies the harmonic approximation hypothesis of Lemma 7.2 on the balls of `ℤᵈ`, with the
 lattice harmonic functions, the exponent `α / 2` and `E = B / R`. -/
 theorem harmonicApproximation_of_cubes {A L C₁ K α X₀ X R B : ℝ} {f : Vertex d → ℝ}
@@ -265,7 +265,7 @@ theorem harmonicApproximation_of_cubes {A L C₁ K α X₀ X R B : ℝ} {f : Ver
       cubeHarmonicDist d m f ≤ C₁ / ((3 : ℝ) ^ m) ^ α * Γ (m + 3))
     (H2 : ∀ j : ℕ, X₀ ≤ 3 ^ j → L * 3 ^ (j + 3) ≤ R →
       Γ j ≤ cubeOsc d j f + K / 3 ^ j * Γ (j + 3))
-    (H3 : ∀ j : ℕ, X₀ ≤ 3 ^ j → L * 3 ^ j ≤ R → Γ j ≤ R / 3 ^ j * B) :
+    (H3 : ∀ j : ℕ, X₀ ≤ 3 ^ j → L * 3 ^ j ≤ R → R < 27 * L * 3 ^ j → Γ j ≤ R / 3 ^ j * B) :
     HarmonicApproximation (componentBallSeminorm (latticeComponent d) 0)
       (latticeHarmonicClass 0) (clusterConstants (latticeComponent d)) A (α / 2) X R (B / R)
       (fun x : latticeComponent d => f x.val) := by
@@ -368,7 +368,12 @@ theorem harmonicApproximation_of_cubes {A L C₁ K α X₀ X R B : ℝ} {f : Ver
     exact cubeOsc_le_of_slope hA0 hr0 (hm1.trans h3i) hRA h3iR hS0 hSs
   have hT1 := sum_squareIterCoeff_le_of_bound (D := fun i => cubeOsc d i f) hK hS0 (cubeSlopeConst_nonneg d hA0.le) hKm
     (fun k => cubeOsc_nonneg _ _) hD
+  have hRlt : R < 27 * L * 3 ^ (m + 3 + 3 * n) := by
+    have e : (3 : ℝ) ^ (m + 3 + 3 * (n + 1)) = 27 * 3 ^ (m + 3 + 3 * n) := by
+      rw [show m + 3 + 3 * (n + 1) = m + 3 + 3 * n + 3 by ring, pow_add]; ring
+    rw [e] at hnspec; linarith
   have hG := H3 (m + 3 + 3 * n) (hX₀m.trans (pow_le_pow_right₀ (by norm_num) (by omega))) hndom
+    hRlt
   have hT2 := squareIterCoeff_mul_top_le hK hL0 hB hR0 hn1 hKm hnspec hG
   -- assembling
   have hH1 := H1 m hX₀m (hPmono _ _ (by omega) hndom)
