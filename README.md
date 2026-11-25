@@ -32,10 +32,10 @@ table.
 | --- | --- | --- |
 | Theorem 1 | `Rigidity.Dirichlet.planarHomogenizationError_holds`, `Rigidity.Dirichlet.cubeHomogenizationError_holds` | `d = 2` for the planar partition, and every `d ≥ 2` for the partition into good cubes; every exponent `p' > 2`; the homogenized matrix is `σ I`, `σ > 0` |
 | Theorem 2 (iii), `k = 0` | `Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_holds`, `Rigidity.Proofs.Regularity.armstrongDarioOrderZero_holds` | `d = 2`, and every `d ≥ 2` (the input `LatticeProb.External.ArmstrongDarioOrderZero`) |
-| Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d`, from Lemma 7.3 at `k = 2` and the corrector estimates |
+| Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_correctorSublinear`, `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d ≥ 2`, from the sublinearity (1.18) of the correctors (Theorem 2 (ii) at `k = 1`) alone, Lemma 7.3 at `k = 2` being proved; or from Lemma 7.3 at `k = 2` and the corrector estimates |
 | Lemma 7.1 | `Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_holds`, `Rigidity.Proofs.Regularity.cubeHarmonicApproximation_holds` | `d = 2` for the planar partition, and every `d ≥ 2` for the partition into good cubes |
 | Lemma 7.2 | `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2` | every `d` and `k`, from its excess-decay and approximation hypotheses |
-| Lemma 7.3 | `Rigidity.Proofs.Regularity.armstrongDarioMesoscopicDegreeTwoPlanar_of_squareEstimates` | `d = 2`, `k = 2`, from the estimates on squares of the proof of Lemma 7.1 |
+| Lemma 7.3 | `Rigidity.Proofs.Regularity.armstrongDarioMesoscopicDegreeTwo_holds`, `Rigidity.Proofs.Regularity.armstrongDarioMesoscopicDegreeTwoPlanar_of_squareEstimates` | `k = 2`, every `d ≥ 2` for the partition into good cubes, with no hypothesis (`ArmstrongDarioMesoscopicDegreeTwo`); `d = 2` for the planar partition |
 | Proposition 2.1 | `Rigidity.Percolation.partition_estimates` | every `d`: the partition into good cubes and its moments |
 | Proposition 2.4 | `Rigidity.Percolation.exists_minimalScale` | every `d` |
 | Propositions 3.4, 3.8 | `Rigidity.Percolation.exists_partition_sum_rpow_le_of_sum_eq_zero`, `Rigidity.Proofs.Cluster.GeneralDim.meyersPartition_holds` | every `d`: the Sobolev inequality and the Meyers estimate on the cluster |
