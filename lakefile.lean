@@ -17,3 +17,9 @@ error. -/
 lean_lib PercolationClusterHomogenization where
   globs := #[.andSubmodules `PercolationClusterHomogenization]
   leanOptions := #[⟨`warningAsError, true⟩]
+
+/-- The comparator pairs `HomogenizationAudit/*/Challenge.lean`, `HomogenizationAudit/*/Solution.lean`.
+Not a default target: it builds only on demand (`lake build HomogenizationAudit`), so the ordinary
+build is unchanged; each challenge elaborates with its one intentional `sorry`. -/
+lean_lib HomogenizationAudit where
+  globs := #[.submodules `HomogenizationAudit]
