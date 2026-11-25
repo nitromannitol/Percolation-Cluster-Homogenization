@@ -831,3 +831,28 @@ report lists only `propext`, `Classical.choice` and `Quot.sound`.
 #print axioms Rigidity.Dirichlet.cubeMesoscopicConvergence_holds
 #print axioms Rigidity.Dirichlet.cubeHomogenizationError_of_inputs
 #print axioms Rigidity.Dirichlet.cubeHomogenizationError_holds
+
+-- Lemma 7.1 and Theorem 2 (iii) at k = 0 in every dimension (the partition into good cubes)
+#print axioms Rigidity.Proofs.Regularity.harmonicApproximation_of_cubes
+#print axioms Rigidity.Proofs.Regularity.exists_cubeOrderZeroDecay
+#print axioms Rigidity.Proofs.Regularity.cubeHarmonicApproximationAt_of_cubeEstimates
+#print axioms Rigidity.Proofs.Regularity.mem_supp_of_mem_crossingClusterVertices
+#print axioms Rigidity.Proofs.Regularity.mem_crossingClusterVertices_succ
+#print axioms Rigidity.Proofs.Regularity.cubeHarmonicApproximation_of_cubeEstimates
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderZero_of_cubeHarmonicApproximation
+#print axioms Rigidity.Proofs.Cluster.GeneralDim.cubeRegularityScales_holds
+#print axioms Rigidity.Proofs.Regularity.cubePartitionSizeScale_holds
+#print axioms Rigidity.Proofs.Regularity.coarseComparison_on_cube
+#print axioms Rigidity.Proofs.Regularity.cubeCoarseComparisonAS_holds
+#print axioms Rigidity.Proofs.Regularity.sum_sq_coarse_sub_mean_le_cube
+#print axioms Rigidity.Proofs.Regularity.cubeL2_coarse_sub_le
+#print axioms Rigidity.Proofs.Regularity.cubeCoarseBoundAS_holds
+#print axioms Rigidity.Proofs.Regularity.abs_grad_le_of_cubeInterior_cube
+#print axioms Rigidity.Proofs.Regularity.abs_sub_le_of_grad_le_cube
+#print axioms Rigidity.Proofs.Regularity.cubeGradNorm_le
+#print axioms Rigidity.Proofs.Regularity.sum_sq_coarse_sub_homogenized_le_cube
+#print axioms Rigidity.Proofs.Regularity.cubeHarmonicDist_le_of_theoremOne_cube
+#print axioms Rigidity.Proofs.Regularity.cubeHarmonicDistAS_holds
+#print axioms Rigidity.Proofs.Regularity.cubeEstimatesAS_holds
+#print axioms Rigidity.Proofs.Regularity.cubeHarmonicApproximation_holds
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderZero_holds

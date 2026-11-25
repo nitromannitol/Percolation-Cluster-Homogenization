@@ -1220,6 +1220,49 @@ Departures from Armstrong and Dario: those of the section on order-zero regulari
 Misprint in the source whose meaning is clear: AD18.tex:5137-5146 (the squares of (7.2)), as noted in the section on
 order-zero regularity above.
 
+## Lemma 7.1 and the order-zero regularity in every dimension from Theorem 1
+
+Lemma 7.1 of Armstrong and Dario, the harmonic approximation of the coarsening `[u]_𝒫` on the balls of the
+cluster, holds in every dimension `d ≥ 2` for `𝔭_c(d) < p < 1` with no hypothesis, for the partition into good
+cubes of `Rigidity.Percolation.partitionCube`, and so does the order-zero regularity of Theorem 2(iii) at
+`k = 0` in the form of the input `LatticeProb.External.ArmstrongDarioOrderZero`
+([`cubeHarmonicApproximation_holds`, `armstrongDarioOrderZero_holds`](PercolationClusterHomogenization/Proofs/Regularity/GeneralOrderZeroHolds.lean)).
+The proof is the one of the planar section above
+([Lemma 7.1 and the order-zero regularity in dimension two from Theorem 1](#lemma-71-and-the-order-zero-regularity-in-dimension-two-from-theorem-1)),
+on the triadic cubes `□_j` of `ℤᵈ`, from Theorem 1 in every dimension
+([Theorem 1 of Armstrong and Dario in every dimension](#theorem-1-of-armstrong-and-dario-in-every-dimension)),
+the minimal scales of Proposition 2.4 (`cubeMinimalScales_holds`, and `cubeRegularityScales_holds` for the
+cells of Definition 3.7 and the reach of the partition), the Meyers estimate on the reverse Hölder cells
+(`meyers_rh_uniform`), Lemmas 3.2 and 3.3 for the partition (`partition_sum_abs_sub_coarseAnchor_rpow_le`,
+`partition_sum_gradNormIn_coarseAnchor_rpow_le`), the Caccioppoli inequality on clusters and the density of
+the infinite cluster (Dario–Gu, Proposition A.1).
+
+| Lean declaration | Statement |
+| --- | --- |
+| [`CubeHarmonicApproximation`, `CubeHarmonicApproximationAt`, `partitionCoarse`](PercolationClusterHomogenization/Proofs/Regularity/GeneralHarmonicApproximation.lean) | AD Lemma 7.1 in dimension `d` in the form used for Lemma 7.3: the coarsening `[u]_𝒫(y) = u(z̄(𝒫(y)))` satisfies the harmonic approximation hypothesis of Lemma 7.2 on the balls of `ℤᵈ` with the lattice harmonic functions, the `L²` form of (7.8) and the bound of Step 2 with `w` constant, above a minimal scale `𝒳 ≤ O_s(θ)`. |
+| [`harmonicApproximation_of_cubes`](PercolationClusterHomogenization/Proofs/Regularity/GeneralHarmonicApproximationBalls.lean) | Step 4 of the proof of Lemma 7.1 and the passage from cubes to balls: for `2r ≤ 3^m < 6r`, `B_r ⊆ □_m` and `□_{m−d−2} ⊆ B_r`, with the factor `(3^{d+2})^{d/2}` between the normalized norms. |
+| [`exists_cubeOrderZeroDecay`](PercolationClusterHomogenization/Proofs/Regularity/GeneralOrderZero.lean) | the proof of Lemma 7.3 at `k = 0`: the order-zero decay with one constant above `A² max(X, M₀, c₁)`, from `CubeHarmonicApproximationAt` and `|C ∩ B_s| ≥ κ s^d`. |
+| [`cubeHarmonicApproximationAt_of_cubeEstimates`](PercolationClusterHomogenization/Proofs/Regularity/GeneralHarmonicApproximationCubes.lean), [`cubeHarmonicApproximation_of_cubeEstimates`](PercolationClusterHomogenization/Proofs/Regularity/GeneralHarmonicApproximationAS.lean) | Lemma 7.1 from the three estimates on cubes (`CubeEstimates`) and the inclusions `C_*(□_j) ⊆ 𝒞_∞`, `𝒞_∞ ∩ □_m ⊆ C_*(□_{m+1})` (`GeneralClusterInclusions`). |
+| [`cubeHarmonicDistAS_holds`](PercolationClusterHomogenization/Proofs/Regularity/GeneralHarmonicDistAS.lean) | AD (7.7) on the cubes above a minimal scale: `inf_{w ∈ Ā(□_j)} ‖[u]_𝒫 − w‖_{L̲²(□_j)} ≤ C 3^{−jβ/2} Γ_{j+3}`, `β = min(α, 1)/(2d)`, with `w = u_hom` of Theorem 1 on `□_{j+1}`, its gradient bounded by the interior estimate for the lattice Laplacian (`abs_grad_le_of_cubeInterior_cube`), and the gradient norm of Theorem 1 by the Meyers and Caccioppoli inequalities (`cubeGradNorm_le`). |
+| [`cubeCoarseComparisonAS_holds`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCoarseComparisonAS.lean), [`coarseComparison_on_cube`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCoarseComparison.lean) | AD (7.8) in the `L²` form on the cubes above a minimal scale, from Lemma 3.2 with the reach scales, the Hölder inequality, the Meyers estimate and the Caccioppoli inequality. |
+| [`cubeCoarseBoundAS_holds`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCoarseBoundAS.lean), [`sum_sq_coarse_sub_mean_le_cube`, `cubeL2_coarse_sub_le`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCoarseBound.lean) | the bound of Step 2 for a constant `w = a`, by the Poincaré inequality on `□_j`, Lemma 3.3 with the weights `size(□_𝒫)^{2d−1}`, the Meyers and Caccioppoli inequalities, and the averaging over `C_*(□_j)`. |
+| [`cubeEstimatesAS_holds`](PercolationClusterHomogenization/Proofs/Regularity/GeneralOrderZeroHolds.lean) | the three estimates combined with `L = 3√d` and one minimal scale. |
+| [`armstrongDarioOrderZero_of_cubeHarmonicApproximation`](PercolationClusterHomogenization/Proofs/Regularity/GeneralOrderZeroInput.lean), [`armstrongDarioOrderZero_holds`](PercolationClusterHomogenization/Proofs/Regularity/GeneralOrderZeroHolds.lean) | AD Theorem 2(iii) at `k = 0` in every dimension (`LatticeProb.External.ArmstrongDarioOrderZero`), through `ArmstrongDarioOrderZeroDecay` and the Liouville argument `armstrongDarioOrderZero_of_decay`. |
+
+Departures from Armstrong and Dario: those of the planar section (the lattice route, with `Ā` the lattice
+harmonic functions and the discrete `u_hom` of Theorem 1; one minimal scale; the `L²` form of (7.8)), and the
+following.
+
+- **Dimensional constants.** The normalized norms on balls and cubes are compared with the factors
+  `(3^m/3^j)^{d/2}`, `((2s+3)/3^j)^{d/2}` and `5^d`; the ball `B_r` contains `□_{m−d−2}` (the cube `□_j` lies in
+  the ball of radius `√d 3^j/2`); the domain condition is `3√d 3^{j+3} ≤ R`.
+- **The rate in (7.7).** The sides of the partition cubes on `□_{j+1}` are bounded by `(3^{j+1})^β`,
+  `β = min(α, 1)/(2d)` (Proposition 2.4 with `t = d/β − d`), and the interior gradient bound for `u_hom` uses
+  cubes of side `3^{j−2−d}`; the rate of (7.7) is `3^{−jβ/2}`, and the exponent of the harmonic
+  approximation hypothesis of Lemma 7.2 obtained from it on balls is `β/4`.
+- **Step 2.** Lemma 3.3 is used in the form proved for the partition, with the weights `size(□_𝒫(z))^{2d−1}`
+  and the moments of the sizes of Proposition 2.4, in place of the pair reach scales of the planar proof.
+
 ## Regularity of order one at the origin from the mesoscopic estimate
 
 `Rigidity.External.ArmstrongDarioOrderOneOrigin` (Theorem 2.4, part (iii) at `k = 1`; AD Theorem 2(iii)
