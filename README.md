@@ -30,7 +30,7 @@ table.
 | Armstrong and Dario | Lean declaration | Form |
 | --- | --- | --- |
 | Theorem 1 | `Rigidity.Dirichlet.planarHomogenizationError_holds`, `Rigidity.Dirichlet.cubeHomogenizationError_holds` | `d = 2` for the planar partition, and every `d ≥ 2` for the partition into good cubes; every exponent `p' > 2`; the homogenized matrix is `σ I`, `σ > 0` |
-| Theorem 2 (iii), `k = 0` | `Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_holds`, `Rigidity.Proofs.Regularity.armstrongDarioOrderZero_holds` | `d = 2` for the planar partition, and every `d ≥ 2` (the input `LatticeProb.External.ArmstrongDarioOrderZero`) for the partition into good cubes |
+| Theorem 2 (iii), `k = 0` | `Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_holds`, `Rigidity.Proofs.Regularity.armstrongDarioOrderZero_holds` | `d = 2`, and every `d ≥ 2` (the input `LatticeProb.External.ArmstrongDarioOrderZero`) |
 | Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d`, from Lemma 7.3 at `k = 2` and the corrector estimates |
 | Lemma 7.1 | `Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_holds`, `Rigidity.Proofs.Regularity.cubeHarmonicApproximation_holds` | `d = 2` for the planar partition, and every `d ≥ 2` for the partition into good cubes |
 | Lemma 7.2 | `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2` | every `d` and `k`, from its excess-decay and approximation hypotheses |
@@ -62,7 +62,9 @@ well-connectedness of cubes, the rectangle crossings of Kesten (*Percolation The
 Mathematicians*, Theorem 11.1), the concentration of the density of the infinite cluster (Dario and
 Gu, Proposition A.1, which is also proved, as `Rigidity.Proofs.S2.cluster_density_concentration`),
 the corrector estimate of Dario and Gu (Proposition 2.12) and Theorem 2 (iii) of Armstrong and
-Dario in the forms in which Percolation-Rigidity quotes them. The theorems of the table above take
+Dario in the forms in which Percolation-Rigidity quotes them. The form of Theorem 2 (iii) at `k = 0` in every
+dimension, `LatticeProb.External.ArmstrongDarioOrderZero`, is also proved, as
+`Rigidity.Proofs.Regularity.armstrongDarioOrderZero_holds`. The theorems of the table above take
 none of them unless the table says so.
 
 ## Guarantees

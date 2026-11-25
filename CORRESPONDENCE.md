@@ -32,7 +32,7 @@ is [`Audit/Axioms.lean`](Audit/Axioms.lean).
 | AD | Lean declaration | Form |
 | --- | --- | --- |
 | Theorem 1 | `Rigidity.Dirichlet.planarHomogenizationError_holds`; `Rigidity.Dirichlet.cubeHomogenizationError_holds` | `d = 2` for the planar partition; every `d ≥ 2` for the partition into good cubes; every exponent `p' > 2`, no hypothesis; the homogenized matrix is `σ I` |
-| Theorem 2 (iii), `k = 0` | `Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_holds` | `d = 2`, no hypothesis |
+| Theorem 2 (iii), `k = 0` | `Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_holds`; `Rigidity.Proofs.Regularity.armstrongDarioOrderZero_holds` | `d = 2`; every `d ≥ 2` (the input `LatticeProb.External.ArmstrongDarioOrderZero`); no hypothesis |
 | Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d`, from Lemma 7.3 at `k = 2` and the corrector inputs |
 | Theorem 2 (ii), `k = 1` | `Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_sublinearL2Ae` | `d = 2`, the corrected planes from the sublinearity (1.18) |
 | Proposition 2.1 | `Rigidity.Percolation.partition_estimates`, `Rigidity.Percolation.partition_estimates_general` | every `d`; the partition into good cubes, and for any family of good cubes with stretched exponential failure bounds |
@@ -63,9 +63,9 @@ is [`Audit/Axioms.lean`](Audit/Axioms.lean).
 | Lemma 5.11 | `Rigidity.Percolation.exists_cubeOmega_isOsBond`, `Rigidity.Percolation.exists_cubeRho_tail` | every `d`, in the `O_s` form with `s = 1/(2d − 1)` and in tail form |
 | Definition 5.12, Proposition 5.13 | `Rigidity.Percolation.exists_cubeBoundN` | every `d` |
 | Proposition 6.1, Lemmas 6.2 to 6.4 | `Rigidity.Dirichlet.sum_sq_sub_le_of_inner_energy_chain`, `Rigidity.Dirichlet.innerEdgeEnergy_dirichletSolution_div_le_of_coarse`; `Rigidity.Dirichlet.cube_sum_sq_sub_uhom_le`, `Rigidity.Dirichlet.cube_lemmaSixTwo`, `Rigidity.Dirichlet.cube_lemmaSixThree`, `Rigidity.Dirichlet.cube_sum_abs_grad_boundaryInterpolation_rpow_div_le` | every `d`, deterministic steps on the lattice; every `d ≥ 2` on the cluster of the partition into good cubes |
-| Lemma 7.1 | `Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_holds` | `d = 2`, no hypothesis |
+| Lemma 7.1 | `Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_holds`; `Rigidity.Proofs.Regularity.cubeHarmonicApproximation_holds` | `d = 2` for the planar partition; every `d ≥ 2` for the partition into good cubes; no hypothesis |
 | Lemma 7.2 | `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2` | every `k`, with its excess-decay and approximation hypotheses |
-| Lemma 7.3 | `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_zero_planar`, `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_one_planar`, `Rigidity.Proofs.Regularity.armstrongDarioMesoscopicDegreeTwoPlanar_of_squareEstimates` | `d = 2`, `k = 0, 1, 2` |
+| Lemma 7.3 | `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_zero_planar`, `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_one_planar`, `Rigidity.Proofs.Regularity.armstrongDarioMesoscopicDegreeTwoPlanar_of_squareEstimates`; `Rigidity.Proofs.Regularity.exists_cubeOrderZeroDecay` | `d = 2`, `k = 0, 1, 2`; every `d ≥ 2`, `k = 0` |
 | Proposition A.2 | `Rigidity.Proofs.Multiscale.multiscalePoincare_holds`, `Rigidity.Proofs.Multiscale.exists_multiscalePoincare_affine` | every `d` |
 
 The percolation results that these proofs use are proved as well: the concentration of the density
@@ -1262,6 +1262,9 @@ following.
   approximation hypothesis of Lemma 7.2 obtained from it on balls is `β/4`.
 - **Step 2.** Lemma 3.3 is used in the form proved for the partition, with the weights `size(□_𝒫(z))^{2d−1}`
   and the moments of the sizes of Proposition 2.4, in place of the pair reach scales of the planar proof.
+
+The twenty-three reports for the declarations of this section are in
+[`Audit/Axioms.lean`](Audit/Axioms.lean).
 
 ## Regularity of order one at the origin from the mesoscopic estimate
 
