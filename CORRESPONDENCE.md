@@ -31,7 +31,7 @@ is [`Audit/Axioms.lean`](Audit/Axioms.lean).
 
 | AD | Lean declaration | Form |
 | --- | --- | --- |
-| Theorem 1 | `Rigidity.Dirichlet.planarHomogenizationError_holds` | `d = 2`, every exponent `p' > 2`, no hypothesis; the homogenized matrix is `σ I` |
+| Theorem 1 | `Rigidity.Dirichlet.planarHomogenizationError_holds`; `Rigidity.Dirichlet.cubeHomogenizationError_holds` | `d = 2` for the planar partition; every `d ≥ 2` for the partition into good cubes; every exponent `p' > 2`, no hypothesis; the homogenized matrix is `σ I` |
 | Theorem 2 (iii), `k = 0` | `Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_holds` | `d = 2`, no hypothesis |
 | Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d`, from Lemma 7.3 at `k = 2` and the corrector inputs |
 | Theorem 2 (ii), `k = 1` | `Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_sublinearL2Ae` | `d = 2`, the corrected planes from the sublinearity (1.18) |
@@ -62,7 +62,7 @@ is [`Audit/Axioms.lean`](Audit/Axioms.lean).
 | Lemma 5.10 | `Rigidity.Percolation.exists_le_mul_pow_of_omega_iteration`, `Rigidity.Percolation.exists_planarOmegaD_le_pow_of_decay`, `Rigidity.Percolation.exists_cubeOmegaD_le_pow`, `Rigidity.Percolation.exists_abs_cubeAhomInvLimit_sub_le_pow`, `Rigidity.Percolation.cubeAhomInvLimit_eq` | for real sequences, for `D_n` in `d = 2`, and in every `d` |
 | Lemma 5.11 | `Rigidity.Percolation.exists_cubeOmega_isOsBond`, `Rigidity.Percolation.exists_cubeRho_tail` | every `d`, in the `O_s` form with `s = 1/(2d − 1)` and in tail form |
 | Definition 5.12, Proposition 5.13 | `Rigidity.Percolation.exists_cubeBoundN` | every `d` |
-| Proposition 6.1, Lemmas 6.2 to 6.4 | `Rigidity.Dirichlet.sum_sq_sub_le_of_inner_energy_chain`, `Rigidity.Dirichlet.innerEdgeEnergy_dirichletSolution_div_le_of_coarse` | every `d`, deterministic steps on the lattice |
+| Proposition 6.1, Lemmas 6.2 to 6.4 | `Rigidity.Dirichlet.sum_sq_sub_le_of_inner_energy_chain`, `Rigidity.Dirichlet.innerEdgeEnergy_dirichletSolution_div_le_of_coarse`; `Rigidity.Dirichlet.cube_sum_sq_sub_uhom_le`, `Rigidity.Dirichlet.cube_lemmaSixTwo`, `Rigidity.Dirichlet.cube_lemmaSixThree`, `Rigidity.Dirichlet.cube_sum_abs_grad_boundaryInterpolation_rpow_div_le` | every `d`, deterministic steps on the lattice; every `d ≥ 2` on the cluster of the partition into good cubes |
 | Lemma 7.1 | `Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_holds` | `d = 2`, no hypothesis |
 | Lemma 7.2 | `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2` | every `k`, with its excess-decay and approximation hypotheses |
 | Lemma 7.3 | `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_zero_planar`, `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_one_planar`, `Rigidity.Proofs.Regularity.armstrongDarioMesoscopicDegreeTwoPlanar_of_squareEstimates` | `d = 2`, `k = 0, 1, 2` |
@@ -1135,6 +1135,46 @@ Departures from Armstrong and Dario:
 
 Misprint in the source whose meaning is clear: the display (1.14) at AD18.tex:446 (`e.homogbnd`) prints on the right
 side the mean of `|∇u 1_{𝐚≠0}|^p`, which is not homogeneous in `u` while the left side is quadratic.
+
+## Theorem 1 of Armstrong and Dario in every dimension
+
+Theorem 1 of Armstrong and Dario is proved in every dimension `d ≥ 2`, for every `𝔭_c(d) < p < 1` and
+every exponent `p' > 2`, for the partition into good cubes, with no further hypothesis
+([`Rigidity.Dirichlet.cubeHomogenizationError_holds`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralScaleForms.lean)),
+in the form `CubeHomogenizationError d p p'`
+([`GeneralStatements.lean`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralStatements.lean)), the
+statement of the planar section above with `|□_m| = 3^{dm}`. The proof is the chain of Section 6 on the cluster of the
+partition into good cubes, assembled as in dimension two, with the inputs of Section 5 and Section 2 in every
+dimension: Proposition 5.13 on the triadic subcubes of scale `⌈m/8⌉` (`cubeMesoscopicConvergence_holds`, from
+`exists_cubeBoundN_general_of_decay` and Lemma 5.9) and both bounds of (2.13) (`cubeMinimalScales_holds`, from
+`exists_minimalScale`).
+
+| Lean declaration | Statement |
+| --- | --- |
+| [`Rigidity.Dirichlet.cubeMu_le_test`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralMuTest.lean), [`cubeForm_le_sum_cubeEnergy`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralClusterEdges.lean), [`card_sdiff_crossingClusterVertices_le`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralClusterTiles.lean) | the `μ` test of display (6.9) on a resolved subcube, the cluster of a cube as a conductance on the lattice edges, and the vertices of `C_*(□_m)` in a resolved tile outside the cluster of the tile, in a boundary layer of width `3^{k+1} + 1`. |
+| [`exists_cube_sum_sq_le_of_eq_zero`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralPoincareZero.lean) | Proposition 3.4 with `s = 2` for functions vanishing off the vertices of `C_*(U)` whose lattice neighbours lie in `U`, with the size of the partition cubes entering through their maximum `3^k`. |
+| [`cube_sum_abs_grad_boundaryInterpolation_rpow_div_le`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralInterpolation.lean), [`sum_three_pow_reachScale_partition_rpow_le`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralInterpolation.lean), [`sum_abs_grad_cubeDatum_rpow_div_le`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralDatumBounds.lean) | Lemma 6.4 (iii) for the partition into good cubes, the moments of the reach scales by those of the partition sizes, and the bound of the datum under the moment bounds of (2.13). |
+| [`cube_lemmaSixTwo`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralLemmaSixTwo.lean), [`cube_lemmaSixThree`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralLemmaSixThree.lean), [`innerEdgeEnergy_cubeTilePatch_le`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralTilePatch.lean), [`sum_sq_cubeTilePatch_sub_le`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralTilePatch.lean) | Lemma 6.2 and Lemma 6.3 (ii) on the cluster, with the patch of the maximizers of `ν` on the tiles and its `L²` distance to the affine approximations. |
+| [`cube_sum_sq_sub_uhom_le`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralPropSixOne.lean), [`cube_error_chain`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralErrorChain.lean), [`cube_chain_le`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralChainBound.lean) | Proposition 6.1 from Lemmas 6.2 and 6.3, the error chain with explicit errors, and its bound `B Λ^{6d} L^{d+2} M² K^{-c₀}`. |
+| [`cubeMinimalScales_holds`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralScaleForms.lean), [`cubeMesoscopicConvergence_holds`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralScaleForms.lean), [`cubeHomogenizationError_of_inputs`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralTheoremOne.lean), [`cubeHomogenizationError_holds`](PercolationClusterHomogenization/Proofs/Dirichlet/GeneralScaleForms.lean) | the two inputs, and Theorem 1 in every dimension from them and then with no hypothesis. |
+
+The eighteen reports for the declarations of this section are in
+[`Audit/Axioms.lean`](Audit/Axioms.lean).
+
+Departures from Armstrong and Dario, besides those of the planar section above:
+
+- **Harmonicity at the lattice interior.** `u` is harmonic on `C_*(□_m)` at the vertices whose lattice neighbours lie in
+  `□_m` (`cubeHarmonic`), the interior of AD, Section 1.2; the planar statement asks it at the vertices whose square of
+  side three lies in `□_m`.
+- **Proposition 3.4 for functions vanishing on the boundary.** The mean-zero Sobolev inequality of exponent
+  `t = 2d/(d + 2)` is combined with the power-mean inequality `(Σ G^t)^{2/t} ≤ |C|^{2/d} Σ G²`, which gives the factor
+  `(3^{scale+1})²` of the Poincaré inequality; in dimension two `t = 1` and the planar proof uses Cauchy–Schwarz.
+- **The rate.** The constants of the chain grow like `Λ^{6d}`, `Λ = 3^{k₀}`, so the scale of the partition cubes is
+  taken as `k₀ = ⌊c₀ (m + 1)/(96 d)⌋` (from the minimal scales with the exponent `96 d²/c₀`); the rate is `α' = c₀/32`
+  as in dimension two.
+- **Shared lattice lemmas.** The lattice lemmas of the planar proof that do not involve the cluster (the triadic grid
+  and the tiles, the faces of the tiles, the block of Lemma 6.3, the sums of the increments of the datum, the
+  homogenized solution for `σ I`) are stated in every dimension and used by both proofs.
 
 ## Lemma 7.1 and the order-zero regularity in dimension two from Theorem 1
 

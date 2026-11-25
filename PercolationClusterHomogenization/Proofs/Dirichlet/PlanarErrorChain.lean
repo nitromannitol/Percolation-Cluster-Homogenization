@@ -1,4 +1,5 @@
 import PercolationClusterHomogenization.Proofs.Dirichlet.PlanarBlockGeometry
+import PercolationClusterHomogenization.Proofs.Dirichlet.ChainSums
 
 /-!
 # The error chain of Section 6 in dimension two
@@ -19,35 +20,6 @@ open scoped Classical
 namespace Rigidity.Dirichlet
 
 variable {ω : Configuration 2}
-
-/-- The sum of the squared increments of `w` over the edges inside `Q`. -/
-noncomputable def innerSqSum (Q : IntegerCube 2) (w : Vertex 2 → ℝ) : ℝ :=
-  ∑ y ∈ Q.vertices, ∑ j : Fin 2, (if y + unit j ∈ Q.vertices then (w (y + unit j) - w y) ^ 2 else 0)
-
-/-- The sum of the `t`-th powers of the increments of `w` over the edges inside `Q`. -/
-noncomputable def innerRpowSum (Q : IntegerCube 2) (w : Vertex 2 → ℝ) (t : ℝ) : ℝ :=
-  ∑ y ∈ Q.vertices, ∑ j : Fin 2,
-    (if y + unit j ∈ Q.vertices then |w (y + unit j) - w y| ^ t else 0)
-
-theorem innerSqSum_nonneg (Q : IntegerCube 2) (w : Vertex 2 → ℝ) : 0 ≤ innerSqSum Q w :=
-  Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => by split_ifs <;> positivity
-
-theorem innerRpowSum_nonneg (Q : IntegerCube 2) (w : Vertex 2 → ℝ) (t : ℝ) :
-    0 ≤ innerRpowSum Q w t :=
-  Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => by split_ifs <;> positivity
-
-/-- The homogenized solution has at most the energy of its datum on the edges inside `Q`. -/
-theorem innerSqSum_dirichletSolution_le {σ : ℝ} (hσ : 0 < σ) (Q : IntegerCube 2)
-    (w : Vertex 2 → ℝ) :
-    innerSqSum Q (dirichletSolution (constCond fun _ => σ) (cubeInterior Q) w) ≤
-      innerSqSum Q w := by
-  have := sum_sq_inner_grad_dirichletSolution_le (d := 2) (by norm_num) (fun _ => σ) hσ
-    (fun _ => ⟨le_rfl, le_rfl⟩) Q w
-  rwa [div_self hσ.ne', one_mul] at this
-
-theorem origin_vertices_subset_succ' (m : ℕ) :
-    (⟨m, 0⟩ : TriadicCube 2).vertices ⊆ (⟨m + 1, 0⟩ : TriadicCube 2).vertices :=
-  (⟨m, 0⟩ : TriadicCube 2).vertices_subset_parent
 
 /-- The Poincaré constant of `□_m` in the error chain. -/
 noncomputable def chainP (K₀ : ℝ) (m k₀ : ℕ) : ℝ :=
@@ -98,16 +70,6 @@ noncomputable def chainDeltaThree (σ K₀ C₃ : ℝ) (k k₀ : ℕ) (S2 : ℝ)
   2 * (chainPT K₀ k k₀ * (4 * S2)) +
     2 * (C₃ * ((3 ^ k : ℕ) : ℝ) ^ 4 / (((3 ^ (4 * k) : ℕ) : ℝ)) ^ 2 * (σ / σ * S2))
 
-theorem le_add_mul_of_div_le {a b c L : ℝ} (hL : 0 < L) (h : a / L ≤ b / L + c) :
-    a ≤ b + L * c := by
-  rw [div_le_iff₀ hL, add_mul, div_mul_cancel₀ _ hL.ne'] at h
-  linarith
-
-theorem le_add_add_mul_of_div_le {a b c d L : ℝ} (hL : 0 < L) (h : a / L ≤ b / L + c / L + d) :
-    a ≤ b + (c + L * d) := by
-  rw [div_le_iff₀ hL, add_mul, add_mul, div_mul_cancel₀ _ hL.ne', div_mul_cancel₀ _ hL.ne'] at h
-  linarith
-
 /-- **The error chain of Section 6 in dimension two.** -/
 theorem planar_error_chain {σ : ℝ} (hσ : 0 < σ) :
     ∃ K₀ C₃ CA : ℝ, 0 ≤ K₀ ∧ 0 ≤ C₃ ∧ 0 ≤ CA ∧
@@ -140,8 +102,8 @@ theorem planar_error_chain {σ : ℝ} (hσ : 0 < σ) :
   obtain ⟨CA, hCA, hA⟩ := exists_sum_tiles_sq_dirichletSolution_sub_le hσ
   refine ⟨K₀, C₃, CA, hK₀0, hC₃, hCA, ?_⟩
   intro ω hP m k k₀ hk₀k hbig hk₀ hU ε hε0 hμ hν γ t hγ0 hγ ht hγt u hu
-  obtain ⟨hsub, hT1, hT2⟩ := blockGeometry (m := m) (k := k) (r := 3 ^ (4 * k)) hbig
-  have hdiv := blockCorner_dvd m k (3 ^ (4 * k))
+  obtain ⟨hsub, hT1, hT2⟩ := blockGeometry (d := 2) (m := m) (k := k) (r := 3 ^ (4 * k)) hbig
+  have hdiv := blockCorner_dvd (d := 2) m k (3 ^ (4 * k))
   have hkm : k + 1 ≤ m := by
     have h1 : 3 ^ (k + 1) ≤ 3 ^ m := by
       have : 3 ^ (k + 1) ≤ 2 * (3 ^ (4 * k) + 3) + 3 * 3 ^ k := by
@@ -178,7 +140,8 @@ theorem planar_error_chain {σ : ℝ} (hσ : 0 < σ) :
     (by positivity) hdiv (blockCount m k (3 ^ (4 * k))) hsub hT1 hT2 (by positivity) hγ0 hγ ht hγt
   rw [hsz] at h63
   have h63' := le_add_add_mul_of_div_le hV h63
-  have hS2uh := innerSqSum_dirichletSolution_le hσ (⟨m, 0⟩ : TriadicCube 2).toIntegerCube
+  have hS2uh := innerSqSum_dirichletSolution_le (by norm_num) hσ
+    (⟨m, 0⟩ : TriadicCube 2).toIntegerCube
     (planarDatum hP m hU u)
   have htile := sum_tileError_le hP hU hkU hε0 hν hdiv
     (dirichletSolution (constCond fun _ => σ)

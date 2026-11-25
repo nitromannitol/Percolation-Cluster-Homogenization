@@ -12,8 +12,8 @@ partition cubes of the vertices of `U' \ U`, hence at least `(3^d − 1) 3^{d(sc
 (Armstrong and Dario, Proposition 3.4, `s = 2`, `t = 2d/(d + 2)`,
 `exists_partition_sum_rpow_le_of_sum_eq_zero`) applied to `f − f̄`, the bound `3^{ρ} ≤ 3^k` of the
 reach scales and the power-mean inequality `(Σ G^t)^{2/t} ≤ |C|^{2/d} Σ G²` give
-`Σ_{C_*(U)} f² ≤ (1 + 3^d/(3^d − 1) 3^{dk}) K (3^k)^{2d} (3^{scale(U)+1})² Σ_{open edges of C_*(U)} (∇f)²`
-(`exists_cube_sum_sq_le_of_eq_zero`). This is Proposition 3.4 of the source with `s = 2` for
+`Σ_{C_*(U)} f² ≤ (1 + 3^d/(3^d − 1) 3^{dk}) K (3^k)^{2d} (3^{scale(U)+1})² Σ (∇f)²`, the sum over
+the open edges of `C_*(U)` (`exists_cube_sum_sq_le_of_eq_zero`). This is Proposition 3.4 of the source with `s = 2` for
 functions vanishing on the boundary, as used in the proofs of Lemma 6.3 and Proposition 6.1, with
 the size of the partition cubes entering through their maximum, in every dimension; the planar
 form is `exists_planar_sum_sq_le_of_eq_zero`.
@@ -262,7 +262,8 @@ theorem rpow_sum_weight_le (hd : 2 ≤ d) {C : Finset (Vertex d)} (hC : C.Nonemp
 `d ≥ 2`. There is `K` such that, if all partition cubes of the vertices of the parent of a triadic
 cube `U` have scale at most `k ≤ scale(U)` and `f` vanishes off the vertices of `C_*(U)` whose
 lattice neighbours lie in `U`, then
-`Σ_{C_*(U)} f² ≤ (1 + 3^d/(3^d − 1) 3^{dk}) K (3^k)^{2d} (3^{scale(U)+1})² Σ_{open edges of C_*(U)} (∇f)²`.
+`Σ_{C_*(U)} f² ≤ (1 + 3^d/(3^d − 1) 3^{dk}) K (3^k)^{2d} (3^{scale(U)+1})² Σ (∇f)²`, the sum over
+the open edges of `C_*(U)`.
 The source states Proposition 3.4 with the moments of the sizes of the partition cubes; here they
 enter through their maximum `3^k`. -/
 theorem exists_cube_sum_sq_le_of_eq_zero (hd : 2 ≤ d) :
@@ -290,7 +291,8 @@ theorem exists_cube_sum_sq_le_of_eq_zero (hd : 2 ≤ d) :
   set U' : TriadicCube d := U.parent
   have hUU' : U.vertices ⊆ U'.vertices := U.vertices_subset_parent
   have hsc : U.scale ≤ U'.scale := by change U.scale ≤ U.scale + 1; omega
-  have hU' : PartitionResolved ω U' := fun z hz => (hk z hz).trans (by change k ≤ U.scale + 1; omega)
+  have hU' : PartitionResolved ω U' := fun z hz =>
+    (hk z hz).trans (by change k ≤ U.scale + 1; omega)
   have hU : PartitionResolved ω U := fun z hz => (hk z (hUU' hz)).trans hkm
   set C := crossingClusterVertices ω U'
   set C₀ := crossingClusterVertices ω U

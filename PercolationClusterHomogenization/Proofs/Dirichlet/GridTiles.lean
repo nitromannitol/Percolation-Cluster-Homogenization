@@ -11,8 +11,9 @@ coordinate, and `gridTile k z i` the triadic cube of scale `k` with corner `z + 
 translate `x + □` of side `3^n ≥ 3^k` away from the boundary of `□_m`, the `(3^{n−k} − 1)^d` tiles
 after the grid corner lie in the translate and in the interior of `□_m`
 (`gridTile_vertices_subset`). Every vertex lies in exactly one tile of a grid (`tileIdx`), and the
-affine approximation `cubeAffine` of a function on a tile has constant increments. These are the tiles of the `μ` test in the proof of Lemma 6.2 of
-Armstrong and Dario, and of the patch of the maximizers of `ν` in the proof of Lemma 6.3.
+affine approximation `cubeAffine` of a function on a tile has constant increments. These are the
+tiles of the `μ` test in the proof of Lemma 6.2 of Armstrong and Dario, and of the patch of the
+maximizers of `ν` in the proof of Lemma 6.3.
 -/
 
 open Finset LatticeProb LatticeHC LatticeProb.Percolation Rigidity.Percolation
@@ -108,7 +109,8 @@ theorem gridTile_vertices_subset {m n k r : ℕ} (hkn : k ≤ n) {x i : Vertex d
     have := triadicGridCorner_spec k x t
     push_cast
     exact ⟨this.1, this.2.1⟩
-  have hsub : (gridTile k (triadicGridCorner k x) i).vertices ⊆ (cornerCube x (3 ^ n)).vertices := by
+  have hsub : (gridTile k (triadicGridCorner k x) i).vertices ⊆
+      (cornerCube x (3 ^ n)).vertices := by
     intro y hy
     rw [← TriadicCube.mem_toIntegerCube_vertices,
       gridTile_toIntegerCube (fun t => (triadicGridCorner_spec k x t).2.2)] at hy

@@ -15,7 +15,8 @@ grid of scale `k` after `x` form a block of `M^d` tiles on which `u` is tested i
 (`cubeMu_le_test`), and `exists_mu_test_of_subcubes` gives the `μ` test of the lattice Lemma 6.2
 at `x` (`innerEdgeEnergy_dirichletSolution_div_le_of_mu_test`), with the errors summed by
 `sum_subcube_errors_le`:
-`L^{-d} E_ā(u_hom) ≤ L^{-d} E(u) + 2 (ε σ² + σ β/2 + σ γ + σ N^{-1/2}) L^{-d} Σ |∇w̃|² + (layer term)`
+`L^{-d} E_ā(u_hom) ≤ L^{-d} E(u) + 2 (ε σ² + σ β/2 + σ γ + σ N^{-1/2}) L^{-d} Σ |∇w̃|²`
+`+ (layer term)`
 (`cube_lemmaSixTwo`). This is Lemma 6.2 of the source, in every dimension, with the discrete
 homogenized solution and the triadic tiles in place of the translates of `□_n`; the planar form is
 `planar_lemmaSixTwo`.

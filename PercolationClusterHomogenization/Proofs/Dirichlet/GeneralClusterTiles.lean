@@ -12,8 +12,8 @@ of `□_𝒫(x)` and the cube of side `2s − 1` around `x`, `s = 3^{s(x)}`
 (`mem_crossingClusterVertices_of_far`). So the vertices of `C_*(U) ∩ T` outside `C_*(T)` lie in
 the boundary layer of `T` of width `3^{k+1} + 1` when all partition cubes have scale at most `k`
 (`sdiff_crossingClusterVertices_subset_cubeLayer`), and there are at most
-`2d (3^{k+1} + 1) side(T)^{d−1}` of them (`card_sdiff_crossingClusterVertices_le`). This is the bound
-`|(C_*(□_m) ∩ (y + □_n)) \ C_*(y + □_n)| ≤ |∂_𝒫(y + □_n)|` in Step 1 of the proof of Armstrong and
+`2d (3^{k+1} + 1) side(T)^{d−1}` of them (`card_sdiff_crossingClusterVertices_le`). This is the
+bound `|(C_*(□_m) ∩ (y + □_n)) \ C_*(y + □_n)| ≤ |∂_𝒫(y + □_n)|` in Step 1 of the proof of Armstrong and
 Dario, Lemma 6.3, in every dimension; the planar form, for the cluster of the planar partition, is
 `card_sdiff_clusterVertices_le`.
 -/

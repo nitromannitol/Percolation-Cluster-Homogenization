@@ -10,7 +10,8 @@ Lattice estimates on `ℤᵈ` used to bound the error terms of Lemmas 6.2 and 6.
   `Σ_i Σ_{tile} (u_h − ℓ_i)² ≤ C N⁴ r⁻² Σ_{edges in Q} |∇w̃|²`
   (`cube_exists_sum_tiles_sq_dirichletSolution_sub_le`, from the interior second differences);
 * the energy of the datum in a boundary layer of width `ℓ`, by Hölder's inequality:
-  `L^{-d} Σ_{layer} σ |∇w̃|² ≤ σ (2dℓ/L)^{1-2/t} (d^{t/2-1} 𝔅_t)^{2/t}` (`cube_layer_energy_div_le`);
+  `L^{-d} Σ_{layer} σ |∇w̃|² ≤ σ (2dℓ/L)^{1-2/t} (d^{t/2-1} 𝔅_t)^{2/t}`
+  (`cube_layer_energy_div_le`);
 * the Hardy term: `(L^{-d} Σ_Q |∇w̃|^t)^{2/t} ≤ (d^{t/2-1} 𝔅_t)^{2/t}` (`cube_hardy_term_le`).
 
 These are the forms in every dimension of `exists_sum_tiles_sq_dirichletSolution_sub_le`,

@@ -786,6 +786,25 @@ groups = {
          'Rigidity.Percolation.vcrossing_iff_of_flip',
          'Rigidity.Percolation.planarMesh_iff_of_flip',
          'Rigidity.Percolation.meshedFlipBound_of_flip'],
+    'Theorem 1 of Armstrong and Dario in every dimension (Section 6: Lemmas 6.2 to 6.4 and Proposition 6.1)':
+        ['Rigidity.Dirichlet.cubeForm_le_sum_cubeEnergy',
+         'Rigidity.Dirichlet.cubeMu_le_test',
+         'Rigidity.Dirichlet.card_sdiff_crossingClusterVertices_le',
+         'Rigidity.Dirichlet.exists_cube_sum_sq_le_of_eq_zero',
+         'Rigidity.Dirichlet.cube_sum_abs_grad_boundaryInterpolation_rpow_div_le',
+         'Rigidity.Dirichlet.sum_three_pow_reachScale_partition_rpow_le',
+         'Rigidity.Dirichlet.cube_lemmaSixTwo',
+         'Rigidity.Dirichlet.innerEdgeEnergy_cubeTilePatch_le',
+         'Rigidity.Dirichlet.sum_sq_cubeTilePatch_sub_le',
+         'Rigidity.Dirichlet.cube_lemmaSixThree',
+         'Rigidity.Dirichlet.cube_sum_sq_sub_uhom_le',
+         'Rigidity.Dirichlet.sum_abs_grad_cubeDatum_rpow_div_le',
+         'Rigidity.Dirichlet.cube_error_chain',
+         'Rigidity.Dirichlet.cube_chain_le',
+         'Rigidity.Dirichlet.cubeMinimalScales_holds',
+         'Rigidity.Dirichlet.cubeMesoscopicConvergence_holds',
+         'Rigidity.Dirichlet.cubeHomogenizationError_of_inputs',
+         'Rigidity.Dirichlet.cubeHomogenizationError_holds'],
 }
 standard = {'propext', 'Classical.choice', 'Quot.sound'}
 

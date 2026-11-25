@@ -29,7 +29,7 @@ table.
 
 | Armstrong and Dario | Lean declaration | Form |
 | --- | --- | --- |
-| Theorem 1 | `Rigidity.Dirichlet.planarHomogenizationError_holds` | `d = 2`, every exponent `p' > 2`; the homogenized matrix is `σ I`, `σ > 0` |
+| Theorem 1 | `Rigidity.Dirichlet.planarHomogenizationError_holds`, `Rigidity.Dirichlet.cubeHomogenizationError_holds` | `d = 2` for the planar partition, and every `d ≥ 2` for the partition into good cubes; every exponent `p' > 2`; the homogenized matrix is `σ I`, `σ > 0` |
 | Theorem 2 (iii), `k = 0` | `Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_holds` | `d = 2` |
 | Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d`, from Lemma 7.3 at `k = 2` and the corrector estimates |
 | Lemma 7.1 | `Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_holds` | `d = 2` |
@@ -43,7 +43,7 @@ table.
 | Lemma 5.7 | `Rigidity.Percolation.exists_lintegral_cubeMuGradAvg_sub_le` | every `d`, every triadic cube |
 | Lemma 5.9 | `Rigidity.Percolation.exists_cubeOmegaD_le_decay` | every `d`, with the exponent `1/4` |
 | Lemmas 5.10, 5.11, Proposition 5.13 | `Rigidity.Percolation.exists_abs_cubeAhomInvLimit_sub_le_pow`, `Rigidity.Percolation.cubeAhomInvLimit_eq`, `Rigidity.Percolation.exists_cubeOmega_isOsBond`, `Rigidity.Percolation.exists_cubeBoundN` | every `d` |
-| Proposition 6.1 | `Rigidity.Dirichlet.sum_sq_sub_le_of_inner_energy_chain` | every `d`, the deterministic error chain |
+| Proposition 6.1, Lemmas 6.2 and 6.3 | `Rigidity.Dirichlet.cube_sum_sq_sub_uhom_le`, `Rigidity.Dirichlet.cube_lemmaSixTwo`, `Rigidity.Dirichlet.cube_lemmaSixThree`, `Rigidity.Dirichlet.cube_error_chain` | every `d ≥ 2`, on the cluster of the partition into good cubes |
 | Proposition A.2 | `Rigidity.Proofs.Multiscale.multiscalePoincare_holds` | every `d` |
 
 [`CORRESPONDENCE.md`](CORRESPONDENCE.md) maps every numbered result of the paper to its Lean

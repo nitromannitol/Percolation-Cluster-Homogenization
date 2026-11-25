@@ -811,3 +811,23 @@ report lists only `propext`, `Classical.choice` and `Quot.sound`.
 #print axioms Rigidity.Percolation.vcrossing_iff_of_flip
 #print axioms Rigidity.Percolation.planarMesh_iff_of_flip
 #print axioms Rigidity.Percolation.meshedFlipBound_of_flip
+
+-- Theorem 1 of Armstrong and Dario in every dimension (Section 6: Lemmas 6.2 to 6.4 and Proposition 6.1)
+#print axioms Rigidity.Dirichlet.cubeForm_le_sum_cubeEnergy
+#print axioms Rigidity.Dirichlet.cubeMu_le_test
+#print axioms Rigidity.Dirichlet.card_sdiff_crossingClusterVertices_le
+#print axioms Rigidity.Dirichlet.exists_cube_sum_sq_le_of_eq_zero
+#print axioms Rigidity.Dirichlet.cube_sum_abs_grad_boundaryInterpolation_rpow_div_le
+#print axioms Rigidity.Dirichlet.sum_three_pow_reachScale_partition_rpow_le
+#print axioms Rigidity.Dirichlet.cube_lemmaSixTwo
+#print axioms Rigidity.Dirichlet.innerEdgeEnergy_cubeTilePatch_le
+#print axioms Rigidity.Dirichlet.sum_sq_cubeTilePatch_sub_le
+#print axioms Rigidity.Dirichlet.cube_lemmaSixThree
+#print axioms Rigidity.Dirichlet.cube_sum_sq_sub_uhom_le
+#print axioms Rigidity.Dirichlet.sum_abs_grad_cubeDatum_rpow_div_le
+#print axioms Rigidity.Dirichlet.cube_error_chain
+#print axioms Rigidity.Dirichlet.cube_chain_le
+#print axioms Rigidity.Dirichlet.cubeMinimalScales_holds
+#print axioms Rigidity.Dirichlet.cubeMesoscopicConvergence_holds
+#print axioms Rigidity.Dirichlet.cubeHomogenizationError_of_inputs
+#print axioms Rigidity.Dirichlet.cubeHomogenizationError_holds
