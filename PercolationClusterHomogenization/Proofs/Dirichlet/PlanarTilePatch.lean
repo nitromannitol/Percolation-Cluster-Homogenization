@@ -29,31 +29,6 @@ namespace Rigidity.Dirichlet
 
 variable {ω : Configuration 2}
 
-/-- The index of the tile containing `x`. -/
-def tileIdx (K : ℕ) (z₀ x : Vertex 2) : Vertex 2 := fun t => (x t - z₀ t) / K
-
-theorem mem_tile_tileIdx {K : ℕ} (hK : 0 < K) (z₀ x : Vertex 2) :
-    x ∈ (cornerCube (z₀ + (K : ℤ) • tileIdx K z₀ x) K).vertices := by
-  rw [IntegerCube.mem_vertices]
-  intro t
-  have hK' : (0 : ℤ) < K := by exact_mod_cast hK
-  have h1 := Int.mul_ediv_add_emod (x t - z₀ t) K
-  have h2 := Int.emod_nonneg (x t - z₀ t) hK'.ne'
-  have h3 := Int.emod_lt_of_pos (x t - z₀ t) hK'
-  simp only [cornerCube, Pi.add_apply, Pi.smul_apply, smul_eq_mul, tileIdx]
-  constructor <;> linarith
-
-theorem tileIdx_eq_of_mem {K : ℕ} (hK : 0 < K) (z₀ : Vertex 2) {i x : Vertex 2}
-    (hx : x ∈ (cornerCube (z₀ + (K : ℤ) • i) K).vertices) : tileIdx K z₀ x = i := by
-  rw [IntegerCube.mem_vertices] at hx
-  funext t
-  have hK' : (0 : ℤ) < K := by exact_mod_cast hK
-  have h := hx t
-  simp only [cornerCube, Pi.add_apply, Pi.smul_apply, smul_eq_mul] at h
-  simp only [tileIdx]
-  exact ((Int.ediv_emod_unique (a := x t - z₀ t) (r := x t - z₀ t - K * i t) (q := i t)
-    hK').2 ⟨by ring, by linarith [h.1], by linarith [h.2]⟩).1
-
 /-- The maximizer of `ν(T, p)`, with the constant of its affine boundary values, on the partition
 event for a resolved cube (and `0` otherwise). -/
 noncomputable def nuMax (ω : Configuration 2) (T : TriadicCube 2) (p : Fin 2 → ℝ) :
@@ -89,23 +64,6 @@ noncomputable def tilePatch (ω : Configuration 2) (k : ℕ) (z₀ : Vertex 2) (
       cubeAffine (3 ^ k) uh (z₀ + ((3 ^ k : ℕ) : ℤ) • tileIdx (3 ^ k) z₀ x)
         (z₀ + ((3 ^ k : ℕ) : ℤ) • tileIdx (3 ^ k) z₀ x)
   else cubeAffine (3 ^ k) uh (z₀ + ((3 ^ k : ℕ) : ℤ) • tileIdx (3 ^ k) z₀ x) x
-
-/-- The affine approximation is affine with the slope of the cube. -/
-theorem cubeAffine_eq_add (N : ℕ) (g : Vertex 2 → ℝ) (y x : Vertex 2) :
-    cubeAffine N g y x = cubeAffine N g y y + ∑ j, cubeSlope N g y j * ((x j - y j : ℤ) : ℝ) := by
-  simp only [cubeAffine, sub_self, Int.cast_zero, mul_zero, Finset.sum_const_zero, add_zero]
-
-theorem cubeAffine_add_unit_sub_two (N : ℕ) (g : Vertex 2 → ℝ) (y x : Vertex 2) (j : Fin 2) :
-    cubeAffine N g y (x + unit j) - cubeAffine N g y x = cubeSlope N g y j := by
-  rw [cubeAffine_eq_add N g y (x + unit j), cubeAffine_eq_add N g y x]
-  have h : ∀ i : Fin 2, ((((x + unit j) i - y i : ℤ) : ℝ)) =
-      (((x i - y i : ℤ) : ℝ)) + if i = j then 1 else 0 := by
-    intro i
-    simp only [Pi.add_apply, unit, Pi.single_apply]
-    split_ifs <;> push_cast <;> ring
-  simp only [h, mul_add, Finset.sum_add_distrib, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq', Finset.mem_univ, if_true]
-  ring
 
 /-- **The patch is the affine approximation at the vertices of a tile not interior to it.** -/
 theorem tilePatch_eq_of_not_isInterior (hP : PlanarPartitionEvent ω) {k : ℕ} {z₀ : Vertex 2}

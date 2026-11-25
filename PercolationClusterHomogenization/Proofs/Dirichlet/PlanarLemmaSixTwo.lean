@@ -1,6 +1,7 @@
 import PercolationClusterHomogenization.Proofs.Dirichlet.PlanarMuTest
 import PercolationClusterHomogenization.Proofs.Dirichlet.SubcubeMuTest
 import PercolationClusterHomogenization.Proofs.Dirichlet.Interpolation
+import PercolationClusterHomogenization.Proofs.Dirichlet.GridTiles
 
 /-!
 # Lemma 6.2 of Armstrong and Dario in dimension two
@@ -28,94 +29,6 @@ open scoped Classical
 namespace Rigidity.Dirichlet
 
 variable {ω : Configuration 2}
-
-/-- The first point of the triadic grid of scale `k` (the corners of the triadic cubes of scale
-`k`) at or after `x` in each coordinate. -/
-def triadicGridCorner (k : ℕ) (x : Vertex 2) : Vertex 2 :=
-  fun t => x t + ((-((3 : ℤ) ^ k / 2) - x t) % 3 ^ k)
-
-theorem triadicGridCorner_spec (k : ℕ) (x : Vertex 2) (t : Fin 2) :
-    x t ≤ triadicGridCorner k x t ∧ triadicGridCorner k x t < x t + 3 ^ k ∧
-      (3 : ℤ) ^ k ∣ triadicGridCorner k x t + (3 : ℤ) ^ k / 2 := by
-  have hK : (0 : ℤ) < 3 ^ k := by positivity
-  have h0 := Int.emod_nonneg (-((3 : ℤ) ^ k / 2) - x t) hK.ne'
-  have h1 := Int.emod_lt_of_pos (-((3 : ℤ) ^ k / 2) - x t) hK
-  refine ⟨by simp only [triadicGridCorner]; linarith, by simp only [triadicGridCorner]; linarith,
-    ?_⟩
-  simp only [triadicGridCorner]
-  rw [Int.emod_def]
-  exact ⟨-((-((3 : ℤ) ^ k / 2) - x t) / 3 ^ k), by ring⟩
-
-/-- The triadic tile of scale `k` with corner `z + 3^k i`, for `z` on the triadic grid. -/
-def gridTile (k : ℕ) (z i : Vertex 2) : TriadicCube 2 :=
-  ⟨k, fun t => (z t + (3 : ℤ) ^ k / 2) / 3 ^ k + i t⟩
-
-theorem gridTile_toIntegerCube {k : ℕ} {z : Vertex 2}
-    (hz : ∀ t, (3 : ℤ) ^ k ∣ z t + (3 : ℤ) ^ k / 2) (i : Vertex 2) :
-    (gridTile k z i).toIntegerCube = cornerCube (z + ((3 ^ k : ℕ) : ℤ) • i) (3 ^ k) := by
-  unfold gridTile TriadicCube.toIntegerCube cornerCube
-  simp only [TriadicCube.side, IntegerCube.mk.injEq, and_true]
-  funext t
-  simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
-  push_cast
-  rw [mul_add, Int.mul_ediv_cancel' (hz t)]
-  ring
-
-/-- A translate away from the boundary lies in the interior of the cube. -/
-theorem mem_cubeInterior_of_mem_cornerCube_of_mem_trim (Q : IntegerCube 2) {N r : ℕ}
-    {x y : Vertex 2} (hx : x ∈ (trimCube Q N).vertices \ cubeLayer (trimCube Q N) (r + 1))
-    (hy : y ∈ (cornerCube x N).vertices) : y ∈ cubeInterior Q := by
-  obtain ⟨hxT, hxL⟩ := Finset.mem_sdiff.mp hx
-  have hnot : ∀ i, ¬(x i < (trimCube Q N).corner i + ((r + 1 : ℕ) : ℤ) ∨
-      (trimCube Q N).corner i + ((trimCube Q N).size : ℤ) ≤ x i + ((r + 1 : ℕ) : ℤ)) :=
-    fun i h => hxL (Finset.mem_filter.mpr ⟨hxT, i, h⟩)
-  have hyQ := (mem_of_mem_cornerCube_of_mem_trim Q hx hy 0).1
-  refine Finset.mem_filter.2 ⟨hyQ, fun i => ?_⟩
-  rw [IntegerCube.mem_vertices] at hxT hy
-  simp only [trimCube, cornerCube] at hxT hy hnot
-  have h1 := hxT i
-  have h2 := hy i
-  have h3 := hnot i
-  push Not at h3
-  constructor <;> omega
-
-/-- The block of tiles after the grid corner lies in the translate. -/
-theorem block_subset_cornerCube {K M N : ℕ} (hMK : (M + 1) * K ≤ N) {x z : Vertex 2}
-    (hz : ∀ t, x t ≤ z t ∧ z t < x t + K) :
-    (cornerCube z (M * K)).vertices ⊆ (cornerCube x N).vertices := by
-  intro y hy
-  rw [IntegerCube.mem_vertices] at hy ⊢
-  intro t
-  have h1 := hy t
-  have h2 := hz t
-  simp only [cornerCube] at h1 ⊢
-  have h3 : ((M * K : ℕ) : ℤ) + K ≤ (N : ℤ) := by
-    have : (((M + 1) * K : ℕ) : ℤ) ≤ (N : ℤ) := by exact_mod_cast hMK
-    push_cast at this ⊢
-    linarith
-  constructor <;> omega
-
-/-- The vertices of the tiles of a translate away from the boundary. -/
-theorem gridTile_vertices_subset {m n k r : ℕ} (hkn : k ≤ n) {x i : Vertex 2}
-    (hx : x ∈ (trimCube (⟨m, 0⟩ : TriadicCube 2).toIntegerCube (3 ^ n)).vertices \
-      cubeLayer (trimCube (⟨m, 0⟩ : TriadicCube 2).toIntegerCube (3 ^ n)) (r + 1))
-    (hi : i ∈ (cornerCube 0 (3 ^ (n - k) - 1)).vertices) :
-    (gridTile k (triadicGridCorner k x) i).vertices ⊆ (cornerCube x (3 ^ n)).vertices ∧
-      ∀ y ∈ (gridTile k (triadicGridCorner k x) i).vertices,
-        y ∈ cubeInterior (⟨m, 0⟩ : TriadicCube 2).toIntegerCube := by
-  have hMK : (3 ^ (n - k) - 1 + 1) * 3 ^ k ≤ 3 ^ n := by
-    rw [Nat.sub_add_cancel (Nat.one_le_pow _ _ (by norm_num)), ← pow_add, Nat.sub_add_cancel hkn]
-  have hz : ∀ t, x t ≤ triadicGridCorner k x t ∧
-      triadicGridCorner k x t < x t + ((3 ^ k : ℕ) : ℤ) := fun t => by
-    have := triadicGridCorner_spec k x t
-    push_cast
-    exact ⟨this.1, this.2.1⟩
-  have hsub : (gridTile k (triadicGridCorner k x) i).vertices ⊆ (cornerCube x (3 ^ n)).vertices := by
-    intro y hy
-    rw [← TriadicCube.mem_toIntegerCube_vertices,
-      gridTile_toIntegerCube (fun t => (triadicGridCorner_spec k x t).2.2)] at hy
-    exact block_subset_cornerCube hMK hz (tile_subset _ _ hi hy)
-  exact ⟨hsub, fun y hy => mem_cubeInterior_of_mem_cornerCube_of_mem_trim _ hx (hsub hy)⟩
 
 /-- The boundary vertices of the cluster of `□_m`. -/
 noncomputable def clusterBoundary (ω : Configuration 2) (m : ℕ) : Finset (Vertex 2) :=
