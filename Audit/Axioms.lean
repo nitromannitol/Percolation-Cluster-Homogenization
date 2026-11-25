@@ -902,3 +902,18 @@ report lists only `propext`, `Classical.choice` and `Quot.sound`.
 #print axioms Rigidity.Proofs.Regularity.exists_const_sublinear_of_excess
 #print axioms Rigidity.Proofs.Regularity.correctorSublinearL2At_of_correctedPlanes
 #print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_supercriticalBondCorrectorInput
+
+-- Theorem 2 (i), (ii) and (iii) at k = 1 in every dimension: the approximation of affine functions, the corrected planes, dim A_1 <= d + 1, the qualitative corrector input and the regularity of order one
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.ae_eventually_cubeNuFlatness_le
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.harmonicOnBall_of_cubeHarmonic
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.sum_sq_extend_sub_anchor_le
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.sum_sq_coarsen_combo_le
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.affineApproximation_at_scale
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.cubeAffineApproximationAe_holds
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.correctorSublinearL2Ae_holds
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.correctedPlaneExistence_holds
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.eq_zero_of_slopeAsymptotics_zero
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.orderOneDimension_le
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.supercriticalBondCorrectorInput_holds
+#print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_holds
+#print axioms Rigidity.Proofs.Regularity.correctorSublinearL2At_holds

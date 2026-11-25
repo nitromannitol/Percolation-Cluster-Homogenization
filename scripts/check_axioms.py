@@ -872,6 +872,20 @@ groups = {
          'Rigidity.Proofs.Regularity.exists_const_sublinear_of_excess',
          'Rigidity.Proofs.Regularity.correctorSublinearL2At_of_correctedPlanes',
          'Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_supercriticalBondCorrectorInput'],
+    'Theorem 2 (i), (ii) and (iii) at k = 1 in every dimension: the approximation of affine functions, the corrected planes, dim A_1 <= d + 1, the qualitative corrector input and the regularity of order one':
+        ['Rigidity.Proofs.Regularity.GeneralDim.ae_eventually_cubeNuFlatness_le',
+         'Rigidity.Proofs.Regularity.GeneralDim.harmonicOnBall_of_cubeHarmonic',
+         'Rigidity.Proofs.Regularity.GeneralDim.sum_sq_extend_sub_anchor_le',
+         'Rigidity.Proofs.Regularity.GeneralDim.sum_sq_coarsen_combo_le',
+         'Rigidity.Proofs.Regularity.GeneralDim.affineApproximation_at_scale',
+         'Rigidity.Proofs.Regularity.GeneralDim.cubeAffineApproximationAe_holds',
+         'Rigidity.Proofs.Regularity.GeneralDim.correctorSublinearL2Ae_holds',
+         'Rigidity.Proofs.Regularity.GeneralDim.correctedPlaneExistence_holds',
+         'Rigidity.Proofs.Regularity.GeneralDim.eq_zero_of_slopeAsymptotics_zero',
+         'Rigidity.Proofs.Regularity.GeneralDim.orderOneDimension_le',
+         'Rigidity.Proofs.Regularity.GeneralDim.supercriticalBondCorrectorInput_holds',
+         'Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_holds',
+         'Rigidity.Proofs.Regularity.correctorSublinearL2At_holds']
 }
 standard = {'propext', 'Classical.choice', 'Quot.sound'}
 

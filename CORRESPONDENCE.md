@@ -33,8 +33,9 @@ is [`Audit/Axioms.lean`](Audit/Axioms.lean).
 | --- | --- | --- |
 | Theorem 1 | `Rigidity.Dirichlet.planarHomogenizationError_holds`; `Rigidity.Dirichlet.cubeHomogenizationError_holds` | `d = 2` for the planar partition; every `d ≥ 2` for the partition into good cubes; every exponent `p' > 2`, no hypothesis; the homogenized matrix is `σ I` |
 | Theorem 2 (iii), `k = 0` | `Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_holds`; `Rigidity.Proofs.Regularity.armstrongDarioOrderZero_holds` | `d = 2`; every `d ≥ 2` (the input `LatticeProb.External.ArmstrongDarioOrderZero`); no hypothesis |
-| Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_supercriticalBondCorrectorInput`, `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_correctorSublinear`, `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d ≥ 2`, from the existence of the corrected planes alone; or from (1.18) (Theorem 2 (ii) at `k = 1`) alone; or from Lemma 7.3 at `k = 2` and the corrector inputs |
-| Theorem 2 (ii), `k = 1` | `Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_sublinearL2Ae`, `Rigidity.Proofs.Regularity.GeneralDim.correctedPlaneExistence_of_sublinearL2Ae`, `Rigidity.Proofs.Regularity.GeneralDim.correctorSublinearL2Ae_of_affineApproximationAe`, `Rigidity.Proofs.Regularity.correctorSublinearL2At_of_correctedPlanes` | `d = 2`, the corrected planes from the sublinearity (1.18); every `d ≥ 2`, the corrected planes from (1.18) with an almost surely finite scale, (1.18) with an almost surely finite scale from the approximation of affine functions on growing balls, and (1.18) with a minimal scale of class `O_s` from the existence of the corrected planes |
+| Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_holds`, `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_supercriticalBondCorrectorInput`, `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_correctorSublinear`, `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d ≥ 2`, with no hypothesis; from the existence of the corrected planes alone; or from (1.18) |
+| Theorem 2 (ii), `k = 1` | `Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_sublinearL2Ae`, `Rigidity.Proofs.Regularity.GeneralDim.correctedPlaneExistence_holds`, `Rigidity.Proofs.Regularity.correctorSublinearL2At_holds`, `Rigidity.Proofs.Regularity.GeneralDim.correctorSublinearL2Ae_holds` | `d = 2`, the corrected planes from the sublinearity (1.18); every `d ≥ 2` with no hypothesis, the corrected planes and (1.18) with a minimal scale of class `O_s` |
+| Theorem 2 (i), `k = 1` | `Rigidity.Proofs.Regularity.GeneralDim.orderOneDimension_le`, `Rigidity.Proofs.Regularity.GeneralDim.supercriticalBondCorrectorInput_holds` | every `d ≥ 2` with no hypothesis: `dim 𝒜₁ ≤ d + 1` and the qualitative corrector input |
 | Proposition 2.1 | `Rigidity.Percolation.partition_estimates`, `Rigidity.Percolation.partition_estimates_general` | every `d`; the partition into good cubes, and for any family of good cubes with stretched exponential failure bounds |
 | Proposition 2.4 | `Rigidity.Percolation.exists_minimalScale`, `Rigidity.Percolation.exists_minimalScale_general`, `Rigidity.Proofs.Cluster.exists_planar_minimalScale`, `Rigidity.Proofs.Cluster.planarMinimalScales_holds` | every `d`, and for the planar partition |
 | Lemma 2.7 | `Rigidity.Percolation.exists_measure_not_mem_goodCubes_le` | every `d` |
@@ -1577,11 +1578,30 @@ the namespace `Rigidity.Proofs.Regularity.GeneralDim`.
 | [`abs_corrector_le_at_scale`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCorrectorAtScale.lean) | the uniform bound of the corrector on the box of side `3^m`. |
 | [`corrector_scale_arith`, `CorrectedPlaneExistence`, `correctedPlaneExistence_of_sublinearL2Ae`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCorrectedPlaneExistence.lean) | the bound `c |q|₁ E^{1-η}`, `η = δ/(2d)`, at the scale `E = 3^m`, and the corrected planes. |
 
-The nine reports for the declarations of this section are in [`Audit/Axioms.lean`](Audit/Axioms.lean)
+The approximation of affine functions on growing balls (`CubeAffineApproximationAe d`) is proved in every
+dimension (`cubeAffineApproximationAe_holds`), from the flatness (5.33) almost surely at all large scales, the
+minimal scales and the density of the cluster, so the corrected planes and (1.18) hold with no hypothesis. With
+`dim 𝒜₁ ≤ d + 1` from (7.18) at `k = 2` (`orderOneDimension_le`) and the Liouville theorem of order zero, the
+qualitative corrector input `LatticeProb.External.SupercriticalBondCorrectorInput` is proved in every dimension
+(`supercriticalBondCorrectorInput_holds`), and with it Theorem 2 (iii) at `k = 1` (`armstrongDarioOrderOneOrigin_holds`).
+
+| Lean declaration | Statement |
+| --- | --- |
+| [`flatness_bracket_le`, `ae_eventually_cubeNuFlatness_le`, `cubeAhom_inv_mulVec_mulVec`](PercolationClusterHomogenization/Proofs/Regularity/GeneralNuFlatnessAS.lean) | the flatness of the maximizers of `ν` almost surely at all large scales, from (5.33) in expectation and the decay of `τ`. |
+| [`harmonicOnBall_of_cubeHarmonic`, `cubeForm_cubeNuSolution_le`, `sum_sq_extend_sub_anchor_le`, `sum_sq_coarsen_combo_le`, `componentBallL2_le_of_sums`, `affineApproximation_at_scale`](PercolationClusterHomogenization/Proofs/Regularity/GeneralAffineFromNu.lean) | the approximation of affine functions on a ball by combinations of the maximizers of `ν` at one scale. |
+| [`affine_scale_arith`, `cubeAffineApproximationAe_holds`, `correctorSublinearL2Ae_holds`, `correctedPlaneExistence_holds`](PercolationClusterHomogenization/Proofs/Regularity/GeneralAffineApproximationHolds.lean) | the approximation of affine functions on growing balls, (1.18) and the corrected planes, with no hypothesis. |
+| [`eq_zero_of_slopeAsymptotics_zero`, `orderOneDimension_le`, `supercriticalBondCorrectorInput_holds`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCorrectorInput.lean) | the slope of a function on a cluster with the cap density, `dim 𝒜₁ ≤ d + 1`, and the qualitative corrector input. |
+| [`armstrongDarioOrderOneOrigin_holds`, `correctorSublinearL2At_holds`](PercolationClusterHomogenization/Proofs/Regularity/GeneralOrderOneHolds.lean) | Theorem 2 (iii) at `k = 1` and (1.18) with a minimal scale of class `O_s`, with no hypothesis. |
+
+The thirteen further reports for the declarations of this section are in [`Audit/Axioms.lean`](Audit/Axioms.lean)
 and depend only on `propext`, `Classical.choice` and `Quot.sound`.
 
 Departures from Armstrong and Dario:
 
+- **The approximation of affine functions.** The harmonic approximation of `q · x` at the scale `3^{j+1}` is the
+  combination `Σᵢ qᵢ v(·, □_{j+3}, eᵢ)` of the maximizers of `ν` minus a constant; Lemma 3.2 is applied to each
+  `v(·, □_{j+3}, eᵢ)` with the partition cubes of `□_{j+3}` of side at most `3^{(j+3)/(2d+1)}` (the minimal scales
+  with the exponent `t = 2d²`), and the flatness (5.33) is used almost surely at all large scales.
 - **The uniform bound.** As in the plane, the uniform norm comes from the comparison with the coarsening `[χ]_𝒫`
   along the local open paths of the partition into good cubes (the pointwise forms of Lemmas 3.2 and 3.3) and the
   interpolation inequality on a box `x + [0, t]ᵈ`, with the increments of `χ` along the open edges bounded by the
