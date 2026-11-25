@@ -33,7 +33,7 @@ is [`Audit/Axioms.lean`](Audit/Axioms.lean).
 | --- | --- | --- |
 | Theorem 1 | `Rigidity.Dirichlet.planarHomogenizationError_holds`; `Rigidity.Dirichlet.cubeHomogenizationError_holds` | `d = 2` for the planar partition; every `d ≥ 2` for the partition into good cubes; every exponent `p' > 2`, no hypothesis; the homogenized matrix is `σ I` |
 | Theorem 2 (iii), `k = 0` | `Rigidity.Proofs.Regularity.armstrongDarioOrderZeroTwo_holds`; `Rigidity.Proofs.Regularity.armstrongDarioOrderZero_holds` | `d = 2`; every `d ≥ 2` (the input `LatticeProb.External.ArmstrongDarioOrderZero`); no hypothesis |
-| Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d`, from Lemma 7.3 at `k = 2` and the corrector inputs |
+| Theorem 2 (iii), `k = 1` | `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_correctorSublinear`, `Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_of_mesoscopicDegreeTwo` | at the origin, every `d ≥ 2`, from (1.18) (Theorem 2 (ii) at `k = 1`) alone; or from Lemma 7.3 at `k = 2` and the corrector inputs |
 | Theorem 2 (ii), `k = 1` | `Rigidity.Proofs.Regularity.planarCorrectedPlaneExistenceTwo_of_sublinearL2Ae` | `d = 2`, the corrected planes from the sublinearity (1.18) |
 | Proposition 2.1 | `Rigidity.Percolation.partition_estimates`, `Rigidity.Percolation.partition_estimates_general` | every `d`; the partition into good cubes, and for any family of good cubes with stretched exponential failure bounds |
 | Proposition 2.4 | `Rigidity.Percolation.exists_minimalScale`, `Rigidity.Percolation.exists_minimalScale_general`, `Rigidity.Proofs.Cluster.exists_planar_minimalScale`, `Rigidity.Proofs.Cluster.planarMinimalScales_holds` | every `d`, and for the planar partition |
@@ -65,7 +65,7 @@ is [`Audit/Axioms.lean`](Audit/Axioms.lean).
 | Proposition 6.1, Lemmas 6.2 to 6.4 | `Rigidity.Dirichlet.sum_sq_sub_le_of_inner_energy_chain`, `Rigidity.Dirichlet.innerEdgeEnergy_dirichletSolution_div_le_of_coarse`; `Rigidity.Dirichlet.cube_sum_sq_sub_uhom_le`, `Rigidity.Dirichlet.cube_lemmaSixTwo`, `Rigidity.Dirichlet.cube_lemmaSixThree`, `Rigidity.Dirichlet.cube_sum_abs_grad_boundaryInterpolation_rpow_div_le` | every `d`, deterministic steps on the lattice; every `d ≥ 2` on the cluster of the partition into good cubes |
 | Lemma 7.1 | `Rigidity.Proofs.Regularity.planarHarmonicApproximationTwo_holds`; `Rigidity.Proofs.Regularity.cubeHarmonicApproximation_holds` | `d = 2` for the planar partition; every `d ≥ 2` for the partition into good cubes; no hypothesis |
 | Lemma 7.2 | `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_2` | every `k`, with its excess-decay and approximation hypotheses |
-| Lemma 7.3 | `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_zero_planar`, `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_one_planar`, `Rigidity.Proofs.Regularity.armstrongDarioMesoscopicDegreeTwoPlanar_of_squareEstimates`; `Rigidity.Proofs.Regularity.exists_cubeOrderZeroDecay` | `d = 2`, `k = 0, 1, 2`; every `d ≥ 2`, `k = 0` |
+| Lemma 7.3 | `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_zero_planar`, `Rigidity.Proofs.Regularity.armstrongDario_lemma_7_3_one_planar`, `Rigidity.Proofs.Regularity.armstrongDarioMesoscopicDegreeTwoPlanar_of_squareEstimates`; `Rigidity.Proofs.Regularity.exists_cubeOrderZeroDecay`, `Rigidity.Proofs.Regularity.armstrongDarioMesoscopicDegreeTwo_holds` | `d = 2`, `k = 0, 1, 2`; every `d ≥ 2`, `k = 0` and `k = 2` |
 | Proposition A.2 | `Rigidity.Proofs.Multiscale.multiscalePoincare_holds`, `Rigidity.Proofs.Multiscale.exists_multiscalePoincare_affine` | every `d` |
 
 The percolation results that these proofs use are proved as well: the concentration of the density
@@ -1267,6 +1267,51 @@ following.
 The twenty-three reports for the declarations of this section are in
 [`Audit/Axioms.lean`](Audit/Axioms.lean).
 
+## Lemma 7.3 at k = 2 in every dimension
+
+AD Lemma 7.3, display (7.18) at `k = 2`, is proved for bond percolation in every dimension `d ≥ 2`
+with no hypothesis (`armstrongDarioMesoscopicDegreeTwo_holds`, the statement
+`ArmstrongDarioMesoscopicDegreeTwo`), from Lemma 7.1 in every dimension (`cubeHarmonicApproximation_holds`),
+the minimal scales of Proposition 2.4 (`cubeMinimalScales_holds`) and the density of the infinite cluster
+in cubes, by the proof of AD (AD18.tex:5489-5650), as in the plane. Lemma 7.2 at `k = 2` for the coarsening
+`[u]_𝒫` on the balls of `ℤᵈ` needs the excess decay of order three of lattice harmonic functions and the
+comparison of the harmonic cubic polynomials `Ā_3` with `Ā_2`, proved here in every dimension. Theorem 2 (iii)
+at `k = 1` follows from (7.18) at `k = 2` and the sublinearity (1.18) of the correctors (AD Theorem 2 (ii) at
+`k = 1`, `CorrectorSublinearL2At`), with no other input (`armstrongDarioOrderOneOrigin_of_correctorSublinear`).
+
+| Lean declaration | Statement |
+| --- | --- |
+| [`latticeHarmonicCubicPoly`, `tensorCubicPart`, `fwd_fwd_fwd_tensorCubicPart`, `latticeLaplacian_tensorCubicPart`, `corrTensor`](PercolationClusterHomogenization/Proofs/Regularity/GeneralLatticeCubic.lean) | the lattice harmonic cubic polynomials `q + t(x, x, x) / 6`, `t` symmetric and trace-free, `q` lattice harmonic quadratic; the cubic part `t(y − c, y − c, y − c) / 6` has third differences `t_{abe}` and lattice Laplacian `∑ₖ (∑ₐ tₐₐₖ)(y − c)ₖ`. |
+| [`abs_sub_latticeHarmonicTaylorThree_le`, `harmonicRegularity_cubicPoly_latticeHarmonicClass`](PercolationClusterHomogenization/Proofs/Regularity/GeneralLatticeExcessThree.lean) | the harmonic third-order expansion at a corner with the error `C S⁴ M₄`, and the excess decay of order three of lattice harmonic functions on the balls of `ℤᵈ`. |
+| [`le_componentBallL2_of_fwd3`, `polynomialComparison_latticeHarmonicCubicPoly`](PercolationClusterHomogenization/Proofs/Regularity/GeneralLatticeCubicComparison.lean) | the lower bound `|t_{abe}| ρ³ ≤ C ‖G‖_{L̲²(B_ρ)}` from mixed third differences with a step, and `PolynomialComparison` for `Ā_2 ≤ Ā_3` with degree `3`. |
+| [`armstrongDario_lemma_7_2_two_latticeHarmonicD`, `armstrongDario_lemma_7_3_two_latticeHarmonicD`](PercolationClusterHomogenization/Proofs/Regularity/GeneralLatticeKIterationTwo.lean) | AD Lemma 7.2 at `k = 2` and its Lemma 7.3 form for lattice harmonic functions on the balls of `ℤᵈ`. |
+| [`abs_le_sum_abs_of_latticeHarmonicD`, `componentBallL2_le_sum_abs_of_latticeHarmonicD`](PercolationClusterHomogenization/Proofs/Regularity/GeneralLatticeMeanValue.lean) | the `ℓ^∞`–`ℓ¹` bound of lattice harmonic functions on boxes and the `ℓ²`–`ℓ¹` bound on balls, used to pass from `ℓ¹` to `ℓ²` in Step 2. |
+| [`componentBallL2_coarse_sub_const_leD`, `sum_abs_coarse_sub_leD`](PercolationClusterHomogenization/Proofs/Regularity/GeneralCoarseTransfer.lean) | the crude bound of the coarse oscillation and the `ℓ¹` step of Step 2 (Cauchy–Schwarz over the fibres of the anchor map), for the partition into good cubes. |
+| [`abs_latticeQuadFunD_sub_le`, `quadSlopeD_le_of_clusterCubeDensity`](PercolationClusterHomogenization/Proofs/Regularity/GeneralQuadraticLipschitz.lean) | the slope of a quadratic polynomial on boxes and the bound (7.23) of its coefficients by its oscillation on the cluster ball. |
+| [`clusterExcess_two_leD`, `componentBallL2_coarse_sub_quad_leD`](PercolationClusterHomogenization/Proofs/Regularity/GeneralMesoscopicTwoSteps.lean), [`harmonicApproximation_error_leD`](PercolationClusterHomogenization/Proofs/Regularity/GeneralMesoscopicTwoTop.lean), [`coarse_top_boundsD`](PercolationClusterHomogenization/Proofs/Regularity/GeneralMesoscopicTwoTopBounds.lean) | Steps 1 and 2 of the proof of Lemma 7.3 ((7.21)–(7.23)) and the top-scale bounds. |
+| [`mesoscopicDegreeTwo_coreD`](PercolationClusterHomogenization/Proofs/Regularity/GeneralMesoscopicTwoMain.lean) | (7.18) at `k = 2` for one configuration, on `[r₀X, R/2]`, from Lemma 7.1 in the form of the proof of Lemma 7.3, partition cubes of side `S'` in `B_R` with `(4√d S')^{d/2} ≤ c R^{α/2}`, `√d S' ≤ R/4`, moments `∑ 3^s ≤ K₁ R^d`, `∑ 3^{ds} ≤ K₂ R^d`, and the density of the cluster in cubes. |
+| [`cube_boundsD`, `mesoscopicDegreeTwoAt_holds`, `armstrongDarioMesoscopicDegreeTwo_holds`](PercolationClusterHomogenization/Proofs/Regularity/GeneralMesoscopicDegreeTwo.lean) | the bounds on the partition cubes in `B_R` from the minimal scales (exponents `t = 1`, `t = d` and `t = d²/α`), and (7.18) at `k = 2` almost surely, with `δ = α/2`, in every dimension. |
+| [`CorrectorSublinearL2At`, `orderOneEndpointData_clusterL2`, `orderOneOrigin_of_mesoscopicDegreeTwoAt_of_sublinear`, `armstrongDarioOrderOneOrigin_of_correctorSublinear`](PercolationClusterHomogenization/Proofs/Regularity/OrderOneOriginSublinear.lean) | (1.18) for one dimension and law; the endpoint data with the lift bound in `L̲²`; Theorem 2 (iii) at `k = 1` from (7.18) and (1.18). |
+
+The twenty-six reports for the declarations of this section are in [`Audit/Axioms.lean`](Audit/Axioms.lean)
+and depend only on `propext`, `Classical.choice` and `Quot.sound`.
+
+Departures from Armstrong and Dario:
+
+- **`Ā_3`.** The approximating class of degree three is the lattice harmonic cubic polynomials. The harmonic
+  third-order expansion at a corner `c` is the cubic part of the third differences of `f` at `c` with the
+  trace removed by `corrTensor`, plus the harmonic second-order expansion of the remainder; the trace is a
+  sum of fourth differences because the first differences of `f` are harmonic.
+- **The `ℓ^∞`–`ℓ¹` bound on balls.** The bound on a ball `B_ρ` uses the box bound on a box centred at each
+  point of `B_ρ`, of half-side `⌊ρ/√d⌋`, inside `B_{4ρ}`.
+- **The partition cubes.** The sides of the partition cubes in `B_R` are bounded by `9 R^{α/d}` and the
+  moments of orders one and `d` by `9^d K R^d`, from Proposition 2.4 with the exponents `t = 1`, `d` and
+  `d²/α`; the loss `(R^{α/d})^{d/2} = R^{α/2}` of the crude bound of the coarse oscillation at the top scale
+  is absorbed by the factor `(4T)^{−α}` of the harmonic approximation error, leaving `δ = α/2` as in the plane.
+- **Theorem 2 (iii) at `k = 1`.** The lifts of the affine functions are the functions of (1.18) for the slopes
+  `eᵢ`, whose correctors are at most `ε t / √d` in `L̲²(𝒞_∞ ∩ B_t)` above the scale `(C √d / ε + 1)^{1/δ}`;
+  the endpoint iteration of the section on regularity of order one uses them in `L̲²`.
+
 ## Regularity of order one at the origin from the mesoscopic estimate
 
 `Rigidity.External.ArmstrongDarioOrderOneOrigin` (Theorem 2.4, part (iii) at `k = 1`; AD Theorem 2(iii)
@@ -1274,9 +1319,12 @@ at `k = 1`) is a theorem from one new hypothesis and two inputs that are already
 [`ArmstrongDarioMesoscopicDegreeTwo`](PercolationClusterHomogenization/Proofs/Regularity/OrderOneOrigin.lean), AD Lemma 7.3, display (7.18) at `k = 2`
 for bond percolation at the origin, with `Ā₂` the harmonic quadratic polynomials and the normalization
 `r^{−d/2} ‖·‖_{L²(𝒞_∞ ∩ B_r)}`, together with `Rigidity.External.CorrectorQuantitativeInput` and
-`LatticeProb.External.SupercriticalBondCorrectorInput`. The mesoscopic estimate itself needs the
-harmonic approximation of AD Lemma 7.1, hence Theorem 1 (Sections 5 and 6), and is not proved in general; in
-dimension two it is proved from the estimates on squares of Lemma 7.1, which are proved in [Lemma 7.1 and the order-zero regularity in dimension two from Theorem 1](#lemma-71-and-the-order-zero-regularity-in-dimension-two-from-theorem-1) (see
+`LatticeProb.External.SupercriticalBondCorrectorInput`. The mesoscopic estimate itself is proved in every
+dimension `d ≥ 2` (`armstrongDarioMesoscopicDegreeTwo_holds`, see
+[Lemma 7.3 at k = 2 in every dimension](#lemma-73-at-k--2-in-every-dimension)), and the two corrector
+inputs are replaced there by the sublinearity (1.18) of the correctors
+(`armstrongDarioOrderOneOrigin_of_correctorSublinear`); in dimension two (7.18) is also proved from the
+estimates on squares of Lemma 7.1 (see
 [Lemma 7.3 at k = 2 and regularity of order one at the origin in dimension two](#lemma-73-at-k--2-and-regularity-of-order-one-at-the-origin-in-dimension-two)).
 
 | Lean declaration | Statement |
