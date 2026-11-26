@@ -19,10 +19,10 @@ open scoped Classical ENNReal
 
 /-- The maximum of two minimal scales with `O_s` bounds of exponents `s, s'` has an `O_s` bound
 of exponent `min s s'`. -/
-theorem exists_isOsBond_max {p : unitInterval} {X Y : Configuration 2 → ℝ} {s s' θ θ' : ℝ}
-    (hs : 0 < s) (hs' : 0 < s') (hθ : 0 < θ) (hθ' : 0 < θ') (hX : Measurable X)
-    (hY : Measurable Y) (h : IsOsBond 2 p X s θ) (h' : IsOsBond 2 p Y s' θ') :
-    ∃ θ'' : ℝ, 0 < θ'' ∧ IsOsBond 2 p (fun ω => max (X ω) (Y ω)) (min s s') θ'' := by
+theorem exists_isOsBond_max {d : ℕ} [NeZero d] {p : unitInterval} {X Y : Configuration d → ℝ}
+    {s s' θ θ' : ℝ} (hs : 0 < s) (hs' : 0 < s') (hθ : 0 < θ) (hθ' : 0 < θ') (hX : Measurable X)
+    (hY : Measurable Y) (h : IsOsBond d p X s θ) (h' : IsOsBond d p Y s' θ') :
+    ∃ θ'' : ℝ, 0 < θ'' ∧ IsOsBond d p (fun ω => max (X ω) (Y ω)) (min s s') θ'' := by
   have hm : 0 < min s s' := lt_min hs hs'
   have h1 := IsOsBond.mono_exponent hm (min_le_left _ _) hX h
   have h2 := IsOsBond.mono_exponent hm (min_le_right _ _) hY h'

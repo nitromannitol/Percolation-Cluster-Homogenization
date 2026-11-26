@@ -198,6 +198,146 @@ def CorrectedPlaneExistence (d : ℕ) [NeZero d] : Prop :=
     ∀ᵐ ω ∂latticeBondLaw d p, ∀ h : HasUniqueInfiniteOpenComponent ω, ∀ q : Fin d → ℝ,
       ∃ u : uniqueInfiniteComponent h → ℝ, IsCorrectedPlane (uniqueInfiniteComponent h) q u
 
+/-- **The uniform bound of the corrector at the scale `E = 3^m`** above the minimal scales: from
+(1.18) on `B_{15 d E}`, the Lipschitz estimate at the vertices of `□_{m+3}` with minimal scales at most
+`3^{(m+1)γ}`, the partition cubes of `□_{m+3}` of sides at most `3^{d(m+3)/(d + d/γ)}` and the density
+of the cluster, `|χ(x)| ≤ c |q|₁ E^{1-η}` on `{|x_i| ≤ E}`. -/
+theorem abs_corrector_le_of_scales [NeZero d] (hd : 2 ≤ d) {ω : Configuration d}
+    (hP : PartitionEvent ω) (C : OpenComponent ω) (hinf : C.supp.Infinite) (q : Fin d → ℝ)
+    (u : C → ℝ) (hu : u ∈ harmonicGrowthSpace C 1) {δ δ₁ K C₀ κ η γ X₁ M₄ : ℝ}
+    (hK : 0 ≤ K) (hC₀ : 0 < C₀) (hκ : 0 < κ) (hδδ : δ ≤ δ₁)
+    (h2η : 2 * η * d = δ) (h3η : 3 * η ≤ δ) (hη4 : η ≤ 1 / 4) (hγ0 : 0 < γ)
+    (hγη : γ * (2 * d + 1) = η) (hγle : γ ≤ η) (hdt : (d : ℝ) / (d + d / γ) ≤ γ)
+    (hL2 : ∀ r : ℝ, X₁ ≤ r →
+      componentBallL2 C 0 r (fun x => u x - componentSlope C q x) ≤ K * (∑ i, |q i|) * r ^ (1 - δ₁))
+    {Y : Vertex d → ℝ}
+    (hLip : ∀ z : Vertex d, ∀ R : ℝ, 2 * Y z ≤ R → ∀ v : C → ℝ,
+      (∀ x ∈ componentEuclideanBall C z R,
+        (∀ y : C, (componentGraph C).Adj x y → y ∈ componentEuclideanBall C z R) →
+          componentLaplacian C v x = 0) →
+      ∃ c : ℝ, ∀ r : ℝ, Y z ≤ r → r ≤ R / 2 →
+        componentBallL2 C z r (v - fun _ => c) ≤ C₀ * (r / R) * componentBallL2 C z R v)
+    {m : ℕ} (hmd : d + 1 ≤ m)
+    (hYbox : ∀ z ∈ triScaleBox d (m + 1), Y z ≤ (3 : ℝ) ^ (((m + 1 : ℕ) : ℝ) * γ))
+    (hmin : ∀ y ∈ (⟨m + 3, 0⟩ : TriadicCube d).vertices,
+      (3 : ℝ) ^ (partitionCube ω y).scale ≤ (3 : ℝ) ^ ((d : ℝ) * ((m + 3 : ℕ) : ℝ) / (d + d / γ)))
+    (hcube : ClusterCubeDensity C 0 ((d : ℝ) * (14 * 3 ^ (d + 1) + 1) + 1) M₄ κ)
+    (hM₄ : 3 ^ (d + 1) * M₄ ≤ 3 ^ m) (hX₁ : X₁ ≤ 3 ^ m) (hE100 : 100 ≤ (3 : ℝ) ^ m)
+    (x : C) (hx : ∀ i, |((x.val i : ℤ) : ℝ)| ≤ 3 ^ m) :
+    |u x - componentSlope C q x| ≤
+      (2 * d * 21 ^ d * (10 * 13 ^ d * C₀ *
+          (15 * d * Real.sqrt ((33 * d) ^ d * 3 ^ (d * (d + 1)) / κ) * K + 1) + 1) +
+        Real.sqrt (2 * 21 ^ d * (33 * d) ^ d * (15 * d * K) ^ 2) +
+        Real.sqrt 2 * d * (2 * d * 21 ^ d * (10 * 13 ^ d * C₀ *
+          (15 * d * Real.sqrt ((33 * d) ^ d * 3 ^ (d * (d + 1)) / κ) * K + 1) + 1))) *
+        (∑ i, |q i|) * ((3 : ℝ) ^ m) ^ (1 - η) := by
+  have hd2 : (2 : ℝ) ≤ d := by exact_mod_cast hd
+  set Q : ℝ := ∑ i, |q i| with hQ
+  have hQ0 : 0 ≤ Q := by positivity
+  set E : ℝ := 3 ^ m with hEdef
+  have hE1 : 1 ≤ E := by linarith
+  have hE0 : 0 < E := by linarith
+  set Y₀ : ℝ := E ^ γ with hY₀def
+  have hY1 : 1 ≤ Y₀ := Real.one_le_rpow hE1 hγ0.le
+  have hYE : Y₀ ^ (2 * d + 1) = E ^ η := by
+    rw [hY₀def, ← Real.rpow_natCast, ← Real.rpow_mul hE0.le]
+    congr 1
+    push_cast
+    linarith
+  have hY10 : 10 * Y₀ ≤ E := by
+    have h1 : Y₀ ≤ E ^ (1 / 2 : ℝ) := Real.rpow_le_rpow_of_exponent_le hE1 (by linarith)
+    have h2 : (10 : ℝ) ≤ E ^ (1 / 2 : ℝ) := by
+      rw [← Real.sqrt_eq_rpow, Real.le_sqrt (by norm_num) (by linarith)]
+      linarith
+    have h3 : E ^ (1 / 2 : ℝ) * E ^ (1 / 2 : ℝ) = E := by
+      rw [← Real.rpow_add hE0]; norm_num
+    calc 10 * Y₀ ≤ E ^ (1 / 2 : ℝ) * E ^ (1 / 2 : ℝ) := mul_le_mul h2 h1 (by positivity)
+          (by positivity)
+      _ = E := h3
+  have hpowγ : ∀ j : ℕ, j ≤ 3 → (3 : ℝ) ^ (((m + j : ℕ) : ℝ) * γ) ≤ 3 * Y₀ := by
+    intro j hj
+    have e : (3 : ℝ) ^ (((m + j : ℕ) : ℝ) * γ) =
+        (3 : ℝ) ^ ((m : ℝ) * γ) * (3 : ℝ) ^ ((j : ℝ) * γ) := by
+      rw [← Real.rpow_add (by norm_num)]; congr 1; push_cast; ring
+    have e2 : (3 : ℝ) ^ ((m : ℝ) * γ) = Y₀ := by
+      rw [Real.rpow_mul (by norm_num), Real.rpow_natCast]
+    have h3 : (3 : ℝ) ^ ((j : ℝ) * γ) ≤ 3 := by
+      have hj' : (j : ℝ) ≤ 3 := by exact_mod_cast hj
+      calc (3 : ℝ) ^ ((j : ℝ) * γ) ≤ (3 : ℝ) ^ (1 : ℝ) :=
+            Real.rpow_le_rpow_of_exponent_le (by norm_num)
+              ((mul_le_mul_of_nonneg_right hj' hγ0.le).trans (by linarith))
+        _ = 3 := Real.rpow_one 3
+    calc (3 : ℝ) ^ (((m + j : ℕ) : ℝ) * γ) = Y₀ * (3 : ℝ) ^ ((j : ℝ) * γ) := by rw [e, e2]
+      _ ≤ Y₀ * 3 := mul_le_mul_of_nonneg_left h3 (by positivity)
+      _ = 3 * Y₀ := by ring
+  have hsc : ∀ y ∈ (⟨m + 3, 0⟩ : TriadicCube d).vertices,
+      (3 : ℝ) ^ (partitionCube ω y).scale ≤ 3 * Y₀ := by
+    intro y hy
+    have h1 := hmin y hy
+    refine h1.trans ((Real.rpow_le_rpow_of_exponent_le (by norm_num) ?_).trans (hpowγ 3 le_rfl))
+    rw [mul_div_right_comm, mul_comm (((m + 3 : ℕ) : ℝ)) γ]
+    exact mul_le_mul_of_nonneg_right hdt (by positivity)
+  have hscm : ∀ y ∈ triadicCubeFinset d (m + 3) 0, (partitionCube ω y).scale ≤ m := by
+    intro y hy
+    have h1 := hsc y (mem_cubeFinset_iff_vertices.1 hy)
+    have h2 : (3 : ℝ) ^ (partitionCube ω y).scale ≤ 3 ^ m := h1.trans (by linarith)
+    exact (pow_le_pow_iff_right₀ (by norm_num : (1 : ℝ) < 3)).1 h2
+  have hYz : ∀ z ∈ (⟨m + 3, 0⟩ : TriadicCube d).vertices, Y z ≤ 3 * Y₀ := by
+    intro z hz
+    have hzbox : z ∈ triScaleBox d (m + 1) := mem_triScaleBox.2 fun i => by
+      have h1 := (mem_triadicCube_zero_iff'.1 hz) i
+      have e : (3 : ℤ) ^ (m + 1 + 2) = 3 ^ (m + 3) := by ring_nf
+      rw [e]
+      have := abs_nonneg (z i)
+      linarith
+    exact (hYbox z hzbox).trans (hpowγ 1 (by norm_num))
+  have hℓ : M₄ ≤ 3 ^ (m - (d + 1)) := by
+    have e : (3 : ℝ) ^ m = 3 ^ (d + 1) * 3 ^ (m - (d + 1)) := by
+      rw [← pow_add]; congr 1; omega
+    rw [hEdef, e] at hM₄
+    exact le_of_mul_le_mul_left hM₄ (by positivity)
+  -- the bound (1.18) on the ball `B_{15 d E}`
+  set b := componentBallL2 C 0 (15 * d * E)
+    (componentCorrector C q u) with hbdef
+  have hb0 : 0 ≤ b := componentBallL2_nonneg _ _ _ _
+  have h15 : (1 : ℝ) ≤ 15 * d := by linarith
+  have hbδ : b ≤ K * Q * (15 * d) * E ^ (1 - δ) := by
+    have h1 : b ≤ K * Q * (15 * d * E) ^ (1 - δ₁) :=
+      hL2 (15 * d * E) (hX₁.trans (le_mul_of_one_le_left hE0.le h15))
+    have h2 : (15 * d * E) ^ (1 - δ₁) ≤ (15 * d * E) ^ (1 - δ) :=
+      Real.rpow_le_rpow_of_exponent_le (h15.trans (le_mul_of_one_le_right (by linarith) hE1))
+        (by linarith)
+    have h3 : (15 * d * E) ^ (1 - δ) ≤ 15 * d * E ^ (1 - δ) := by
+      rw [Real.mul_rpow (by positivity) hE0.le]
+      refine mul_le_mul_of_nonneg_right ?_ (by positivity)
+      calc (15 * (d : ℝ)) ^ (1 - δ) ≤ (15 * d) ^ (1 : ℝ) :=
+            Real.rpow_le_rpow_of_exponent_le h15 (by linarith)
+        _ = 15 * d := Real.rpow_one _
+    calc b ≤ K * Q * (15 * d * E) ^ (1 - δ₁) := h1
+      _ ≤ K * Q * (15 * d * E ^ (1 - δ)) := by
+          gcongr
+          exact h2.trans h3
+      _ = K * Q * (15 * d) * E ^ (1 - δ) := by ring
+  have hbE : b ≤ K * Q * (15 * d) * E := by
+    refine hbδ.trans (mul_le_mul_of_nonneg_left ?_ (by positivity))
+    calc E ^ (1 - δ) ≤ E ^ (1 : ℝ) := Real.rpow_le_rpow_of_exponent_le hE1 (by linarith)
+      _ = E := Real.rpow_one E
+  -- the side of the box
+  set t : ℕ := ⌊E ^ (1 - 2 * η)⌋₊ with htdef
+  have ht : (t : ℝ) ≤ E ^ (1 - 2 * η) := Nat.floor_le (by positivity)
+  have ht1 : E ^ (1 - 2 * η) ≤ (t : ℝ) + 1 := (Nat.lt_floor_add_one _).le
+  have htE : (t : ℝ) ≤ 3 ^ m := by
+    refine ht.trans ?_
+    calc E ^ (1 - 2 * η) ≤ E ^ (1 : ℝ) := Real.rpow_le_rpow_of_exponent_le hE1 (by linarith)
+      _ = E := Real.rpow_one E
+  have hbound := abs_corrector_le_at_scale hP C hinf q u hu.1 hmd
+    (Y₀ := Y₀) (C₀ := C₀) (κ := κ) (ℓ := M₄) (b := b) (Yz := Y) hY1 hY10
+    hC₀.le hκ hsc hscm (fun z => hLip z.val) hYz hcube hℓ le_rfl t htE x hx
+  have harith := corrector_scale_arith hd (E := E) (Y := Y₀) (Q := Q) (K := K) (C₀ := C₀)
+    (κ := κ) (δ := δ) (η := η) (b := b) (t := t) hE1 hY1 hYE hQ0 hK hC₀.le h2η h3η hη4 ht ht1
+    hb0 hbE hbδ
+  exact hbound.trans harith
+
 /-- **Every slope has a corrected plane on the infinite cluster of `ℤᵈ`**, `d ≥ 2`, from (1.18)
 with an almost surely finite scale, by the Remark after (1.19) of Armstrong and Dario. -/
 theorem correctedPlaneExistence_of_sublinearL2Ae [NeZero d] (hd : 2 ≤ d)
@@ -257,114 +397,13 @@ theorem correctedPlaneExistence_of_sublinearL2Ae [NeZero d] (hd : 2 ≤ d)
   have hma' : ma ≤ m := (le_max_left _ _).trans hm
   have hk₀' : k₀ ≤ m := ((le_max_left _ _).trans (le_max_right _ _)).trans hm
   have hmd : d + 1 ≤ m := ((le_max_right _ _).trans (le_max_right _ _)).trans hm
-  set E : ℝ := 3 ^ m with hEdef
   have hEm := hma m hma'
-  have hX₁ : X₁ ≤ E := ((le_max_left _ _).trans (le_max_left _ _)).trans hEm
-  have hM₅ : M₅ ω ≤ E := ((le_max_right _ _).trans (le_max_left _ _)).trans hEm
-  have hM₄ : 3 ^ (d + 1) * M₄ ω ≤ E := ((le_max_left _ _).trans (le_max_right _ _)).trans hEm
-  have hE100 : 100 ≤ E := ((le_max_right _ _).trans (le_max_right _ _)).trans hEm
-  have hE1 : 1 ≤ E := by linarith
-  have hE0 : 0 < E := by linarith
-  set Y₀ : ℝ := E ^ γ with hY₀def
-  have hY1 : 1 ≤ Y₀ := Real.one_le_rpow hE1 hγ0.le
-  have hYE : Y₀ ^ (2 * d + 1) = E ^ η := by
-    rw [hY₀def, ← Real.rpow_natCast, ← Real.rpow_mul hE0.le]
-    congr 1
-    push_cast
-    linarith
-  have hY10 : 10 * Y₀ ≤ E := by
-    have h1 : Y₀ ≤ E ^ (1 / 2 : ℝ) := Real.rpow_le_rpow_of_exponent_le hE1 (by linarith)
-    have h2 : (10 : ℝ) ≤ E ^ (1 / 2 : ℝ) := by
-      rw [← Real.sqrt_eq_rpow, Real.le_sqrt (by norm_num) (by linarith)]
-      linarith
-    have h3 : E ^ (1 / 2 : ℝ) * E ^ (1 / 2 : ℝ) = E := by
-      rw [← Real.rpow_add hE0]; norm_num
-    calc 10 * Y₀ ≤ E ^ (1 / 2 : ℝ) * E ^ (1 / 2 : ℝ) := mul_le_mul h2 h1 (by positivity)
-          (by positivity)
-      _ = E := h3
-  have hpowγ : ∀ j : ℕ, j ≤ 3 → (3 : ℝ) ^ (((m + j : ℕ) : ℝ) * γ) ≤ 3 * Y₀ := by
-    intro j hj
-    have e : (3 : ℝ) ^ (((m + j : ℕ) : ℝ) * γ) =
-        (3 : ℝ) ^ ((m : ℝ) * γ) * (3 : ℝ) ^ ((j : ℝ) * γ) := by
-      rw [← Real.rpow_add (by norm_num)]; congr 1; push_cast; ring
-    have e2 : (3 : ℝ) ^ ((m : ℝ) * γ) = Y₀ := by
-      rw [Real.rpow_mul (by norm_num), Real.rpow_natCast]
-    have h3 : (3 : ℝ) ^ ((j : ℝ) * γ) ≤ 3 := by
-      have hj' : (j : ℝ) ≤ 3 := by exact_mod_cast hj
-      calc (3 : ℝ) ^ ((j : ℝ) * γ) ≤ (3 : ℝ) ^ (1 : ℝ) :=
-            Real.rpow_le_rpow_of_exponent_le (by norm_num)
-              ((mul_le_mul_of_nonneg_right hj' hγ0.le).trans (by linarith))
-        _ = 3 := Real.rpow_one 3
-    calc (3 : ℝ) ^ (((m + j : ℕ) : ℝ) * γ) = Y₀ * (3 : ℝ) ^ ((j : ℝ) * γ) := by rw [e, e2]
-      _ ≤ Y₀ * 3 := mul_le_mul_of_nonneg_left h3 (by positivity)
-      _ = 3 * Y₀ := by ring
-  have hM₅' : M₅ ω ≤ 3 ^ (m + 3) := hM₅.trans (pow_le_pow_right₀ (by norm_num) (by omega))
-  have hsc : ∀ y ∈ (⟨m + 3, 0⟩ : TriadicCube d).vertices,
-      (3 : ℝ) ^ (partitionCube ω y).scale ≤ 3 * Y₀ := by
-    intro y hy
-    have h1 := (hω₅ (m + 3) hM₅').2 y hy
-    refine h1.trans ((Real.rpow_le_rpow_of_exponent_le (by norm_num) ?_).trans (hpowγ 3 le_rfl))
-    rw [mul_div_right_comm, mul_comm (((m + 3 : ℕ) : ℝ)) γ]
-    exact mul_le_mul_of_nonneg_right hdt (by positivity)
-  have hscm : ∀ y ∈ triadicCubeFinset d (m + 3) 0, (partitionCube ω y).scale ≤ m := by
-    intro y hy
-    have h1 := hsc y (mem_cubeFinset_iff_vertices.1 hy)
-    have h2 : (3 : ℝ) ^ (partitionCube ω y).scale ≤ 3 ^ m := h1.trans (by linarith)
-    exact (pow_le_pow_iff_right₀ (by norm_num : (1 : ℝ) < 3)).1 h2
-  have hYz : ∀ z ∈ (⟨m + 3, 0⟩ : TriadicCube d).vertices, Y z ω ≤ 3 * Y₀ := by
-    intro z hz
-    have hzbox : z ∈ triScaleBox d (m + 1) := mem_triScaleBox.2 fun i => by
-      have h1 := (mem_triadicCube_zero_iff'.1 hz) i
-      have e : (3 : ℤ) ^ (m + 1 + 2) = 3 ^ (m + 3) := by ring_nf
-      rw [e]
-      have := abs_nonneg (z i)
-      linarith
-    exact (hk₀ (m + 1) (by omega) z hzbox).trans (hpowγ 1 (by norm_num))
-  have hℓ : M₄ ω ≤ 3 ^ (m - (d + 1)) := by
-    have e : (3 : ℝ) ^ m = 3 ^ (d + 1) * 3 ^ (m - (d + 1)) := by
-      rw [← pow_add]; congr 1; omega
-    rw [hEdef, e] at hM₄
-    exact le_of_mul_le_mul_left hM₄ (by positivity)
-  -- the bound (1.18) on the ball `B_{15 d E}`
-  set b := componentBallL2 (uniqueInfiniteComponent h) 0 (15 * d * E)
-    (componentCorrector (uniqueInfiniteComponent h) q u) with hbdef
-  have hb0 : 0 ≤ b := componentBallL2_nonneg _ _ _ _
-  have h15 : (1 : ℝ) ≤ 15 * d := by linarith
-  have hbδ : b ≤ K * Q * (15 * d) * E ^ (1 - δ) := by
-    have h1 : b ≤ K * Q * (15 * d * E) ^ (1 - δ₁) :=
-      hL2 (15 * d * E) (hX₁.trans (le_mul_of_one_le_left hE0.le h15))
-    have h2 : (15 * d * E) ^ (1 - δ₁) ≤ (15 * d * E) ^ (1 - δ) :=
-      Real.rpow_le_rpow_of_exponent_le (h15.trans (le_mul_of_one_le_right (by linarith) hE1))
-        (by linarith)
-    have h3 : (15 * d * E) ^ (1 - δ) ≤ 15 * d * E ^ (1 - δ) := by
-      rw [Real.mul_rpow (by positivity) hE0.le]
-      refine mul_le_mul_of_nonneg_right ?_ (by positivity)
-      calc (15 * (d : ℝ)) ^ (1 - δ) ≤ (15 * d) ^ (1 : ℝ) :=
-            Real.rpow_le_rpow_of_exponent_le h15 (by linarith)
-        _ = 15 * d := Real.rpow_one _
-    calc b ≤ K * Q * (15 * d * E) ^ (1 - δ₁) := h1
-      _ ≤ K * Q * (15 * d * E ^ (1 - δ)) := by
-          gcongr
-          exact h2.trans h3
-      _ = K * Q * (15 * d) * E ^ (1 - δ) := by ring
-  have hbE : b ≤ K * Q * (15 * d) * E := by
-    refine hbδ.trans (mul_le_mul_of_nonneg_left ?_ (by positivity))
-    calc E ^ (1 - δ) ≤ E ^ (1 : ℝ) := Real.rpow_le_rpow_of_exponent_le hE1 (by linarith)
-      _ = E := Real.rpow_one E
-  -- the side of the box
-  set t : ℕ := ⌊E ^ (1 - 2 * η)⌋₊ with htdef
-  have ht : (t : ℝ) ≤ E ^ (1 - 2 * η) := Nat.floor_le (by positivity)
-  have ht1 : E ^ (1 - 2 * η) ≤ (t : ℝ) + 1 := (Nat.lt_floor_add_one _).le
-  have htE : (t : ℝ) ≤ 3 ^ m := by
-    refine ht.trans ?_
-    calc E ^ (1 - 2 * η) ≤ E ^ (1 : ℝ) := Real.rpow_le_rpow_of_exponent_le hE1 (by linarith)
-      _ = E := Real.rpow_one E
-  have hbound := abs_corrector_le_at_scale hP (uniqueInfiniteComponent h) hinf q u hu.1 hmd
-    (Y₀ := Y₀) (C₀ := C₀) (κ := κ) (ℓ := M₄ ω) (b := b) (Yz := fun z => Y z ω) hY1 hY10
-    hC₀.le hκ hsc hscm (fun z => hLip z.val) hYz (hω₄ h) hℓ le_rfl t htE x hx
-  have harith := corrector_scale_arith hd (E := E) (Y := Y₀) (Q := Q) (K := K) (C₀ := C₀)
-    (κ := κ) (δ := δ) (η := η) (b := b) (t := t) hE1 hY1 hYE hQ0 hK hC₀.le h2η h3η hη4 ht ht1
-    hb0 hbE hbδ
-  exact hbound.trans harith
+  exact abs_corrector_le_of_scales hd hP (uniqueInfiniteComponent h) hinf q u hu hK hC₀ hκ hδδ
+    h2η h3η hη4 hγ0 hγη hγle hdt hL2 (Y := fun z => Y z ω) (fun z => hLip z) hmd
+    (fun z hz => hk₀ (m + 1) (by omega) z hz) ((hω₅ (m + 3) (((le_max_right _ _).trans
+      (le_max_left _ _)).trans hEm |>.trans (pow_le_pow_right₀ (by norm_num) (by omega)))).2)
+    (hω₄ h) (((le_max_left _ _).trans (le_max_right _ _)).trans hEm)
+    (((le_max_left _ _).trans (le_max_left _ _)).trans hEm)
+    (((le_max_right _ _).trans (le_max_right _ _)).trans hEm) x hx
 
 end Rigidity.Proofs.Regularity.GeneralDim

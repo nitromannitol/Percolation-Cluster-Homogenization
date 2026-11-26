@@ -148,10 +148,10 @@ theorem restrictBad_subset_proxy {ω : Configuration 2} (hP : PlanarPartitionEve
       linarith
 
 /-- A union over a finite set of events of probability at most `b`. -/
-theorem measure_biUnion_le_card_mul {α : Type*} {p : unitInterval} (S : Finset α)
-    (f : α → Set (Configuration 2)) {b : ℝ} (h : ∀ a ∈ S, latticeBondLaw 2 p (f a) ≤
+theorem measure_biUnion_le_card_mul {α : Type*} {d : ℕ} [NeZero d] {p : unitInterval}
+    (S : Finset α) (f : α → Set (Configuration d)) {b : ℝ} (h : ∀ a ∈ S, latticeBondLaw d p (f a) ≤
       ENNReal.ofReal b) :
-    latticeBondLaw 2 p (⋃ a ∈ S, f a) ≤ ENNReal.ofReal (S.card * b) := by
+    latticeBondLaw d p (⋃ a ∈ S, f a) ≤ ENNReal.ofReal (S.card * b) := by
   refine (measure_biUnion_finset_le _ _).trans ((Finset.sum_le_sum h).trans (le_of_eq ?_))
   rw [Finset.sum_const, nsmul_eq_mul]
   rcases le_or_gt 0 b with hb | hb

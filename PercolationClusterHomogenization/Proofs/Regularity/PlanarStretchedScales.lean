@@ -21,6 +21,8 @@ namespace Rigidity.Proofs.Regularity
 open MeasureTheory LatticeProb LatticeProb.Percolation Rigidity.External Rigidity.Percolation
 open scoped ENNReal
 
+variable {d : ℕ} [NeZero d]
+
 theorem exp_neg_rpow_anti {x c c' σ σ' : ℝ} (hx : 1 ≤ x) (hc' : 0 ≤ c') (hcc : c' ≤ c)
     (hσσ : σ' ≤ σ) : Real.exp (-c * x ^ σ) ≤ Real.exp (-c' * x ^ σ') := by
   apply Real.exp_le_exp.2
@@ -47,9 +49,9 @@ theorem exists_rpow_mul_exp_le {a c σ : ℝ} (hc : 0 < c) (hσ : 0 < σ) :
     _ ≤ _ := pow_mul_exp_neg_le N hc (by linarith)
 
 /-- **The tail of `X ≤ O_s(θ)`.** -/
-theorem measure_lt_le_of_isOsBond {p : unitInterval} {X : Configuration 2 → ℝ} {s θ t : ℝ}
-    (hs : 0 < s) (hθ : 0 < θ) (ht : 0 ≤ t) (h : IsOsBond 2 p X s θ) :
-    latticeBondLaw 2 p {ω | t < X ω} ≤ ENNReal.ofReal (2 * Real.exp (-((t / θ) ^ s))) := by
+theorem measure_lt_le_of_isOsBond {p : unitInterval} {X : Configuration d → ℝ} {s θ t : ℝ}
+    (hs : 0 < s) (hθ : 0 < θ) (ht : 0 ≤ t) (h : IsOsBond d p X s θ) :
+    latticeBondLaw d p {ω | t < X ω} ≤ ENNReal.ofReal (2 * Real.exp (-((t / θ) ^ s))) := by
   obtain ⟨hi, hb⟩ := h
   have e : ∀ ω, Real.exp (Real.rpow (max (X ω / θ) 0) s) =
       Real.exp ((max (X ω) 0 / θ) ^ s) := fun ω => by
@@ -57,22 +59,22 @@ theorem measure_lt_le_of_isOsBond {p : unitInterval} {X : Configuration 2 → �
     rfl
   simp only [e] at hi hb
   refine le_trans (measure_mono fun ω (hω : t < X ω) => ?_)
-    (measure_lt_le_of_exp_rpow_moment (latticeBondLaw 2 p) hθ hs hi hb ht)
+    (measure_lt_le_of_exp_rpow_moment (latticeBondLaw d p) hθ hs hi hb ht)
   exact lt_of_lt_of_le hω (le_max_left _ _)
 
 /-- **A minimal scale from events with stretched-exponential probabilities.** -/
-theorem exists_isOsBond_of_events {p : unitInterval} (E : ℕ → Set (Configuration 2))
+theorem exists_isOsBond_of_events {p : unitInterval} (E : ℕ → Set (Configuration d))
     (hEm : ∀ n, MeasurableSet (E n)) {C : ℝ≥0∞} (hC : C ≠ ∞) {s c : ℝ} (hs : 0 < s)
     (hc : 0 < c)
-    (hE : ∀ n : ℕ, latticeBondLaw 2 p (E n) ≤
+    (hE : ∀ n : ℕ, latticeBondLaw d p (E n) ≤
       C * ENNReal.ofReal (Real.exp (-c * ((3 : ℝ) ^ n) ^ s))) :
-    ∃ θ : ℝ, 0 < θ ∧ ∃ Y : Configuration 2 → ℝ, Measurable Y ∧ (∀ ω, 0 ≤ Y ω) ∧
-      IsOsBond 2 p Y s θ ∧
-      ∀ᵐ ω ∂latticeBondLaw 2 p, ∀ n : ℕ, Y ω < 3 ^ n → ω ∉ E n := by
-  obtain ⟨θ, hθ, hint, hle⟩ := exceptionalScale_exp_moment (latticeBondLaw 2 p) E hEm C hC s c
+    ∃ θ : ℝ, 0 < θ ∧ ∃ Y : Configuration d → ℝ, Measurable Y ∧ (∀ ω, 0 ≤ Y ω) ∧
+      IsOsBond d p Y s θ ∧
+      ∀ᵐ ω ∂latticeBondLaw d p, ∀ n : ℕ, Y ω < 3 ^ n → ω ∉ E n := by
+  obtain ⟨θ, hθ, hint, hle⟩ := exceptionalScale_exp_moment (latticeBondLaw d p) E hEm C hC s c
     hs hc hE
-  have hfin : ∀ᵐ ω ∂latticeBondLaw 2 p, exceptionalScale E ω ≠ ∞ :=
-    ae_exceptionalScale_ne_top (latticeBondLaw 2 p) E C hC ((3 : ℝ) ^ s) c
+  have hfin : ∀ᵐ ω ∂latticeBondLaw d p, exceptionalScale E ω ≠ ∞ :=
+    ae_exceptionalScale_ne_top (latticeBondLaw d p) E C hC ((3 : ℝ) ^ s) c
       (Real.one_lt_rpow (by norm_num) hs) hc (fun n => by
         rw [Real.rpow_pow_comm (show (0 : ℝ) ≤ 3 by norm_num) s n]
         exact hE n)
