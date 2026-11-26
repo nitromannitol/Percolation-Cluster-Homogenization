@@ -115,8 +115,8 @@ COMPARATOR_LEAN4EXPORT=<lean4export> COMPARATOR_NANODA=<nanoda_bin> \
 
 The script builds the library and, in a fresh copy of the source tree, the audit modules, runs the
 comparator on every pair under `HomogenizationAudit/` and fails if a pair is missing or rejected;
-its logs are kept under `.lake/comparator-logs/`. The **Comparator audit** workflow runs it when
-started manually from the [Actions page](https://github.com/nitromannitol/Percolation-Cluster-Homogenization/actions).
+its logs are kept under `.lake/comparator-logs/`. The **Comparator audit** workflow runs it
+after each successful CI run on `main` (on the commit that CI built) and on manual dispatch (from the [Actions page](https://github.com/nitromannitol/Percolation-Cluster-Homogenization/actions)).
 
 To use the library from another Lake project:
 
