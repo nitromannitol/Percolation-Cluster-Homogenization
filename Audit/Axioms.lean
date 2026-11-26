@@ -917,3 +917,9 @@ report lists only `propext`, `Classical.choice` and `Quot.sound`.
 #print axioms Rigidity.Proofs.Regularity.GeneralDim.supercriticalBondCorrectorInput_holds
 #print axioms Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_holds
 #print axioms Rigidity.Proofs.Regularity.correctorSublinearL2At_holds
+
+-- (1.22) of Armstrong and Dario in every dimension
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.exists_isOsBond_scale_le_three_os
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.exists_corrector_sup_os
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.correctorOscSublinear_holds
+#print axioms Rigidity.Proofs.Regularity.GeneralDim.abs_corrector_le_of_scales

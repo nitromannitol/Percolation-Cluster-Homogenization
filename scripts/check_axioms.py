@@ -885,7 +885,12 @@ groups = {
          'Rigidity.Proofs.Regularity.GeneralDim.orderOneDimension_le',
          'Rigidity.Proofs.Regularity.GeneralDim.supercriticalBondCorrectorInput_holds',
          'Rigidity.Proofs.Regularity.armstrongDarioOrderOneOrigin_holds',
-         'Rigidity.Proofs.Regularity.correctorSublinearL2At_holds']
+         'Rigidity.Proofs.Regularity.correctorSublinearL2At_holds'],
+    '(1.22) of Armstrong and Dario in every dimension':
+        ['Rigidity.Proofs.Regularity.GeneralDim.exists_isOsBond_scale_le_three_os',
+         'Rigidity.Proofs.Regularity.GeneralDim.exists_corrector_sup_os',
+         'Rigidity.Proofs.Regularity.GeneralDim.correctorOscSublinear_holds',
+         'Rigidity.Proofs.Regularity.GeneralDim.abs_corrector_le_of_scales']
 }
 standard = {'propext', 'Classical.choice', 'Quot.sound'}
 
