@@ -21,7 +21,7 @@ namespace Rigidity.Proofs.Regularity
 open MeasureTheory LatticeProb LatticeProb.Percolation Rigidity.External Rigidity.Percolation
 open scoped ENNReal
 
-variable {d : ℕ} [NeZero d]
+variable {d : ℕ}
 
 theorem exp_neg_rpow_anti {x c c' σ σ' : ℝ} (hx : 1 ≤ x) (hc' : 0 ≤ c') (hcc : c' ≤ c)
     (hσσ : σ' ≤ σ) : Real.exp (-c * x ^ σ) ≤ Real.exp (-c' * x ^ σ') := by
